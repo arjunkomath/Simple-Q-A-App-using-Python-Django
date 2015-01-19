@@ -3,27 +3,59 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+
+<style>
+cool {
+  font-family: 'Lobster', cursive;
+}
+</style>
+
 <div class="container">
 <div class="page-header">
   <h1><a href="/">Simple QA </a><small>Open Questions</small></h1>
 </div>
 
 <div class="jumbotron">
-  <h2>Q: {{ question.question_text }}</h2>
+  <p class="pull-right">{{ question.pub_date }}</p>
+  <h2><cool>Q: {{ question.question_text }}</cool></h2>
   <p><a class="btn btn-primary btn-sm pull-right" href="/answer/{{ question.id }}" role="button">Answer this Question!</a></p>
 </div>
 
-{% if question.answer_set.count %}
+{% if answers %}
 <div class="panel panel-success">
   <div class="panel-heading">
-    <h3 class="panel-title">There are {{ question.answer_set.count }} Answers</h3>
+    <h3 class="panel-title">There are {{ answers.count }} Answers</h3>
   </div>
   <div class="panel-body">
-    {% for answer in question.answer_set.all %}
-    <div class="alert alert-info" role="alert">{{ answer.answer_text }}<small class="pull-right">- <b>{{ answer.user_data.user.username }}</b> ({{ answer.pub_date }})</small></div>
+    {% for answer in answers %}
+    <div class="row">
+      {% if user.is_authenticated %}
+      <div class ="col-md-1"><h3><a href="/vote/{{ answer.id }}/{{ question.id }}/0/"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> {{ answer.votes }} <a href="/vote/{{ answer.id }}/{{ question.id }}/1/"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></h3></div>
+      {% endif %}
+      <div class ="col-md-8"><div class="alert alert-info" role="alert">{{ answer.answer_text }}</div></div>
+      <div class ="col-md-3"><p class="pull-right">- <b>{{ answer.user_data.user.username }}</b> ({{ answer.pub_date }})</p></div>
+    </div>
     {% endfor %}
   </div>
 </div>
+
+<div class="pagination">
+  <span class="step-links">
+    {% if answers.has_previous %}
+    <a href="?page={{ answers.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current">
+      Page {{ answers.number }} of {{ answers.paginator.num_pages }}.
+    </span>
+
+    {% if answers.has_next %}
+    <a href="?page={{ answers.next_page_number }}">next</a>
+    {% endif %}
+  </span>
+</div>
+
 {% else %}
 <center><p>This question is still open, <a href="/answer/{{ question.id }}" role="button">Write answer!</a></p></center>
 {% endif %}

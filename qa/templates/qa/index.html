@@ -3,6 +3,15 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+
+<style>
+.ques {
+  font-family: 'Roboto', sans-serif;
+  font-size: 25px;
+}
+</style>
+
 <div class="container">
 <div class="page-header">
   <a class="btn btn-danger pull-right" href="/add/">Ask Question</a><h1><a href="/">Simple QA </a><small>Open Questions</small></h1>
@@ -11,7 +20,7 @@
 {% if questions %}
 <ul>
   {% for question in questions %}
-  <li><a href="/q/{{ question.id }}/">{{ question.question_text }}</a><small class="pull-right"> {{ question.pub_date}}</small></li>
+  <li><a class="ques" href="/q/{{ question.id }}/">{{ question.question_text }}</a><small class="pull-right"> {{ question.pub_date}}</small></li>
   {% endfor %}
 </ul>
 

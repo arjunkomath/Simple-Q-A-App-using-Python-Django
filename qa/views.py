@@ -47,9 +47,22 @@ def add(request):
 def detail(request, question_id):
     try:
         question = Question.objects.get(pk=question_id)
+        answer_list = question.answer_set.order_by('-votes')
+
+        paginator = Paginator(answer_list, 10)
+        page = request.GET.get('page')
+        try:
+            answers = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            answers = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            answers = paginator.page(paginator.num_pages)
+
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
-    return render(request, 'qa/detail.html', {'question': question})
+    return render(request, 'qa/detail.html', {'answers': answers, 'question': question}, )
 
 def answer(request, question_id):
     try:
@@ -72,13 +85,53 @@ def add_answer(request):
             return render(request, 'qa/answer.html', {'question': question, 'message': 'Empty'})
 
         a = Answer()
+        pub_date = datetime.datetime.now()
         a.answer_text = answer_text
         a.question = question
         a.user_data = user
+        a.pub_date = pub_date
         a.save()
-        return render(request, 'qa/detail.html', {'question': question})
 
-    return render(request, 'qa/answer.html', {'question': question})
+        answer_list = question.answer_set.order_by('-votes')
+
+        paginator = Paginator(answer_list, 10)
+        page = request.GET.get('page')
+        try:
+            answers = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            answers = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            answers = paginator.page(paginator.num_pages)
+
+        return render(request, 'qa/detail.html', {'question': question, 'answers': answers})
+
+    return render(request, 'qa/detail.html', {'question': question})
+
+def vote(request, answer_id, question_id, op_code):
+    answer = Answer.objects.get(pk=answer_id)
+    if op_code == '0':
+        answer.votes += 1
+    if op_code == '1':
+        answer.votes -= 1
+    answer.save()
+    question = Question.objects.get(pk=question_id)
+
+    answer_list = question.answer_set.order_by('-votes')
+
+    paginator = Paginator(answer_list, 10)
+    page = request.GET.get('page')
+    try:
+        answers = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        answers = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        answers = paginator.page(paginator.num_pages)
+
+    return render(request, 'qa/detail.html', {'question': question, 'answers': answers})
 
 from qa.forms import UserForm, UserProfileForm
 
