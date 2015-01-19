@@ -1,0 +1,36 @@
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<div class="container">
+  <div class="page-header">
+    <h1><a href="/">Simple QA </a><small>Add Question</small></h1>
+  </div>
+
+  {% if message %}
+  <strong>Enter a valid Question!</strong>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+
+  <form id="add_q" method="post" action="/add/">
+    {% csrf_token %}
+    <input class="input-lg" style="width:100%" placeholder="Enter your question....." type="text" name="question"/> <br/><br/>
+
+    <input class="btn pull-right btn-success" type="submit" value="Submit Question" />
+  </form>
+  <p>Note. Question cannot be empty!</p>
+  {% else %}
+  <small><a href="/login">Please Login to Add Questions!</a></small>
+  {% endif %}
+
+</div>
+<hr>
+<center>
+  {% if user.is_authenticated %}
+  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
+  {% else %}
+  <small><a href="/login">Login</a></small>
+  {% endif %}
+  | <a href="/admin">Admin Panel</a></small></center>

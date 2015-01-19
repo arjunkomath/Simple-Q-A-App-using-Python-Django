@@ -1,0 +1,47 @@
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<div class="container">
+<div class="page-header">
+  <a class="btn btn-danger pull-right" href="/add/">Ask Question</a><h1><a href="/">Simple QA </a><small>Open Questions</small></h1>
+</div>
+
+{% if questions %}
+<ul>
+  {% for question in questions %}
+  <li><a href="/q/{{ question.id }}/">{{ question.question_text }}</a><small class="pull-right"> {{ question.pub_date}}</small></li>
+  {% endfor %}
+</ul>
+
+<div class="pagination">
+  <span class="step-links">
+    {% if questions.has_previous %}
+    <a href="?page={{ questions.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current">
+      Page {{ questions.number }} of {{ questions.paginator.num_pages }}.
+    </span>
+
+    {% if questions.has_next %}
+    <a href="?page={{ questions.next_page_number }}">next</a>
+    {% endif %}
+  </span>
+</div>
+
+{% else %}
+<p>No Questions are available.</p>
+{% endif %}
+
+</div>
+
+<hr>
+<center>
+  {% if user.is_authenticated %}
+  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
+  {% else %}
+  <small><a href="/login">Login</a></small>
+  {% endif %}
+ | <a href="/admin">Admin Panel</a></small></center>

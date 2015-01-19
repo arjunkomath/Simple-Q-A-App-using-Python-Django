@@ -1,0 +1,39 @@
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<div class="container">
+<div class="page-header">
+  <h1><a href="/">Simple QA </a><small>Open Questions</small></h1>
+</div>
+
+<div class="jumbotron">
+  <h2>Q: {{ question.question_text }}</h2>
+  <p><a class="btn btn-primary btn-sm pull-right" href="/answer/{{ question.id }}" role="button">Answer this Question!</a></p>
+</div>
+
+{% if question.answer_set.count %}
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">There are {{ question.answer_set.count }} Answers</h3>
+  </div>
+  <div class="panel-body">
+    {% for answer in question.answer_set.all %}
+    <div class="alert alert-info" role="alert">{{ answer.answer_text }}<small class="pull-right">- <b>{{ answer.user_data.user.username }}</b> ({{ answer.pub_date }})</small></div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<center><p>This question is still open, <a href="/answer/{{ question.id }}" role="button">Write answer!</a></p></center>
+{% endif %}
+
+</div>
+<hr>
+<center>
+  {% if user.is_authenticated %}
+  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
+  {% else %}
+  <small><a href="/login">Login</a></small>
+  {% endif %}
+  | <a href="/admin">Admin Panel</a></small></center>

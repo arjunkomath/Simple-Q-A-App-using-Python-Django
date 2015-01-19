@@ -1,0 +1,52 @@
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<div class="container">
+  <div class="page-header">
+    <h1><a href="/">Simple QA </a><small>Login</small></h1>
+  </div>
+
+  <div class="row">
+  <div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Login</h3>
+    </div>
+    <div class="panel-body">
+      <form id="login_form" method="post" action="/login/">
+        {% csrf_token %}
+        Username: <input type="text" name="username" value="" size="50" />
+        <br />
+        Password: <input type="password" name="password" value="" size="50" />
+        <br />
+
+        <input type="submit" value="submit" />
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">New User?</h3>
+    </div>
+    <div class="panel-body">
+      <a href="/register">Create new Account!</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</div>
+<hr>
+<center>
+  {% if user.is_authenticated %}
+  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
+  {% else %}
+  <small><a href="/login">Login</a></small>
+  {% endif %}
+  | <a href="/admin">Admin Panel</a></small></center>

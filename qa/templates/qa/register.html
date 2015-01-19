@@ -1,0 +1,41 @@
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<div class="container">
+  <div class="page-header">
+    <h1><a href="/">Simple QA </a><small>New User Registration</small></h1>
+  </div>
+
+  {% if registered %}
+  <strong>thank you for registering!</strong>
+  <a href="/">Return to the homepage.</a><br />
+  {% else %}
+  <strong>Enter the following details:</strong><br /><br />
+
+  <form id="user_form" method="post" action="/register/"
+  enctype="multipart/form-data">
+
+  {% csrf_token %}
+
+  <!-- Display each form. The as_p method wraps each element in a paragraph
+  (<p>) element. This ensures each element appears on a new line,
+  making everything look neater. -->
+  {{ user_form.as_p }}
+  {{ profile_form.as_p }}
+
+  <!-- Provide a button to click to submit the form. -->
+  <input type="submit" name="submit" value="Register" />
+</form>
+{% endif %}
+
+</div>
+<hr>
+<center>
+  {% if user.is_authenticated %}
+  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
+  {% else %}
+  <small><a href="/login">Login</a></small>
+  {% endif %}
+  | <a href="/admin">Admin Panel</a></small></center>
