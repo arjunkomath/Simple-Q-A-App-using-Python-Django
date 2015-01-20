@@ -26,6 +26,11 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
+def profile(request, user_id):
+    user_ob = User.objects.get(id=user_id)
+    user = UserProfile.objects.get(user=user_ob)
+    return render(request, 'qa/profile.html', {'user': user})
+
 def add(request):
     template = loader.get_template('qa/add.html')
     context = RequestContext(request)
@@ -44,9 +49,37 @@ def add(request):
         return HttpResponseRedirect('/')
     return HttpResponse(template.render(context))
 
+def comment(request, answer_id):
+    if request.method == 'POST':
+        comment_text = request.POST['comment']
+        user_id = request.POST['user']
+        user_ob = User.objects.get(id=user_id)
+        user = UserProfile.objects.get(user=user_ob)
+        user.points += 1
+        user.save()
+
+        if comment_text.strip() == '':
+            return render(request, 'qa/comment.html', {'answer_id': answer_id, 'message': 'Empty'})
+
+        pub_date = datetime.datetime.now()
+        a = Answer.objects.get(pk=answer_id)
+        c = Comment()
+        c.answer = a
+        c.comment_text = comment_text
+        c.pub_date = pub_date
+        c.user_data = user
+        c.save()
+        return HttpResponseRedirect('/')
+
+    template = loader.get_template('qa/comment.html')
+    context = RequestContext(request, {'answer_id': answer_id})
+    return HttpResponse(template.render(context))
+
 def detail(request, question_id):
     try:
         question = Question.objects.get(pk=question_id)
+        question.views += 1
+        question.save()
         answer_list = question.answer_set.order_by('-votes')
 
         paginator = Paginator(answer_list, 10)
@@ -80,6 +113,8 @@ def add_answer(request):
         question = Question.objects.get(pk=question_id)
         user_ob = User.objects.get(id=user_id)
         user = UserProfile.objects.get(user=user_ob)
+        user.points += 5
+        user.save()
 
         if answer_text.strip() == '':
             return render(request, 'qa/answer.html', {'question': question, 'message': 'Empty'})
@@ -113,9 +148,16 @@ def vote(request, answer_id, question_id, op_code):
     answer = Answer.objects.get(pk=answer_id)
     if op_code == '0':
         answer.votes += 1
+        u = answer.user_data
+        u.points += 10
+        u.save()
     if op_code == '1':
         answer.votes -= 1
+        u = answer.user_data
+        u.points -= 10
+        u.save()
     answer.save()
+
     question = Question.objects.get(pk=question_id)
 
     answer_list = question.answer_set.order_by('-votes')

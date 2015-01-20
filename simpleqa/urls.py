@@ -12,9 +12,13 @@ urlpatterns = patterns('',
     url(r'^add/$', views.add, name='add'),
     url(r'^answer/$', views.add_answer, name='add_answer'),
     url(r'^vote/(?P<answer_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$', views.vote, name='vote'),
+    url(r'^comment/(?P<answer_id>\d+)/$', views.comment, name='comment'),
 
+    url(r'^profile/(?P<user_id>\d+)/$', views.profile, name='profile'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
+
+    url('^markdown/', include( 'django_markdown.urls')),
 
 )

@@ -2,6 +2,8 @@
 
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load staticfiles %}
+{% load django_markdown %}
 
 <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
@@ -25,7 +27,7 @@ cool {
 {% if answers %}
 <div class="panel panel-success">
   <div class="panel-heading">
-    <h3 class="panel-title">There are {{ answers.count }} Answers</h3>
+    <h3 class="panel-title">Answers</h3>
   </div>
   <div class="panel-body">
     {% for answer in answers %}
@@ -33,9 +35,24 @@ cool {
       {% if user.is_authenticated %}
       <div class ="col-md-1"><h3><a href="/vote/{{ answer.id }}/{{ question.id }}/0/"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> {{ answer.votes }} <a href="/vote/{{ answer.id }}/{{ question.id }}/1/"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></h3></div>
       {% endif %}
-      <div class ="col-md-8"><div class="alert alert-info" role="alert">{{ answer.answer_text }}</div></div>
-      <div class ="col-md-3"><p class="pull-right">- <b>{{ answer.user_data.user.username }}</b> ({{ answer.pub_date }})</p></div>
+      <div class ="col-md-8">
+        <a href="/comment/{{ answer.id }}/" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
+
+        {% if answer.votes > 0 %}
+        <div id="ans" class="alert alert-info" role="alert">{{ answer.answer_text|markdown }}</div>
+        {% elif answer.votes == 0 %}
+        <div id="ans" class="alert alert-warning" role="alert">{{ answer.answer_text|markdown }}</div>
+        {% else %}
+        <div id="ans" class="alert alert-danger" role="alert">{{ answer.answer_text|markdown }}</div>
+        {% endif %}
+
+          {% for comment in answer.comment_set.all %}
+          <p>-<b>{{ comment.comment_text }}</b><small>, <a href="/profile/{{ comment.user_data.user.id }}">{{ comment.user_data.user.username }}</a> at {{ comment.pub_date }}</small></p>
+          {% endfor %}
+      </div>
+      <div class ="col-md-3"><p class="pull-right">- <b><a href="/profile/{{ answer.user_data.user.id }}">{{ answer.user_data.user.username }}</a> ({{ answer.user_data.points }})</b> ({{ answer.pub_date }})</p></div>
     </div>
+
     {% endfor %}
   </div>
 </div>
@@ -57,7 +74,8 @@ cool {
 </div>
 
 {% else %}
-<center><p>This question is still open, <a href="/answer/{{ question.id }}" role="button">Write answer!</a></p></center>
+<img class="pull-right" src="{% static "qa/question.jpg" %}" alt="question"/>
+<center><h2>This question is still open, <a href="/answer/{{ question.id }}" role="button">Write answer!</a></h2></center>
 {% endif %}
 
 </div>

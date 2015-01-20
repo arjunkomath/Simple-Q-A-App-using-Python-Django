@@ -2,6 +2,9 @@
 
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load django_markdown %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <div class="container">
 <div class="page-header">
@@ -16,7 +19,10 @@
 {% if user.is_authenticated %}
 <form id="answer" method="post" action="/answer/">
   {% csrf_token %}
-  <textarea class="input-lg" rows="7" style="width:100%" placeholder="Enter your Answer....." type="text" name="answer"></textarea> <br/><br/>
+  <textarea id="ans" rows="7" style="width:100%" placeholder="Enter your Answer....." type="text" name="answer"></textarea>
+  {% markdown_editor "#ans" %}
+  {% markdown_media %}
+   <br/><br/>
   <input type="hidden" value="{{ question.id }}" name="question" />
   <input type="hidden" value="{{ user.id }}" name="user" />
   <input class="btn btn-success" type="submit" value="Submit Answer" />

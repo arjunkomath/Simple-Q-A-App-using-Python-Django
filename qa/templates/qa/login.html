@@ -45,7 +45,7 @@
 <hr>
 <center>
   {% if user.is_authenticated %}
-  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
+  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/profile/{{ user.id }}">My Profile</a> | <a href="/logout/">Logout</a> )</small>
   {% else %}
   <small><a href="/login">Login</a></small>
   {% endif %}
