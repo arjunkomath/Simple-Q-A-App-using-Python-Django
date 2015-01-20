@@ -8,6 +8,26 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from qa.models import *
 import datetime
 
+def search(request):
+    if request.method == 'POST':
+        word = request.POST['word']
+        latest_question_list = Question.objects.filter(question_text__contains=word)
+        paginator = Paginator(latest_question_list, 10)
+        page = request.GET.get('page')
+        try:
+            questions = paginator.page(page)
+        except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+            questions = paginator.page(1)
+        except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+            questions = paginator.page(paginator.num_pages)
+        template = loader.get_template('qa/index.html')
+        context = RequestContext(request, {
+        'questions': questions,
+        })
+    return HttpResponse(template.render(context))
+
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')
     paginator = Paginator(latest_question_list, 10)
