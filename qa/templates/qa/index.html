@@ -10,6 +10,10 @@
   font-family: 'Roboto', sans-serif;
   font-size: 25px;
 }
+tag {
+  background-color:#E0E0E0;
+  color:#500000;
+}
 </style>
 
 <div class="container">
@@ -22,13 +26,16 @@
   {% for question in questions %}
   <li>{% if question.answer_set.count %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="/q/{{ question.id }}/">{{ question.question_text }}</a><small class="pull-right"> {{ question.pub_date}}</small></li>
   <small>{{ question.answer_set.count }} Answers | {{ question.views }} Views</small>
+    {% for tag in question.tags.all %}
+      <tag>{{ tag.slug }}</tag>
+    {% endfor %}
   {% endfor %}
 </ul>
 
 <div class="pagination">
   <span class="step-links">
     {% if questions.has_previous %}
-    <a href="?page={{ questions.previous_page_number }}">previous</a>
+    <a href="?page={{ questions.previous_page_number }}">< Previous | </a>
     {% endif %}
 
     <span class="current">
@@ -36,7 +43,7 @@
     </span>
 
     {% if questions.has_next %}
-    <a href="?page={{ questions.next_page_number }}">next</a>
+    <a href="?page={{ questions.next_page_number }}"> | Next ></a>
     {% endif %}
   </span>
 </div>

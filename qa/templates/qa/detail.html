@@ -50,7 +50,16 @@ cool {
           <p>-<b>{{ comment.comment_text }}</b><small>, <a href="/profile/{{ comment.user_data.user.id }}">{{ comment.user_data.user.username }}</a> at {{ comment.pub_date }}</small></p>
           {% endfor %}
       </div>
-      <div class ="col-md-3"><p class="pull-right">- <b><a href="/profile/{{ answer.user_data.user.id }}">{{ answer.user_data.user.username }}</a> ({{ answer.user_data.points }})</b> ({{ answer.pub_date }})</p></div>
+      <div class ="col-md-3">
+
+        {% if answer.user_data.picture %}
+        <img class="pull-right" src="{{ answer.user_data.picture }}">
+        {% else %}
+        <img class="pull-right" width="50px" height="50px" src="{% static "qa/user.png" %}">
+        {% endif %}
+
+        <p class="pull-right">- <b><a href="/profile/{{ answer.user_data.user.id }}">{{ answer.user_data.user.username }}</a> ({{ answer.user_data.points }})</b> ({{ answer.pub_date }})</p>
+      </div>
     </div>
 
     {% endfor %}
@@ -60,7 +69,7 @@ cool {
 <div class="pagination">
   <span class="step-links">
     {% if answers.has_previous %}
-    <a href="?page={{ answers.previous_page_number }}">previous</a>
+    <a href="?page={{ answers.previous_page_number }}">< Previous | </a>
     {% endif %}
 
     <span class="current">
@@ -68,7 +77,7 @@ cool {
     </span>
 
     {% if answers.has_next %}
-    <a href="?page={{ answers.next_page_number }}">next</a>
+    <a href="?page={{ answers.next_page_number }}"> | Next ></a>
     {% endif %}
   </span>
 </div>

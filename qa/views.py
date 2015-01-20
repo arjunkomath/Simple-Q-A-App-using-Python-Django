@@ -37,6 +37,7 @@ def add(request):
 
     if request.method == 'POST':
         question_text = request.POST['question']
+        tags_text = request.POST['tags']
 
         if question_text.strip() == '':
             return render(request, 'qa/add.html', {'message': 'Empty'})
@@ -46,6 +47,17 @@ def add(request):
         q.question_text = question_text
         q.pub_date = pub_date
         q.save()
+
+        tags = tags_text.split(',')
+        for tag in tags:
+            try:
+                t = Tag.objects.get(slug=tag)
+                q.tags.add(t)
+            except Tag.DoesNotExist:
+                t=Tag()
+                t.slug = tag
+                t.save()
+                q.tags.add(t)
         return HttpResponseRedirect('/')
     return HttpResponse(template.render(context))
 
