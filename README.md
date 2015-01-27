@@ -1,6 +1,6 @@
 # A Simple Q&A App using Python Django
 
-I will soon upload a link for live demo. cheers! :)
+Live Demo : http://arjunkomath.pythonanywhere.com
 
 # Screenshots
 
