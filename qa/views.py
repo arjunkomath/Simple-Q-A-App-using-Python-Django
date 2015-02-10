@@ -30,6 +30,9 @@ def search(request):
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')
+    latest_noans_list = Question.objects.order_by('-pub_date').filter(answer__isnull=True)[:10]
+    count = Question.objects.count
+    count_a = Answer.objects.count
     paginator = Paginator(latest_question_list, 10)
     page = request.GET.get('page')
     try:
@@ -43,6 +46,9 @@ def index(request):
     template = loader.get_template('qa/index.html')
     context = RequestContext(request, {
         'questions': questions,
+        'totalcount': count,
+        'anscount': count_a,
+        'noans': latest_noans_list,
     })
     return HttpResponse(template.render(context))
 

@@ -20,7 +20,7 @@ cool {
 
 <div class="jumbotron">
   <p class="pull-right">{{ question.pub_date }}</p>
-  <h2><cool>Q: {{ question.question_text }}</cool></h2>
+  <h3><cool>Q: </cool>{{ question.question_text }}</h3>
   <p><a class="btn btn-primary btn-sm pull-right" href="/answer/{{ question.id }}" role="button">Answer this Question!</a></p>
 </div>
 
@@ -35,7 +35,7 @@ cool {
       {% if user.is_authenticated %}
       <div class ="col-md-1"><h3><a href="/vote/{{ answer.id }}/{{ question.id }}/0/"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> {{ answer.votes }} <a href="/vote/{{ answer.id }}/{{ question.id }}/1/"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></h3></div>
       {% endif %}
-      <div class ="col-md-8">
+      <div class ="col-md-9">
         <a href="/comment/{{ answer.id }}/" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
 
         {% if answer.votes > 0 %}
@@ -50,7 +50,7 @@ cool {
           <p>-<b>{{ comment.comment_text }}</b><small>, <a href="/profile/{{ comment.user_data.user.id }}">{{ comment.user_data.user.username }}</a> at {{ comment.pub_date }}</small></p>
           {% endfor %}
       </div>
-      <div class ="col-md-3">
+      <div class ="col-md-2">
 
         {% if answer.user_data.picture %}
         <img class="pull-right" src="{{ answer.user_data.picture }}">
@@ -58,7 +58,7 @@ cool {
         <img class="pull-right" width="50px" height="50px" src="{% static "qa/user.png" %}">
         {% endif %}
 
-        <p class="pull-right">- <b><a href="/profile/{{ answer.user_data.user.id }}">{{ answer.user_data.user.username }}</a> ({{ answer.user_data.points }})</b> ({{ answer.pub_date }})</p>
+        <p class="pull-right">- <b><a href="/profile/{{ answer.user_data.user.id }}">{{ answer.user_data.user.username }}</a> ({{ answer.user_data.points }})</b></p>
       </div>
     </div>
 
