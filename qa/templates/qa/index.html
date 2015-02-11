@@ -116,6 +116,7 @@ $(function () {
 </script>
 
 <div class="container">
+  
 <div class="page-header">
   <a class="btn btn-lg btn-warning pull-right" href="#search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Find</a><a class="btn btn-lg btn-danger pull-right" href="/add/">Ask Question</a><h1><a href="/">Simple QA </a><small>Open Questions</small></h1>
 </div>
@@ -161,6 +162,7 @@ $(function () {
 </div>
 
 <div class="col-md-4">
+
   <div class="panel panel-default">
     <div class="panel-body">
       <h4>Total Questions: {{ totalcount }}</h4>
@@ -194,16 +196,25 @@ $(function () {
     </div>
   </div>
 
+  {% if user.is_authenticated %}
+
+  <div class="span3 well">
+    <center>
+      <a href="/profile/{{ user.id }}" data-toggle="modal"><img src="/static/qa/user.png" name="aboutme" width="100" height="100" class="img-circle"></a>
+      <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+      <a href="/profile/{{ user.id }}">My Profile</a> |
+      <a href="/logout/">Logout</a>
+    </center>
+  </div>
+  {% else %}
+  <a class="btn btn-block btn-success" href="/login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Login | Sign Up</a><br/>
+  {% endif %}
+
 </div>
 </div>
 <hr>
 <center>
-  {% if user.is_authenticated %}
-  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/profile/{{ user.id }}">My Profile</a> | <a href="/logout/">Logout</a> )</small>
-  {% else %}
-  <small><a href="/login">Login</a></small>
-  {% endif %}
- | <a href="/admin">Admin Panel</a></small></center>
+<a href="/admin">Admin Panel</a></small></center>
  <br/><br/>
 
  <div id="search">
