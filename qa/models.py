@@ -44,6 +44,10 @@ class Answer(models.Model):
     def __str__(self):
         return self.answer_text
 
+class Voter(models.Model):
+    user = models.ForeignKey(UserProfile)
+    answer = models.ForeignKey(Answer)
+
 class Comment(models.Model):
     answer = models.ForeignKey(Answer)
     comment_text = models.CharField(max_length=200)

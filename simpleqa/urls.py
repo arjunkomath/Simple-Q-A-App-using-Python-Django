@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^add/$', views.add, name='add'),
     url(r'^answer/$', views.add_answer, name='add_answer'),
-    url(r'^vote/(?P<answer_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$', views.vote, name='vote'),
+    url(r'^vote/(?P<user_id>\d+)/(?P<answer_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$', views.vote, name='vote'),
     url(r'^comment/(?P<answer_id>\d+)/$', views.comment, name='comment'),
     url(r'^search/$', views.search, name='search'),
 
