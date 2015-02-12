@@ -15,6 +15,11 @@
   font-size: 20px;
 }
 
+reward {
+  font-size: 15px;
+  color: #FF4444;
+}
+
 .ans {
   height: 40px;
   width: 75px;
@@ -116,12 +121,23 @@ $(function () {
 </script>
 
 <div class="container">
-  
+
 <div class="page-header">
   <a class="btn btn-lg btn-warning pull-right" href="#search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Find</a><a class="btn btn-lg btn-danger pull-right" href="/add/">Ask Question</a><h1><a href="/">Simple QA </a><small>Open Questions</small></h1>
 </div>
 
 <div class="col-md-8">
+
+  <ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="#latest" aria-controls="latest" role="tab" data-toggle="tab">Latest</a></li>
+    <li role="presentation"><a href="#unans" aria-controls="unans" role="tab" data-toggle="tab">Unanswered <span class="badge">{{ noans.count }}</span></a></li>
+    <li role="presentation"><a href="#reward" aria-controls="reward" role="tab" data-toggle="tab">Most Rewarding <span class="badge">{{ reward.count }}</span></a></li>
+  </ul>
+  <br/>
+
+
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="latest">
 {% if questions %}
   {% for question in questions %}
   <div class="row">
@@ -156,9 +172,58 @@ $(function () {
 </div>
 
 {% else %}
-<p>No Questions are available.</p>
+<div class="alert alert-warning" role="alert">No Questions are available!</div>
 {% endif %}
+</div>
 
+<div role="tabpanel" class="tab-pane" id="unans">
+{% if noans %}
+  {% for question in noans %}
+  <div class="row">
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.answer_set.count }}</div>Answers</small></div>
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
+  <p>
+    {% if question.answer_set.count %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="/q/{{ question.id }}/">{{ question.question_text }}</a>
+    <br/>
+    {% for tag in question.tags.all %}
+    <tag>{{ tag.slug }}</tag>
+    {% endfor %}
+    <small> {{ question.pub_date}}</small>
+  </p>
+</div>
+<hr>
+  {% endfor %}
+
+{% else %}
+<div class="alert alert-warning" role="alert">No Questions are available!</div>
+{% endif %}
+</div>
+
+<div role="tabpanel" class="tab-pane" id="reward">
+{% if reward %}
+  {% for question in reward %}
+  <div class="row">
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.answer_set.count }}</div>Answers</small></div>
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
+  <p>
+    {% if question.answer_set.count %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="/q/{{ question.id }}/">{{ question.question_text }}</a>
+    <br/>
+    <reward>Earn <b>{{ question.reward }}</b> points</reward>
+    {% for tag in question.tags.all %}
+    <tag>{{ tag.slug }}</tag>
+    {% endfor %}
+    <small> {{ question.pub_date}}</small>
+  </p>
+</div>
+<hr>
+  {% endfor %}
+
+{% else %}
+<div class="alert alert-warning" role="alert">No Questions are available!</div>
+{% endif %}
+</div>
+
+  </div>
 </div>
 
 <div class="col-md-4">

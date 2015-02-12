@@ -38,10 +38,28 @@ cool {
 </div>
 {% endif %}
 
+{% if question.reward %}
+<div class="alert alert-info" role="alert">This question has been marked to be worth a reward of <b>{{ question.reward }}<b> points!
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+</div>
+{% endif %}
+
 <div class="jumbotron">
-  <p class="pull-right">{{ question.pub_date }}</p>
+  <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
   <h3><cool>Q: </cool>{{ question.question_text }}</h3>
-  <p><a class="btn btn-primary btn-sm pull-right" href="/answer/{{ question.id }}" role="button">Answer this Question!</a></p>
+  <p>
+    {% if user.is_authenticated %}
+  <a href="/thumb/{{ user.id }}/{{ question.id }}/0/" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+  <a href="/thumb/{{ user.id }}/{{ question.id }}/1/" class="btn btn-danger"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
+    {% endif %}
+    {% if question.closed %}
+    <p class="pull-right">This Question has been closed.</p>
+    {% else %}
+    <a class="btn btn-primary btn-sm pull-right" href="/answer/{{ question.id }}" role="button">Answer this Question!</a>
+    {% endif %}
+  </p>
 </div>
 
 {% if answers %}

@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^vote/(?P<user_id>\d+)/(?P<answer_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$', views.vote, name='vote'),
     url(r'^comment/(?P<answer_id>\d+)/$', views.comment, name='comment'),
     url(r'^search/$', views.search, name='search'),
+    url(r'^thumb/(?P<user_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$', views.thumb, name='thumb'),
 
     url(r'^profile/(?P<user_id>\d+)/$', views.profile, name='profile'),
     url(r'^register/$', views.register, name='register'),

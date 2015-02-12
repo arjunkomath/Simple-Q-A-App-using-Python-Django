@@ -9,15 +9,6 @@ class Tag(models.Model):
     class Meta:
         ordering = ('slug',)
 
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-    tags = models.ManyToManyField(Tag)
-    views = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.question_text
-
 from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
@@ -35,6 +26,18 @@ class UserProfile(models.Model):
 
 from django_markdown.models import MarkdownField
 
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+    tags = models.ManyToManyField(Tag)
+    reward = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
+    user_data = models.ForeignKey(UserProfile)
+    closed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.question_text
+
 class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer_text = MarkdownField()
@@ -47,6 +50,10 @@ class Answer(models.Model):
 class Voter(models.Model):
     user = models.ForeignKey(UserProfile)
     answer = models.ForeignKey(Answer)
+
+class QVoter(models.Model):
+    user = models.ForeignKey(UserProfile)
+    question = models.ForeignKey(Question)
 
 class Comment(models.Model):
     answer = models.ForeignKey(Answer)

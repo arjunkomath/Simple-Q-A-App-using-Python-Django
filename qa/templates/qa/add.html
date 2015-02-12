@@ -19,7 +19,7 @@
     <input class="input-lg" style="width:100%" placeholder="Enter your question....." type="text" name="question"/> <br/><br/>
 
     <input class="input-lg" style="width:100%" placeholder="Enter tags separates by comma!" type="text" name="tags"/> <br/><br/>
-
+    <input type="hidden" value="{{ user.id }}" name="user" />
     <input class="btn pull-right btn-success" type="submit" value="Submit Question" />
   </form>
   <p>Note. Question cannot be empty!</p>
