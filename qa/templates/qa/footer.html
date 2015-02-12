@@ -1,0 +1,13 @@
+<hr>
+<center>
+  <a href="http://www.djangoproject.com/"><img src="https://www.djangoproject.com/m/img/badges/djangoproject120x25.gif" border="0" alt="A Django project." title="A Django project." /></a> · <a href="https://github.com/arjunkomath/Simple-Q-A-App-using-Python-Django">Github</a> · <a href="/admin">Admin Panel</a></small></center>
+ <br/><br/>
+
+ <div id="search">
+   <button type="button" class="close">×</button>
+   <form method="post" action="/search/">
+     {% csrf_token %}
+     <input type="search" value="" name="word" placeholder="type keyword(s) here" />
+     <input class="btn btn-lg btn-warning" type="submit" value="Find" />
+   </form>
+ </div>

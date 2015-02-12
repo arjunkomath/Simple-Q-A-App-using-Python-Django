@@ -1,12 +1,7 @@
-{% load bootstrap3 %}
-
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 
 <div class="container">
-  <div class="page-header">
-    <h1><a href="/">Simple QA </a><small>{{ user.user.first_name }} {{ user.user.last_name }}</small></h1>
-  </div>
+
+  {% include "qa/header.html" %}
 
 <h2 class="pull-right">Points: {{ user.points }}</h1>
 <ul>
@@ -18,12 +13,5 @@
 <ul>
 
 </div>
-<hr>
-<center>
-  {% if user.is_authenticated %}
-  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
-  {% else %}
-  <small><a href="/login">Login</a></small>
-  {% endif %}
-  | <a href="/admin">Admin Panel</a></small></center>
-  <br/><br/>
+
+{% include "qa/footer.html" %}

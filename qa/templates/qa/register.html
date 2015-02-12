@@ -1,12 +1,7 @@
-{% load bootstrap3 %}
-
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 
 <div class="container">
-  <div class="page-header">
-    <h1><a href="/">Simple QA </a><small>New User Registration</small></h1>
-  </div>
+
+  {% include "qa/header.html" %}
 
   {% if registered %}
   <strong>thank you for registering!</strong>
@@ -31,12 +26,5 @@
 {% endif %}
 
 </div>
-<hr>
-<center>
-  {% if user.is_authenticated %}
-  <small>Logged in as <b>{{ user.username }}</b> ( <a href="/logout/">Logout</a> )</small>
-  {% else %}
-  <small><a href="/login">Login</a></small>
-  {% endif %}
-  | <a href="/admin">Admin Panel</a></small></center>
-  <br/><br/>
+
+{% include "qa/footer.html" %}

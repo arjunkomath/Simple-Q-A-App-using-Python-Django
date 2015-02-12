@@ -23,10 +23,49 @@ def search(request):
         except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
             questions = paginator.page(paginator.num_pages)
+
+        latest_noans_list = Question.objects.order_by('-pub_date').filter(tags__slug__contains=word,answer__isnull=True)[:10]
+        top_questions = Question.objects.order_by('-reward').filter(tags__slug__contains=word,answer__isnull=True,reward__gte=1)[:10]
+        count = Question.objects.count
+        count_a = Answer.objects.count
+
         template = loader.get_template('qa/index.html')
         context = RequestContext(request, {
         'questions': questions,
+        'totalcount': count,
+        'anscount': count_a,
+        'noans': latest_noans_list,
+        'reward': top_questions,
         })
+    return HttpResponse(template.render(context))
+
+def tag(request, tag):
+    word = tag
+    latest_question_list = Question.objects.filter(tags__slug__contains=word)
+    paginator = Paginator(latest_question_list, 10)
+    page = request.GET.get('page')
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+    # If page is not an integer, deliver first page.
+        questions = paginator.page(1)
+    except EmptyPage:
+    # If page is out of range (e.g. 9999), deliver last page of results.
+        questions = paginator.page(paginator.num_pages)
+
+    latest_noans_list = Question.objects.order_by('-pub_date').filter(tags__slug__contains=word,answer__isnull=True)[:10]
+    top_questions = Question.objects.order_by('-reward').filter(tags__slug__contains=word,answer__isnull=True,reward__gte=1)[:10]
+    count = Question.objects.count
+    count_a = Answer.objects.count
+
+    template = loader.get_template('qa/index.html')
+    context = RequestContext(request, {
+    'questions': questions,
+    'totalcount': count,
+    'anscount': count_a,
+    'noans': latest_noans_list,
+    'reward': top_questions,
+    })
     return HttpResponse(template.render(context))
 
 def index(request):
@@ -101,6 +140,10 @@ def add(request):
     return HttpResponse(template.render(context))
 
 def comment(request, answer_id):
+
+    if request.user.is_anonymous():
+        return HttpResponseRedirect("/login/")
+
     if request.method == 'POST':
         comment_text = request.POST['comment']
         user_id = request.POST['user']
@@ -149,6 +192,9 @@ def detail(request, question_id):
     return render(request, 'qa/detail.html', {'answers': answers, 'question': question}, )
 
 def answer(request, question_id):
+    if request.user.is_anonymous():
+        return HttpResponseRedirect("/login/")
+        
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
