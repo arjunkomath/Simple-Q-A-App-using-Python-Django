@@ -33,7 +33,7 @@
   <div class="col-sm-1 ans"><small><div class="ques">{{ question.answer_set.count }}</div>Answers</small></div>
   <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
   <p>
-    {% if question.answer_set.count %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="/q/{{ question.id }}/">{{ question.question_text }}</a>
+    {% if question.reward %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="/q/{{ question.id }}/">{{ question.question_text }}</a>
     <br/>
     {% for tag in question.tags.all %}
     <a href="/tag/{{ tag.slug|slugify }}/"><tag>{{ tag.slug }}</tag></a>
