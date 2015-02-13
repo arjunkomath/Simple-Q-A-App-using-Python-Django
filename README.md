@@ -1,14 +1,11 @@
 # A Simple Q&A App using Python Django
 
-Live Demo : http://arjunkomath.pythonanywhere.com
+Live Demo : http://djangoqa.azurewebsites.net/
 
 # Screenshots
 
 Home Page:
-<img src="http://i.imgur.com/lj2UQ5r.png" />
-
-Search Option:
-<img src="http://i.imgur.com/h52TorJ.png" />
+<img src="http://s4.postimg.org/7stjbku8d/image.png" />
 
 QA Page:
-<img src="http://i.imgur.com/WS2AMDe.png" />
+<img src="http://s4.postimg.org/jj7gsyn0t/image.png" />
