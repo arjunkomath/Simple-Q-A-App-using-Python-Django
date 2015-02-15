@@ -157,13 +157,34 @@ def comment(request, answer_id):
 
         pub_date = datetime.datetime.now()
         a = Answer.objects.get(pk=answer_id)
+        q_id = a.question_id
         c = Comment()
         c.answer = a
         c.comment_text = comment_text
         c.pub_date = pub_date
         c.user_data = user
         c.save()
-        return HttpResponseRedirect('/')
+    
+        try:
+            question = Question.objects.get(pk=q_id)
+            question.views += 1
+            question.save()
+            answer_list = question.answer_set.order_by('-votes')
+
+            paginator = Paginator(answer_list, 10)
+            page = request.GET.get('page')
+            try:
+                answers = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                answers = paginator.page(1)
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                answers = paginator.page(paginator.num_pages)
+
+        except Question.DoesNotExist:
+            raise Http404("Question does not exist")
+        return render(request, 'qa/detail.html', {'answers': answers, 'question': question}, )
 
     template = loader.get_template('qa/comment.html')
     context = RequestContext(request, {'answer_id': answer_id})
@@ -194,7 +215,7 @@ def detail(request, question_id):
 def answer(request, question_id):
     if request.user.is_anonymous():
         return HttpResponseRedirect("/login/")
-        
+
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
