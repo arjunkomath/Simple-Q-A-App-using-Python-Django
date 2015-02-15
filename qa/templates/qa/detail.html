@@ -1,3 +1,29 @@
+<style>
+.closed {
+  width:100%;
+  height:7px;
+  position: absolute;
+
+  background: #FF4444;
+}
+
+.open {
+  width:100%;
+  height:7px;
+  position: absolute;
+
+  background: #99CC00;
+}
+
+.rewarding {
+  width:100%;
+  height:7px;
+  position: absolute;
+
+  background: #AA66CC;
+}
+</style>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script>
 $(function () {
@@ -20,6 +46,16 @@ cool {
   font-family: 'Lobster', cursive;
 }
 </style>
+
+{% if question.reward %}
+  <div class="rewarding"></div>
+{% else %}
+{% if question.closed %}
+  <div class="closed"></div>
+{% else %}
+  <div class="open"></div>
+{% endif %}
+{% endif %}
 
 <div class="container">
 
