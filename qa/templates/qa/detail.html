@@ -47,14 +47,14 @@ cool {
 }
 </style>
 
-{% if question.reward %}
-  <div class="rewarding"></div>
-{% else %}
 {% if question.closed %}
   <div class="closed"></div>
 {% else %}
-  <div class="open"></div>
-{% endif %}
+    {% if question.reward %}
+    <div class="rewarding"></div>
+    {% else %}
+    <div class="open"></div>
+    {% endif %}
 {% endif %}
 
 <div class="container">
@@ -94,11 +94,9 @@ cool {
 </div>
 
 {% if answers %}
-<div class="panel panel-success">
-  <div class="panel-heading">
-    <h3 class="panel-title">Answers</h3>
-  </div>
-  <div class="panel-body">
+  <h3>Answers</h3>
+  <hr/>
+
     {% for answer in answers %}
     <div class="row">
       {% if user.is_authenticated %}
@@ -113,16 +111,19 @@ cool {
         <a href="/comment/{{ answer.id }}/" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
 
         {% if answer.votes > 0 %}
-        <div id="ans" class="alert alert-info" role="alert">{{ answer.answer_text|markdown }}</div>
+        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
         {% elif answer.votes == 0 %}
-        <div id="ans" class="alert alert-warning" role="alert">{{ answer.answer_text|markdown }}</div>
+        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
         {% else %}
-        <div id="ans" class="alert alert-danger" role="alert">{{ answer.answer_text|markdown }}</div>
+        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
         {% endif %}
 
+        {% if answer.comment_set %}
           {% for comment in answer.comment_set.all %}
-          <p>-<b>{{ comment.comment_text }}</b><small>, <a href="/profile/{{ comment.user_data.user.id }}">{{ comment.user_data.user.username }}</a> at {{ comment.pub_date }}</small></p>
+          <p><b>{{ comment.comment_text }}</b><small>, <a href="/profile/{{ comment.user_data.user.id }}">{{ comment.user_data.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+          <hr>
           {% endfor %}
+        {% endif %}
       </div>
       <div class ="col-md-2">
 
@@ -135,10 +136,8 @@ cool {
         <p class="pull-right">- <b><a href="/profile/{{ answer.user_data.user.id }}">{{ answer.user_data.user.username }}</a> ({{ answer.user_data.points }})</b></p>
       </div>
     </div>
-
+  <hr>
     {% endfor %}
-  </div>
-</div>
 
 <div class="pagination">
   <span class="step-links">
@@ -161,6 +160,5 @@ cool {
 <center><h2>This question is still open, <a href="/answer/{{ question.id }}" role="button">Write answer!</a></h2></center>
 {% endif %}
 
-</div>
 
 {% include "qa/footer.html" %}

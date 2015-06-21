@@ -9,6 +9,8 @@ from qa.models import *
 import datetime
 from qa.forms import UserForm, UserProfileForm
 
+from django.core.mail import send_mail
+
 def search(request):
     if request.method == 'POST':
         word = request.POST['word']
@@ -136,6 +138,9 @@ def add(request):
                 t.slug = tag
                 t.save()
                 q.tags.add(t)
+
+        #send_mail('QA: Your Question has been Posted.', 'Thank you for posting the question, '+question_text+'. We will notify you once someone posts an answer.', 'admin@test.com', [request.user.email], fail_silently=False)
+
         return HttpResponseRedirect('/')
     return HttpResponse(template.render(context))
 
@@ -164,7 +169,7 @@ def comment(request, answer_id):
         c.pub_date = pub_date
         c.user_data = user
         c.save()
-    
+
         try:
             question = Question.objects.get(pk=q_id)
             question.views += 1

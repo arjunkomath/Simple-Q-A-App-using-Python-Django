@@ -97,3 +97,9 @@ SITE_ID = 1
 STATIC_URL = '/static/'
 
 MARKDOWN_EDITOR_SKIN = 'simple'
+
+#EMAIL_HOST = 'smtp.sendgrid.net'
+#EMAIL_HOST_USER = 'username'
+#EMAIL_HOST_PASSWORD = 'your-password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
