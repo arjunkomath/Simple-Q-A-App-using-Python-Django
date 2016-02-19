@@ -39,8 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'qa',
     'bootstrap3',
-    'django_markdown',
-    'rest_framework',
+    #'django_markdown',
+    #'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
