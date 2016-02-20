@@ -5,7 +5,7 @@ from django import forms
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fiels = ('question_text', 'tags')
+        fields = ('question_text', 'tags')
         
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
