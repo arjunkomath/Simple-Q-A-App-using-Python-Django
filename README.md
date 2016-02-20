@@ -1,7 +1,5 @@
 # A Simple Q&A App using Python Django
 
-Live Demo : http://djangoqa.in/
-
 # Screenshots
 
 Home Page:
