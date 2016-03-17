@@ -3,11 +3,7 @@
 # Screenshots
 
 Home Page:
-<img src="http://s4.postimg.org/7stjbku8d/image.png" />
+<img src="https://github.com/swappsco/django-qa/blob/develop/qa/static/qa/qa_index.jpeg" />
 
 QA Page:
-<img src="http://s4.postimg.org/jj7gsyn0t/image.png" />
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/arjunkomath/simple-q-a-app-using-python-django/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
+<img src="https://github.com/swappsco/django-qa/blob/develop/qa/static/qa/qa_page.jpeg" />
