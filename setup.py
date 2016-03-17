@@ -10,7 +10,7 @@ setup(
     version='0.0.1',
     description='Pluggable django app for Q&A',
     long_description=long_description,
-    author='arjunkomath, cdvv7788',
+    author='arjunkomath, cdvv7788, sebastian-code',
     author_email='dev@swapps.co',
     url='https://github.com/swappsco/django-qa',
     license='MIT',
