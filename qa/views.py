@@ -115,29 +115,26 @@ def add(request):
         question_text = request.POST['question']
         tags_text = request.POST['tags']
         user_id = request.POST['user']
-        user_ob = get_user_model().objects.get(id=user_id)
-        user = user_ob.userqaprofile
+        user = get_user_model().objects.get(id=user_id)
 
         if question_text.strip() == '':
             return render(request, 'qa/add.html', {'message': 'Empty'})
 
-        pub_date = datetime.datetime.now()
-        q = Question()
-        q.question_text = question_text
-        q.pub_date = pub_date
-        q.user_data = user
-        q.save()
+        question = Question()
+        question.question_text = question_text
+        question.user = user
+        question.save()
 
         tags = tags_text.split(',')
         for tag in tags:
             try:
-                t = Tag.objects.get(slug=tag)
-                q.tags.add(t)
+                tag = Tag.objects.get(slug=tag)
+                question.tags.add(tag)
             except Tag.DoesNotExist:
-                t=Tag()
-                t.slug = tag
-                t.save()
-                q.tags.add(t)
+                tag = Tag()
+                tag.slug = tag
+                tag.save()
+                question.tags.add(tag)
 
         #send_mail('QA: Your Question has been Posted.', 'Thank you for posting the question, '+question_text+'. We will notify you once someone posts an answer.', 'admin@test.com', [request.user.email], fail_silently=False)
 

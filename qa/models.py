@@ -30,11 +30,11 @@ class UserQAProfile(models.Model):
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = models.ManyToManyField(Tag)
     reward = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
-    user_data = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     closed = models.BooleanField(default=False)
 
     def __str__(self):
@@ -46,7 +46,7 @@ class Answer(models.Model):
     answer_text = MarkdownField()
     votes = models.IntegerField(default=0)
     pub_date = models.DateTimeField('date published')
-    user_data = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     def __str__(self):
         return self.answer_text
@@ -66,7 +66,7 @@ class Comment(models.Model):
     answer = models.ForeignKey(Answer)
     comment_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
-    user_data = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     def __str__(self):
         return self.comment_text
