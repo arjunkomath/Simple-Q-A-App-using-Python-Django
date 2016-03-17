@@ -131,7 +131,7 @@ def add(request):
         for tag in tags:
             try:
                 tag_object = Tag.objects.get(slug=tag)
-                question.tags.add(tag)
+                question.tags.add(tag_object)
             except Tag.DoesNotExist:
                 tag_object = Tag()
                 tag_object.slug = tag
