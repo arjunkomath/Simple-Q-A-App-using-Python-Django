@@ -53,9 +53,9 @@ urlpatterns = patterns('',
     url(r'^thumb/(?P<user_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$', views.thumb, name='thumb'),
 
     url(r'^profile/(?P<user_id>\d+)/$', views.profile, name='profile'),
-    url(r'^register/$', views.register, name='register'),
-    url(r'^login/$', views.user_login, name='login'),
-    url(r'^logout/$', views.user_logout, name='logout'),
+    #url(r'^register/$', views.register, name='register'),
+    #url(r'^login/$', views.user_login, name='login'),
+    #url(r'^logout/$', views.user_logout, name='logout'),
 
     url('^markdown/', include( 'django_markdown.urls')),
 

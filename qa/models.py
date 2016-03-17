@@ -1,4 +1,5 @@
 from django.db import models
+from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django_markdown.models import MarkdownField
 
@@ -15,14 +16,14 @@ class Tag(models.Model):
 
 class UserQAProfile(models.Model):
     # This line is required. Links UserQAProfile to a User model instance.
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     points = models.IntegerField(default=0)
     # The additional attributes we wish to include.
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='qa/static/profile_images',
                                 blank=True)
 
-    # Override the __str__() method to return out something meaningful!
+    # Override the __unicode__() method to return out something meaningful!
     def __str__(self):
         return self.user.username
 
