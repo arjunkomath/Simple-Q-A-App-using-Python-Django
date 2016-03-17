@@ -13,7 +13,7 @@
 
   {% if user.is_authenticated %}
 
-  <form id="add_q" method="post" action="/add/">
+  <form id="add_q" method="post" action="{% url 'qa:add' %}">
     {% csrf_token %}
     <input class="input-lg" style="width:100%" placeholder="Enter your question....." type="text" name="title"/> <br/><br/>
     <textarea id="ans" rows="7" style="width:100%" placeholder="Explain your question....." type="text" name="description"></textarea>

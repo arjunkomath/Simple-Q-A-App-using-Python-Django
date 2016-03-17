@@ -34,7 +34,7 @@
   <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
   <p>
     {% if question.reward %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %}
-    <h3><a href="{% url 'detail' question.id %}">{{ question.title }}</a></h3>
+    <h3><a href="{% url 'qa:detail' question.id %}">{{ question.title }}</a></h3>
     <br/>
     {% for tag in question.tags.all %}
     <a href="/tag/{{ tag.slug|slugify }}/"><tag>{{ tag.slug }}</tag></a>
