@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.shortcuts import get_object_or_404, render, render_to_response
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
@@ -109,7 +110,8 @@ def add(request):
     context = RequestContext(request)
 
     if request.user.is_anonymous():
-        return HttpResponseRedirect("/login/")
+        return HttpResponseRedirect(reverse(settings.LOGIN_URL)\
+                +'?next=' + request.path)
 
     if request.method == 'POST':
         question_title = request.POST['title']
@@ -139,8 +141,7 @@ def add(request):
 
 
         #send_mail('QA: Your Question has been Posted.', 'Thank you for posting the question, '+question_text+'. We will notify you once someone posts an answer.', 'admin@test.com', [request.user.email], fail_silently=False)
-
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(reverse('qa:index'))
     return HttpResponse(template.render(context))
 
 def comment(request, answer_id):
