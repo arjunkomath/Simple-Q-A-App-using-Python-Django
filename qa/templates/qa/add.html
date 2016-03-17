@@ -1,5 +1,5 @@
 {% load bootstrap3 %}
-
+{% load django_markdown %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
@@ -16,7 +16,10 @@
   <form id="add_q" method="post" action="/add/">
     {% csrf_token %}
     <input class="input-lg" style="width:100%" placeholder="Enter your question....." type="text" name="question"/> <br/><br/>
-
+    <textarea id="ans" rows="7" style="width:100%" placeholder="Explain your question....." type="text" name="description"></textarea>
+    {% markdown_editor "#ans" %}
+    {% markdown_media %}
+     <br/><br/>
     <input class="input-lg" style="width:100%" placeholder="Enter tags separates by comma!" type="text" name="tags"/> <br/><br/>
     <input type="hidden" value="{{ user.id }}" name="user" />
     <input class="btn pull-right btn-success" type="submit" value="Submit Question" />

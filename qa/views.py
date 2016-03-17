@@ -113,6 +113,7 @@ def add(request):
 
     if request.method == 'POST':
         question_text = request.POST['question']
+        question_description = request.POST['description']
         tags_text = request.POST['tags']
         user_id = request.POST['user']
         user = get_user_model().objects.get(id=user_id)
@@ -122,6 +123,7 @@ def add(request):
 
         question = Question()
         question.question_text = question_text
+        question.description = question_description
         question.user = user
         question.save()
 
