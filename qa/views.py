@@ -235,20 +235,18 @@ def add_answer(request):
 
         question = Question.objects.get(pk=question_id)
         user_ob = get_user_model().objects.get(id=user_id)
-        user = UserQAProfile.objects.get(user=user_ob)
+        user = user_ob.userqaprofile
         user.points += 5
         user.save()
 
         if answer_text.strip() == '':
             return render(request, 'qa/answer.html', {'question': question, 'message': 'Empty'})
 
-        a = Answer()
-        pub_date = datetime.datetime.now()
-        a.answer_text = answer_text
-        a.question = question
-        a.user_data = user
-        a.pub_date = pub_date
-        a.save()
+        answer = Answer()
+        answer.answer_text = answer_text
+        answer.question = question
+        answer.user = user_ob
+        answer.save()
 
         answer_list = question.answer_set.order_by('-votes')
 
