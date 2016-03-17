@@ -27,6 +27,7 @@ setup(
         'Programming Language :: Python :: 3.3',
     ],
     install_requires=[
+        'django-annoying',
         'django_bootstrap3',
         'django_markdown',
         'pillow',

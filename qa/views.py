@@ -101,7 +101,7 @@ def index(request):
 
 def profile(request, user_id):
     user_ob = User.objects.get(id=user_id)
-    user = UserProfile.objects.get(user=user_ob)
+    user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
 
 def add(request):
@@ -116,7 +116,7 @@ def add(request):
         tags_text = request.POST['tags']
         user_id = request.POST['user']
         user_ob = User.objects.get(id=user_id)
-        user = UserProfile.objects.get(user=user_ob)
+        user = user_ob.userqaprofile
 
         if question_text.strip() == '':
             return render(request, 'qa/add.html', {'message': 'Empty'})
@@ -153,7 +153,7 @@ def comment(request, answer_id):
         comment_text = request.POST['comment']
         user_id = request.POST['user']
         user_ob = User.objects.get(id=user_id)
-        user = UserProfile.objects.get(user=user_ob)
+        user = UserQAProfile.objects.get(user=user_ob)
         user.points += 1
         user.save()
 
@@ -235,7 +235,7 @@ def add_answer(request):
 
         question = Question.objects.get(pk=question_id)
         user_ob = User.objects.get(id=user_id)
-        user = UserProfile.objects.get(user=user_ob)
+        user = UserQAProfile.objects.get(user=user_ob)
         user.points += 5
         user.save()
 
@@ -270,7 +270,7 @@ def add_answer(request):
 def vote(request, user_id, answer_id, question_id, op_code):
 
     user_ob = User.objects.get(id=user_id)
-    user = UserProfile.objects.get(user=user_ob)
+    user = UserQAProfile.objects.get(user=user_ob)
     answer = Answer.objects.get(pk=answer_id)
     question = Question.objects.get(pk=question_id)
 
@@ -329,7 +329,7 @@ def vote(request, user_id, answer_id, question_id, op_code):
 def thumb(request, user_id, question_id, op_code):
 
     user_ob = User.objects.get(id=user_id)
-    user = UserProfile.objects.get(user=user_ob)
+    user = UserQAProfile.objects.get(user=user_ob)
     question = Question.objects.get(pk=question_id)
 
     answer_list = question.answer_set.order_by('-votes')
@@ -393,7 +393,7 @@ def register(request):
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
+        profile_form = UserQAProfileForm(data=request.POST)
 
         # If the two forms are valid...
         if user_form.is_valid() and profile_form.is_valid():
@@ -432,7 +432,7 @@ def register(request):
     # These forms will be blank, ready for user input.
     else:
         user_form = UserForm()
-        profile_form = UserProfileForm()
+        profile_form = UserQAProfileForm()
 
     # Render the template depending on the context.
     return render_to_response(

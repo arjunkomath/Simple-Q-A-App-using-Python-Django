@@ -1,4 +1,6 @@
 from django.db import models
+from annoying.fields import AutoOneToOneField
+
 
 class Tag(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
@@ -11,9 +13,10 @@ class Tag(models.Model):
 
 from django.contrib.auth.models import User
 
+
 class UserQAProfile(models.Model):
     # This line is required. Links UserQAProfile to a User model instance.
-    user = models.OneToOneField(User)
+    user = AutoOneToOneField(User, primary_key=True)
     points = models.IntegerField(default=0)
 
     # The additional attributes we wish to include.
