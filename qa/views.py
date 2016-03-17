@@ -125,6 +125,7 @@ def add(request):
         question.title = question_title
         question.description = question_description
         question.user = user
+        question.save()
         tags = tags_text.split(',')
         for tag in tags:
             try:
@@ -136,7 +137,7 @@ def add(request):
                 tag_object.save()
                 question.tags.add(tag_object)
 
-        question.save()
+
         #send_mail('QA: Your Question has been Posted.', 'Thank you for posting the question, '+question_text+'. We will notify you once someone posts an answer.', 'admin@test.com', [request.user.email], fail_silently=False)
 
         return HttpResponseRedirect('/')
