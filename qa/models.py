@@ -11,8 +11,8 @@ class Tag(models.Model):
 
 from django.contrib.auth.models import User
 
-class UserProfile(models.Model):
-    # This line is required. Links UserProfile to a User model instance.
+class UserQAProfile(models.Model):
+    # This line is required. Links UserQAProfile to a User model instance.
     user = models.OneToOneField(User)
     points = models.IntegerField(default=0)
 
@@ -32,7 +32,7 @@ class Question(models.Model):
     tags = models.ManyToManyField(Tag)
     reward = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
-    user_data = models.ForeignKey(UserProfile)
+    user_data = models.ForeignKey(UserQAProfile)
     closed = models.BooleanField(default=False)
 
     def __str__(self):
@@ -43,22 +43,22 @@ class Answer(models.Model):
     answer_text = MarkdownField()
     votes = models.IntegerField(default=0)
     pub_date = models.DateTimeField('date published')
-    user_data = models.ForeignKey(UserProfile)
+    user_data = models.ForeignKey(UserQAProfile)
     def __str__(self):
         return self.answer_text
 
 class Voter(models.Model):
-    user = models.ForeignKey(UserProfile)
+    user = models.ForeignKey(UserQAProfile)
     answer = models.ForeignKey(Answer)
 
 class QVoter(models.Model):
-    user = models.ForeignKey(UserProfile)
+    user = models.ForeignKey(UserQAProfile)
     question = models.ForeignKey(Question)
 
 class Comment(models.Model):
     answer = models.ForeignKey(Answer)
     comment_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
-    user_data = models.ForeignKey(UserProfile)
+    user_data = models.ForeignKey(UserQAProfile)
     def __str__(self):
         return self.comment_text
