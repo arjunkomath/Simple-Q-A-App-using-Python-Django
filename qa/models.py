@@ -1,4 +1,8 @@
 from django.db import models
+from annoying.fields import AutoOneToOneField
+from django.conf import settings
+from django_markdown.models import MarkdownField
+
 
 class Tag(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
@@ -9,56 +13,61 @@ class Tag(models.Model):
     class Meta:
         ordering = ('slug',)
 
-from django.contrib.auth.models import User
 
-class UserProfile(models.Model):
-    # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User)
+class UserQAProfile(models.Model):
+    # This line is required. Links UserQAProfile to a User model instance.
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     points = models.IntegerField(default=0)
-
     # The additional attributes we wish to include.
     website = models.URLField(blank=True)
-    picture = models.ImageField(upload_to='qa/static/profile_images', blank=True)
+    picture = models.ImageField(upload_to='qa/static/profile_images',
+                                blank=True)
 
     # Override the __unicode__() method to return out something meaningful!
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
 
-from django_markdown.models import MarkdownField
 
 class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    title = models.CharField(max_length=200)
+    description = MarkdownField()
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = models.ManyToManyField(Tag)
     reward = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
-    user_data = models.ForeignKey(UserProfile)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     closed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.question_text
+        return self.title
+
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer_text = MarkdownField()
     votes = models.IntegerField(default=0)
-    pub_date = models.DateTimeField('date published')
-    user_data = models.ForeignKey(UserProfile)
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+
     def __str__(self):
         return self.answer_text
 
+
 class Voter(models.Model):
-    user = models.ForeignKey(UserProfile)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     answer = models.ForeignKey(Answer)
 
+
 class QVoter(models.Model):
-    user = models.ForeignKey(UserProfile)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     question = models.ForeignKey(Question)
+
 
 class Comment(models.Model):
     answer = models.ForeignKey(Answer)
-    comment_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-    user_data = models.ForeignKey(UserProfile)
+    comment_text = MarkdownField()
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+
     def __str__(self):
         return self.comment_text
