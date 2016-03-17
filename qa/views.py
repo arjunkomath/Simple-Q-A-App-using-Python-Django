@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 def search(request):
     if request.method == 'POST':
         word = request.POST['word']
-        latest_question_list = Question.objects.filter(question_text__contains=word)
+        latest_question_list = Question.objects.filter(title__contains=word)
         paginator = Paginator(latest_question_list, 10)
         page = request.GET.get('page')
         try:
@@ -112,21 +112,19 @@ def add(request):
         return HttpResponseRedirect("/login/")
 
     if request.method == 'POST':
-        question_text = request.POST['question']
+        question_title = request.POST['title']
         question_description = request.POST['description']
         tags_text = request.POST['tags']
         user_id = request.POST['user']
         user = get_user_model().objects.get(id=user_id)
 
-        if question_text.strip() == '':
+        if question_title.strip() == '':
             return render(request, 'qa/add.html', {'message': 'Empty'})
 
         question = Question()
-        question.question_text = question_text
+        question.title = question_title
         question.description = question_description
         question.user = user
-        question.save()
-
         tags = tags_text.split(',')
         for tag in tags:
             try:
@@ -138,6 +136,7 @@ def add(request):
                 tag_object.save()
                 question.tags.add(tag_object)
 
+        question.save()
         #send_mail('QA: Your Question has been Posted.', 'Thank you for posting the question, '+question_text+'. We will notify you once someone posts an answer.', 'admin@test.com', [request.user.email], fail_silently=False)
 
         return HttpResponseRedirect('/')

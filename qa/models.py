@@ -39,7 +39,7 @@ class Question(models.Model):
     closed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.question_text
+        return self.title
 
 
 class Answer(models.Model):

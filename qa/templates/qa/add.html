@@ -15,7 +15,7 @@
 
   <form id="add_q" method="post" action="/add/">
     {% csrf_token %}
-    <input class="input-lg" style="width:100%" placeholder="Enter your question....." type="text" name="question"/> <br/><br/>
+    <input class="input-lg" style="width:100%" placeholder="Enter your question....." type="text" name="title"/> <br/><br/>
     <textarea id="ans" rows="7" style="width:100%" placeholder="Explain your question....." type="text" name="description"></textarea>
     {% markdown_editor "#ans" %}
     {% markdown_media %}

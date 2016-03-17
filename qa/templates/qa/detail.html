@@ -79,7 +79,7 @@ cool {
 
 <div class="jumbotron">
   <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
-  <h3><cool>Q: </cool>{{ question.question_text }}</h3>
+  <h3><cool>Q: </cool>{{ question.title }}</h3>
   <h4>{{ question.description }}</h4>
   <p>
     {% if user.is_authenticated %}

@@ -7,7 +7,7 @@
 {% if message %}
 <strong>Enter a valid Answer!</strong>
 {% endif %}
-<h4>Answering Question : {{ question.question_text }}</h4>
+<h4>Answering Question : {{ question.title }}</h4>
 
 {% if user.is_authenticated %}
 <form id="answer" method="post" action="/answer/">
