@@ -3,6 +3,7 @@ from django.template import RequestContext, loader
 from django.shortcuts import get_object_or_404, render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth import get_user_model
 
 from qa.models import *
 import datetime
@@ -99,7 +100,7 @@ def index(request):
     return HttpResponse(template.render(context))
 
 def profile(request, user_id):
-    user_ob = User.objects.get(id=user_id)
+    user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
 
@@ -114,7 +115,7 @@ def add(request):
         question_text = request.POST['question']
         tags_text = request.POST['tags']
         user_id = request.POST['user']
-        user_ob = User.objects.get(id=user_id)
+        user_ob = get_user_model().objects.get(id=user_id)
         user = user_ob.userqaprofile
 
         if question_text.strip() == '':
@@ -151,7 +152,7 @@ def comment(request, answer_id):
     if request.method == 'POST':
         comment_text = request.POST['comment']
         user_id = request.POST['user']
-        user_ob = User.objects.get(id=user_id)
+        user_ob = get_user_model().objects.get(id=user_id)
         user = UserQAProfile.objects.get(user=user_ob)
         user.points += 1
         user.save()
@@ -233,7 +234,7 @@ def add_answer(request):
         user_id = request.POST['user']
 
         question = Question.objects.get(pk=question_id)
-        user_ob = User.objects.get(id=user_id)
+        user_ob = get_user_model().objects.get(id=user_id)
         user = UserQAProfile.objects.get(user=user_ob)
         user.points += 5
         user.save()
@@ -268,7 +269,7 @@ def add_answer(request):
 
 def vote(request, user_id, answer_id, question_id, op_code):
 
-    user_ob = User.objects.get(id=user_id)
+    user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     answer = Answer.objects.get(pk=answer_id)
     question = Question.objects.get(pk=question_id)
@@ -327,7 +328,7 @@ def vote(request, user_id, answer_id, question_id, op_code):
 
 def thumb(request, user_id, question_id, op_code):
 
-    user_ob = User.objects.get(id=user_id)
+    user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     question = Question.objects.get(pk=question_id)
 
