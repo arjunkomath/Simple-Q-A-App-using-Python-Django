@@ -130,13 +130,13 @@ def add(request):
         tags = tags_text.split(',')
         for tag in tags:
             try:
-                tag = Tag.objects.get(slug=tag)
+                tag_object = Tag.objects.get(slug=tag)
                 question.tags.add(tag)
             except Tag.DoesNotExist:
-                tag = Tag()
-                tag.slug = tag
-                tag.save()
-                question.tags.add(tag)
+                tag_object = Tag()
+                tag_object.slug = tag
+                tag_object.save()
+                question.tags.add(tag_object)
 
         #send_mail('QA: Your Question has been Posted.', 'Thank you for posting the question, '+question_text+'. We will notify you once someone posts an answer.', 'admin@test.com', [request.user.email], fail_silently=False)
 
