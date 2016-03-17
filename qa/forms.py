@@ -5,7 +5,7 @@ from django import forms
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('question_text', 'tags')
+        fields = ('title', 'description','tags')
 
 
 class UserProfileForm(forms.ModelForm):
