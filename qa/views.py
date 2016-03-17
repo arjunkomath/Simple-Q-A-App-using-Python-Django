@@ -243,11 +243,9 @@ def add_answer(request):
             return render(request, 'qa/answer.html', {'question': question, 'message': 'Empty'})
 
         answer = Answer()
-        pub_date = datetime.datetime.now()
         answer.answer_text = answer_text
         answer.question = question
         answer.user = user_ob
-        answer.pub_date = pub_date
         answer.save()
 
         answer_list = question.answer_set.order_by('-votes')
