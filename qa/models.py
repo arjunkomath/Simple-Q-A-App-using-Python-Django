@@ -30,6 +30,7 @@ class UserQAProfile(models.Model):
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
+    description = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = models.ManyToManyField(Tag)
     reward = models.IntegerField(default=0)
@@ -45,7 +46,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer_text = MarkdownField()
     votes = models.IntegerField(default=0)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     def __str__(self):
@@ -64,8 +65,8 @@ class QVoter(models.Model):
 
 class Comment(models.Model):
     answer = models.ForeignKey(Answer)
-    comment_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    comment_text = MarkdownField()
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     def __str__(self):
