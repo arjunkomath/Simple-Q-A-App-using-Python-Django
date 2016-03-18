@@ -5,6 +5,7 @@
 <title>Simple QA</title>
 <link rel="icon" type="image/png" href="static/qa/icon.ico">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
 
 <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
@@ -68,7 +69,7 @@
  </div>
 </div>
 
-
+{% block js %}
 <script>
 $(function () {
   $('a[href="#search"]').on('click', function(event) {
@@ -85,3 +86,5 @@ $(function () {
 
 });
 </script>
+{% endblock js %}
+{%block extra_js %}{% endblock extra_js %}

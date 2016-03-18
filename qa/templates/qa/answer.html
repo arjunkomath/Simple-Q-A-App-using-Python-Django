@@ -9,8 +9,7 @@
 {% endif %}
 <h4>Answering Question : {{ question.title }}</h4>
 
-{% if user.is_authenticated %}
-<form id="answer" method="post" action="/answer/">
+<form id="answer" method="post" action="{% url 'qa-add_answer' %}">
   {% csrf_token %}
   <textarea id="ans" rows="7" style="width:100%" placeholder="Enter your Answer..." type="text" name="answer"></textarea>
   {% markdown_editor "#ans" %}
@@ -20,9 +19,6 @@
   <input type="hidden" value="{{ user.id }}" name="user" />
   <input class="btn btn-success" type="submit" value="Submit Answer" />
 </form>
-{% else %}
-<small><a href="/login">Please Login to Add Questions!</a></small>
-{% endif %}
 </div>
 
 {% endblock content %}
