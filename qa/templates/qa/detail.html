@@ -38,13 +38,13 @@
   <h4>{{ question.description }}</h4>
   <p>
     {% if user.is_authenticated %}
-  <a href="{% url 'qa-thumb' user.id question.id 0 %}" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
-  <a href="{% url 'qa-thumb' user.id question.id 1 %}" class="btn btn-danger"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
+  <a href="{% url 'qa_thumb' user.id question.id 0 %}" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+  <a href="{% url 'qa_thumb' user.id question.id 1 %}" class="btn btn-danger"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
     {% endif %}
     {% if question.closed %}
     <p class="pull-right">This Question has been closed.</p>
     {% else %}
-    <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa-answer' question.id %}" role="button">Answer this Question!</a>
+    <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_answer' question.id %}" role="button">Answer this Question!</a>
     {% endif %}
   </p>
 </div>
@@ -59,12 +59,12 @@
       <div class ="col-md-1">
         <div class="row">
           <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.votes }}</b></big></div>
-          <div class ="col-sm-1"><a class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer" href="{% url 'qa-vote' user.id answer.id question.id 0 %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> <a class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer" href="{% url 'qa-vote' user.id answer.id question.id 1 %}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></div>
+          <div class ="col-sm-1"><a class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer" href="{% url 'qa_vote' user.id answer.id question.id 0 %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> <a class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer" href="{% url 'qa_vote' user.id answer.id question.id 1 %}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></div>
         </div>
       </div>
       {% endif %}
       <div class ="col-md-9">
-        <a href="{% url 'qa-comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
+        <a href="{% url 'qa_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
 
         {% if answer.votes > 0 %}
         <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
@@ -76,7 +76,7 @@
 
         {% if answer.comment_set %}
           {% for comment in answer.comment_set.all %}
-          <p><b>{{ comment.comment_text }}</b><small>, <a href="{% url 'qa-profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+          <p><b>{{ comment.comment_text }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
           <hr>
           {% endfor %}
         {% endif %}
@@ -89,7 +89,7 @@
         <img class="pull-right" width="50px" height="50px" src="{% static "qa/user.png" %}">
         {% endif %}
 
-        <p class="pull-right">- <b><a href="{% url 'qa-profile' answer.user.id %}">{{ answer.user.username }}</a> ({{ answer.user.userqaprofile.points }})</b></p>
+        <p class="pull-right">- <b><a href="{% url 'qa_profile' answer.user.id %}">{{ answer.user.username }}</a> ({{ answer.user.userqaprofile.points }})</b></p>
       </div>
     </div>
   <hr>
@@ -113,7 +113,7 @@
 
 {% else %}
 <img class="pull-right" src="{% static "qa/question.jpg" %}" alt="question"/>
-<center><h2>This question is still open, <a href="{% url 'qa-answer' question.id %}" role="button">Write answer!</a></h2></center>
+<center><h2>This question is still open, <a href="{% url 'qa_answer' question.id %}" role="button">Write answer!</a></h2></center>
 {% endif %}
 
 
