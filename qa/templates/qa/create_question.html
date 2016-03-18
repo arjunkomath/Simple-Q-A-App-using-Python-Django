@@ -1,0 +1,20 @@
+{% load django_markdown %}
+
+<div class="container">
+
+  {% include "qa/header.html" %}
+  {% if message %}
+  <strong>Enter a valid Question!</strong>
+  {% endif %}
+
+  <form method="post" action="{% url 'qa:add' %}">
+    {{ form }}
+    {% csrf_token %}
+    <input class="btn pull-right btn-success" type="submit" value="Submit Question" />
+  </form>
+
+</div>
+
+{% markdown_editor "#ans" %}
+{% markdown_media %}
+{% include "qa/footer.html" %}

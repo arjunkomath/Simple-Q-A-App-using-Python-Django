@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.template import RequestContext, loader
+from django.views.generic import CreateView
+from django.views.generic.edit import ModelFormMixin
 from django.shortcuts import get_object_or_404, render, render_to_response
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
@@ -8,9 +10,39 @@ from django.contrib.auth import get_user_model
 
 from qa.models import *
 import datetime
-from qa.forms import UserProfileForm
+from qa.forms import UserProfileForm, QuestionForm
+from .mixins import LoginRequired
 
 from django.core.mail import send_mail
+
+
+class CreateQuestionView(LoginRequired, CreateView):
+    """
+    View to handle the creation of a new question
+    """
+    template_name = 'qa/create_question.html'
+    model = Question
+    form_class = QuestionForm
+
+    def form_valid(self, form):
+        """
+        Extract tags and create the required relation
+        """
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        tags = form.cleaned_data['new_tags'].split(',')
+        for tag in tags:
+            tag_object, created = Tag.objects.get_or_create(slug=tag)
+            self.object.tags.add(tag_object)
+        return super(ModelFormMixin, self).form_valid(form)
+
+    def get_success_url(self):
+        """
+        Redirects to the question page on success
+        """
+        url = reverse('qa:detail', kwargs = {'question_id': self.object.pk})
+        return url
 
 def search(request):
     if request.method == 'POST':
@@ -105,44 +137,6 @@ def profile(request, user_id):
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
 
-def add(request):
-    template = loader.get_template('qa/add.html')
-    context = RequestContext(request)
-
-    if request.user.is_anonymous():
-        return HttpResponseRedirect(reverse(settings.LOGIN_URL)\
-                +'?next=' + request.path)
-
-    if request.method == 'POST':
-        question_title = request.POST['title']
-        question_description = request.POST['description']
-        tags_text = request.POST['tags']
-        user_id = request.POST['user']
-        user = get_user_model().objects.get(id=user_id)
-
-        if question_title.strip() == '':
-            return render(request, 'qa/add.html', {'message': 'Empty'})
-
-        question = Question()
-        question.title = question_title
-        question.description = question_description
-        question.user = user
-        question.save()
-        tags = tags_text.split(',')
-        for tag in tags:
-            try:
-                tag_object = Tag.objects.get(slug=tag)
-                question.tags.add(tag_object)
-            except Tag.DoesNotExist:
-                tag_object = Tag()
-                tag_object.slug = tag
-                tag_object.save()
-                question.tags.add(tag_object)
-
-
-        #send_mail('QA: Your Question has been Posted.', 'Thank you for posting the question, '+question_text+'. We will notify you once someone posts an answer.', 'admin@test.com', [request.user.email], fail_silently=False)
-        return HttpResponseRedirect(reverse('qa:index'))
-    return HttpResponse(template.render(context))
 
 def comment(request, answer_id):
 
