@@ -3,9 +3,11 @@ from django import forms
 
 
 class QuestionForm(forms.ModelForm):
+    new_tags = forms.CharField()
+
     class Meta:
         model = Question
-        fields = ('title', 'description','tags')
+        fields = ('title', 'description', 'new_tags')
 
 
 class UserProfileForm(forms.ModelForm):

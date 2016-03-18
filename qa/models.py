@@ -29,7 +29,7 @@ class UserQAProfile(models.Model):
 
 
 class Question(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=False)
     description = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = models.ManyToManyField(Tag)
