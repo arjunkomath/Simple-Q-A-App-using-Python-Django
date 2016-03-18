@@ -1,8 +1,8 @@
+{% extends 'qa/base.html' %}
+{% load bootstrap3 %}
 {% load django_markdown %}
 
-<div class="container">
-
-  {% include "qa/header.html" %}
+{% block content %}
 
 {% if message %}
 <strong>Enter a valid Answer!</strong>
@@ -12,7 +12,7 @@
 {% if user.is_authenticated %}
 <form id="answer" method="post" action="/answer/">
   {% csrf_token %}
-  <textarea id="ans" rows="7" style="width:100%" placeholder="Enter your Answer....." type="text" name="answer"></textarea>
+  <textarea id="ans" rows="7" style="width:100%" placeholder="Enter your Answer..." type="text" name="answer"></textarea>
   {% markdown_editor "#ans" %}
   {% markdown_media %}
    <br/><br/>
@@ -25,4 +25,4 @@
 {% endif %}
 </div>
 
-{% include "qa/footer.html" %}
+{% endblock content %}

@@ -1,11 +1,8 @@
+{% extends 'qa/base.html' %}
 {% load bootstrap3 %}
 {% load django_markdown %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 
-<div class="container">
-
-  {% include "qa/header.html" %}
+{% block content %}
 
   {% if message %}
   <strong>Enter a valid Question!</strong>
@@ -31,4 +28,4 @@
 
 </div>
 
-{% include "qa/footer.html" %}
+{% endblock content %}

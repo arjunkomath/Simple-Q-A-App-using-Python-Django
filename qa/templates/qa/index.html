@@ -1,32 +1,18 @@
-<style>
-.topbar {
-  width:100%;
-  height:7px;
-  position: absolute;
-  z-index:1000;
-
-  background: #FF8800;
-}
-</style>
-
-<div class="topbar"></div>
-
-<div class="container">
-
-{% include "qa/header.html" %}
+{% extends "qa/base.html" %}
+{% block content %}
 
 <div class="col-md-8">
 
   <ul class="nav nav-tabs nav-justified">
-    <li role="presentation" class="active"><a href="#latest" aria-controls="latest" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Latest</a></li>
-    <li role="presentation"><a href="#unans" aria-controls="unans" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Unanswered <span class="badge">{{ noans.count }}</span></a></li>
-    <li role="presentation"><a href="#reward" aria-controls="reward" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Most Rewarding <span class="badge">{{ reward.count }}</span></a></li>
+    <li role="presentation" class="active"><a href="#latest" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Latest</a></li>
+    <li role="presentation"><a href="#unans" data-toggle="tab"><span class="glyphicon glyphicon-question-sign"></span> Unanswered <span class="badge">{{ noans.count }}</span></a></li>
+    <li role="presentation"><a href="#reward" data-toggle="tab"><span class="glyphicon glyphicon-star"></span> Most Rewarding <span class="badge">{{ reward.count }}</span></a></li>
   </ul>
   <br/>
 
 
 <div class="tab-content">
-<div role="tabpanel" class="tab-pane active" id="latest">
+<div class="tab-pane active" id="latest">
 {% if questions %}
   {% for question in questions %}
   <div class="row">
@@ -66,7 +52,7 @@
 {% endif %}
 </div>
 
-<div role="tabpanel" class="tab-pane" id="unans">
+<div class="tab-pane" id="unans">
 {% if noans %}
   {% for question in noans %}
   <div class="row">
@@ -89,7 +75,7 @@
 {% endif %}
 </div>
 
-<div role="tabpanel" class="tab-pane" id="reward">
+<div class="tab-pane" id="reward">
 {% if reward %}
   {% for question in reward %}
   <div class="row">
@@ -168,6 +154,5 @@
   {% endif %}
 
 </div>
-</div>
 
-{% include "qa/footer.html" %}
+{% endblock content %}
