@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^q/(?P<question_id>\d+)/$', views.detail, name='detail'),
+    url(r'^question/(?P<question_id>\d+)/$', views.detail, name='detail'),
     url(r'^answer/(?P<question_id>\d+)/$', views.answer, name='answer'),
     url(r'^new-question/$', views.CreateQuestionView.as_view(), name='qa_create_question'),
     url(r'^answer/$', views.add_answer, name='add_answer'),

@@ -33,8 +33,9 @@ class CreateQuestionView(LoginRequired, CreateView):
         self.object.save()
         tags = form.cleaned_data['new_tags'].split(',')
         for tag in tags:
-            tag_object, created = Tag.objects.get_or_create(slug=tag)
-            self.object.tags.add(tag_object)
+            if tag != '' and tag != ' ':
+                tag_object, created = Tag.objects.get_or_create(slug=tag)
+                self.object.tags.add(tag_object)
         return super(ModelFormMixin, self).form_valid(form)
 
     def get_success_url(self):
@@ -138,7 +139,7 @@ def profile(request, user_id):
     return render(request, 'qa/profile.html', {'user': user})
 
 
-def comment(request, answer_id):
+def comment(request, answer_id): # requires login
 
     if request.user.is_anonymous():
         return HttpResponseRedirect("/login/")
@@ -161,7 +162,7 @@ def comment(request, answer_id):
         c.answer = a
         c.comment_text = comment_text
         c.pub_date = pub_date
-        c.user_data = user
+        c.user = user_ob
         c.save()
 
         try:
@@ -211,7 +212,7 @@ def detail(request, question_id):
         raise Http404("Question does not exist")
     return render(request, 'qa/detail.html', {'answers': answers, 'question': question}, )
 
-def answer(request, question_id):
+def answer(request, question_id): # requires login
     if request.user.is_anonymous():
         return HttpResponseRedirect("/login/")
 
@@ -221,7 +222,7 @@ def answer(request, question_id):
         raise Http404("Question does not exist")
     return render(request, 'qa/answer.html', {'question': question})
 
-def add_answer(request):
+def add_answer(request): #requires login
     if request.method == 'POST':
         answer_text = request.POST['answer']
         question_id = request.POST['question']
@@ -279,7 +280,7 @@ def vote(request, user_id, answer_id, question_id, op_code):
         # If page is out of range (e.g. 9999), deliver last page of results.
         answers = paginator.page(paginator.num_pages)
 
-    if Answer.objects.filter(id=answer_id, user_data=user).exists():
+    if Answer.objects.filter(id=answer_id, user=user_ob).exists():
         return render(request, 'qa/detail.html', {'question': question, 'answers': answers, 'message':"You cannot vote on your answer!"})
 
     if Voter.objects.filter(answer_id=answer_id, user=user).exists():
@@ -337,19 +338,17 @@ def thumb(request, user_id, question_id, op_code):
         # If page is out of range (e.g. 9999), deliver last page of results.
         answers = paginator.page(paginator.num_pages)
 
-    if QVoter.objects.filter(question_id=question_id, user=user).exists():
+    if QVoter.objects.filter(question_id=question_id, user=user_ob).exists():
         return render(request, 'qa/detail.html', {'question': question, 'answers': answers, 'message':"You've already cast vote on this question!"})
 
     if op_code == '0':
         question.reward += 5
-        u = question.user_data
-        u.points += 5
-        u.save()
+        user.points += 5
+        user.save()
     if op_code == '1':
         question.reward -= 5
-        u = question.user_data
-        u.points -= 5
-        u.save()
+        user.points -= 5
+        user.save()
     question.save()
 
     answer_list = question.answer_set.order_by('-votes')
@@ -366,7 +365,7 @@ def thumb(request, user_id, question_id, op_code):
         answers = paginator.page(paginator.num_pages)
 
     v = QVoter()
-    v.user = user
+    v.user = user_ob
     v.question = question
     v.save()
 

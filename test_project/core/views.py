@@ -88,7 +88,7 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render_to_response('qa/login.html', {}, context)
+        return render_to_response('core/templates/login.html', {}, context)
 
 from django.contrib.auth import logout
 

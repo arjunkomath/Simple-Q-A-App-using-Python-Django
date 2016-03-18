@@ -5,7 +5,7 @@ from django_markdown.models import MarkdownField
 
 
 class Tag(models.Model):
-    slug = models.SlugField(max_length=100, unique=True)
+    slug = models.SlugField(blank=False, max_length=100, unique=True)
 
     def __str__(self):
         return self.slug

@@ -1,14 +1,15 @@
+{% extends 'qa/base.html' %}
+{% load bootstrap3 %}
 {% load django_markdown %}
 
-<div class="container">
+{% block content %}
 
-  {% include "qa/header.html" %}
   {% if message %}
   <strong>Enter a valid Question!</strong>
   {% endif %}
 
-  <form method="post" action="{% url 'qa:add' %}">
-    {{ form }}
+  <form method="post" action="{% url 'qa-add' %}">
+    {{ form.as_p }}
     {% csrf_token %}
     <input class="btn pull-right btn-success" type="submit" value="Submit Question" />
   </form>
@@ -17,4 +18,4 @@
 
 {% markdown_editor "#ans" %}
 {% markdown_media %}
-{% include "qa/footer.html" %}
+{% endblock content %}
