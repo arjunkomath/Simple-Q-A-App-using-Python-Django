@@ -17,13 +17,3 @@ class TestViews(TestCase):
             password='top_secret'
         )
         self.client.login(username='test_user', password='top_secret')
-
-    def test_login_required(self):
-        """
-        If user is anonymous, this page should
-        redirect to the login page
-        """
-        client = Client()
-        response = client.get(reverse('qa_create_question'))
-        response_url = response.url.split('?')[0]
-        self.assertEqual(response_url, 'http://testserver' + settings.LOGIN_URL)
