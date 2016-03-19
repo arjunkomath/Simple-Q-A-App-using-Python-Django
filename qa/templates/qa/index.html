@@ -62,7 +62,7 @@
     {% if question.answer_set.count %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
     <br/>
     {% for tag in question.tags.all %}
-    <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
+        <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
     {% endfor %}
     <small> {{ question.pub_date}}</small>
   </p>
@@ -86,7 +86,7 @@
     <br/>
     <reward>Earn <b>{{ question.reward }}</b> points</reward>
     {% for tag in question.tags.all %}
-    <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
+        <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
     {% endfor %}
     <small> {{ question.pub_date}}</small>
   </p>
@@ -118,7 +118,7 @@
     <div class="panel-body">
       {% for question in questions %}
       {% for tag in question.tags.all %}
-      <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
+          <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
       {% endfor %}
       {% endfor %}
     </div>
