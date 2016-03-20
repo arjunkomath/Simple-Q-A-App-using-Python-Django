@@ -31,6 +31,7 @@ setup(
         'django_bootstrap3',
         'django_markdown',
         'pillow',
+        'django-taggit',
     ],
     extras_require={
         'i18n': [
