@@ -1,14 +1,23 @@
 from django.db import models
-from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django_markdown.models import MarkdownField
+from django.template.defaultfilters import slugify
+
+from annoying.fields import AutoOneToOneField
 
 
 class Tag(models.Model):
-    slug = models.SlugField(blank=False, max_length=100, unique=True)
+    to_slug = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
 
     def __str__(self):
         return self.slug
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self.q)
+
+        super(Tag, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ('slug',)
