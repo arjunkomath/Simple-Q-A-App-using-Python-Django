@@ -17,26 +17,26 @@
 
 
 {% if message %}
-<div class="alert alert-danger" role="alert">{{ message }}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-</button>
-</div>
+    <div class="alert alert-danger" role="alert">{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 {% endif %}
 
 {% if question.reward %}
-<div class="alert alert-info" role="alert">This question has been marked to be worth a reward of <b>{{ question.reward }}<b> points!
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-</button>
-</div>
+    <div class="alert alert-info" role="alert">This question has been marked to be worth a reward of <b>{{ question.reward }}<b> points!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 {% endif %}
 
 <div class="jumbotron">
-  <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
-  <h3><cool>Q: </cool>{{ question.title }}</h3>
-  <h4>{{ question.description }}</h4>
-  <p>
+    <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
+    <h3><cool>Q: </cool>{{ question.title }}</h3>
+    <h4>{{ question.description }}</h4>
+    <p>
     {% if user.is_authenticated %}
         <a href="{% url 'qa_thumb' user.id question.id 0 %}" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
         <a href="{% url 'qa_thumb' user.id question.id 1 %}" class="btn btn-danger"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
@@ -46,7 +46,7 @@
     {% else %}
         <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_answer' question.id %}" role="button">Answer this Question!</a>
     {% endif %}
-  </p>
+    </p>
 </div>
 
 {% if answers %}

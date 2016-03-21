@@ -10,7 +10,7 @@ urlpatterns = [
         name='qa_create_question'),
     url(r'^answer/$', views.add_answer, name='add_answer'),
     url(r'^vote/(?P<user_id>\d+)/(?P<answer_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$', views.vote, name='qa_vote'),
-    url(r'^comment/(?P<answer_id>\d+)/$', views.comment, name='comment'),
+    url(r'^comment/(?P<answer_id>\d+)/$', views.comment, name='qa_comment'),
     url(r'^search/$', views.search, name='qa_search'),
     url(r'^tag/(?P<tag>[-\w]+)/$', views.tag, name='qa_tag'),
     url(r'^thumb/(?P<user_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$',
