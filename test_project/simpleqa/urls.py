@@ -4,7 +4,7 @@ from django.contrib import admin
 from core.views import register, user_login, user_logout
 
 from django.contrib.auth.models import User
-from qa.models import Question, Tag
+from qa.models import Question  # , Tag
 #from rest_framework import routers, serializers, viewsets
 
 # Serializers define the API representation.
