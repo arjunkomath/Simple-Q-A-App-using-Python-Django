@@ -38,10 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'annoying',
-    'qa',
     'bootstrap3',
     'django_markdown',
     'taggit',
+    'qa',
     # 'rest_framework',
 )
 

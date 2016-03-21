@@ -1,24 +1,23 @@
 import datetime
+
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic import CreateView
-from django.views.generic.edit import ModelFormMixin
 from django.shortcuts import render, Http404
-from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
 
-from qa.models import (Tag, UserQAProfile, Question, Answer,
-                       Voter, QVoter, Comment)
-
-from qa.forms import QuestionForm
+from qa.models import UserQAProfile, Question, Answer, Voter, QVoter, Comment
 from .mixins import LoginRequired
 
 # Commented lines because bad imported and unnused, but perhaps will be need
-# later.
+# later so better to keep them here... for now.
 # from django.shortcuts import render, get_object_or_404, render_to_response
 # from django.core.mail import send_mail
+# from django.views.generic.edit import ModelFormMixin
+# from django.core.urlresolvers import reverse
 # from qa.forms import QuestionForm, UserProfileForm
+# from qa.forms import QuestionForm
 
 
 class CreateQuestionView(LoginRequired, CreateView):
@@ -27,29 +26,15 @@ class CreateQuestionView(LoginRequired, CreateView):
     """
     template_name = 'qa/create_question.html'
     model = Question
-    form_class = QuestionForm
+    success_url = '/'
+    fields = ['title', 'description', 'tags']
 
     def form_valid(self, form):
         """
         Extract tags and create the required relation
         """
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
-        tags = form.cleaned_data['new_tags'].split(',')
-        for tag in tags:
-            if tag != '' and tag != ' ':
-                tag_object, created = Tag.objects.get_or_create(slug=tag)
-                self.object.tags.add(tag_object)
-
-        return super(ModelFormMixin, self).form_valid(form)
-
-    def get_success_url(self):
-        """
-        Redirects to the question page on success
-        """
-        url = reverse('qa:detail', kwargs={'question_id': self.object.pk})
-        return url
+        form.instance.user = self.request.user
+        return super(CreateQuestionView, self).form_valid(form)
 
 
 def search(request):
