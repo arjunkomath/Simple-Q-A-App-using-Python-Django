@@ -37,6 +37,32 @@ class CreateQuestionView(LoginRequired, CreateView):
         return super(CreateQuestionView, self).form_valid(form)
 
 
+class CreateAnswerView(LoginRequired, CreateView):
+    """
+    View to create new answers for a given question
+    """
+    template_name = 'qa/create_answer.html'
+    model = Answer
+    success_url = '/'
+    fields = ['answer_text']
+
+    def get_context_data(self, **kwargs):
+        """
+        Add question_id to context
+        """
+        kwargs.setdefault('question_id', self.kwargs.get('question_id'))
+        return super(CreateAnswerView, self).get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        """
+        Creates the required relationship between answer
+        and user/question
+        """
+        form.instance.user = self.request.user
+        form.instance.question_id = 1
+        return super(CreateAnswerView, self).form_valid(form)
+
+
 def search(request):
     if request.method == 'POST':
         word = request.POST['word']
@@ -235,47 +261,6 @@ def answer(request, question_id):  # requires login
 
     return render(request, 'qa/answer.html', {'question': question})
 
-
-def add_answer(request):  # requires login
-    if request.method == 'POST':
-        answer_text = request.POST['answer']
-        question_id = request.POST['question']
-        user_id = request.POST['user']
-
-        question = Question.objects.get(pk=question_id)
-        user_ob = get_user_model().objects.get(id=user_id)
-        user = user_ob.userqaprofile
-        user.points += 5
-        user.save()
-
-        if answer_text.strip() == '':
-            return render(request, 'qa/answer.html',
-                          {'question': question, 'message': 'Empty'})
-
-        answer = Answer()
-        answer.answer_text = answer_text
-        answer.question = question
-        answer.user = user_ob
-        answer.save()
-        answer_list = question.answer_set.order_by('-votes')
-        paginator = Paginator(answer_list, 10)
-        page = request.GET.get('page')
-        try:
-            answers = paginator.page(page)
-
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            answers = paginator.page(1)
-
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of
-            # results.
-            answers = paginator.page(paginator.num_pages)
-
-        return render(request, 'qa/detail.html',
-                      {'question': question, 'answers': answers})
-
-    return render(request, 'qa/detail.html', {'question': question})
 
 
 def vote(request, user_id, answer_id, question_id, op_code):
