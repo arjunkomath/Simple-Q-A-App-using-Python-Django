@@ -27,11 +27,11 @@ class CreateQuestionView(LoginRequired, CreateView):
     template_name = 'qa/create_question.html'
     model = Question
     success_url = '/'
-    fields = ['title', 'description', 'tags']
+    fields = ['title', 'description']
 
     def form_valid(self, form):
         """
-        Extract tags and create the required relation
+        Create the required relation
         """
         form.instance.user = self.request.user
         return super(CreateQuestionView, self).form_valid(form)
