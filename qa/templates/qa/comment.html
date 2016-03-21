@@ -4,18 +4,17 @@
 
 {% block content %}
 
-  {% if message %}
-  <strong>Enter a valid comment!</strong>
-  {% endif %}
+    {% if message %}
+        <strong>Enter a valid comment!</strong>
+    {% endif %}
 
-  <form id="add_q" method="post" action="{% url 'qa-comment' answer_id %}">
-    {% csrf_token %}
-    <input class="input-lg" style="width:100%" placeholder="Enter your comment....." type="text" name="comment"/> <br/><br/>
-    <input type="hidden" value="{{ user.id }}" name="user" />
-    <input class="btn pull-right btn-success" type="submit" value="Submit Comment" />
-  </form>
-  <p>Note. Comment cannot be empty!</p>
-
-</div>
+    {# <form id="add_q" method="post" action="{% url 'qa_comment' answer.id %}"> #}
+    <form id="add_q" method="post" action="#">
+        {% csrf_token %}
+        <input class="input-lg" style="width:100%" placeholder="Enter your comment....." type="text" name="comment"/> <br/><br/>
+        <input type="hidden" value="{{ user.id }}" name="user" />
+        <input class="btn pull-right btn-success" type="submit" value="Submit Comment" />
+    </form>
+    <p>Note. Comment cannot be empty!</p>
 
 {% endblock content %}
