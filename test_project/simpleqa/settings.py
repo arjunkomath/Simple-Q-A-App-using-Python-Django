@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django_markdown',
     'taggit',
     'qa',
+    'core',
     # 'rest_framework',
 )
 
@@ -82,7 +83,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'test_project'  # insert your TEMPLATE_DIRS here
+            'templates'  # insert your TEMPLATE_DIRS here
         ],
         'APP_DIRS': True,
         'OPTIONS': {

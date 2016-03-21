@@ -1,11 +1,12 @@
+{% extends 'qa/base.html' %}
 {% load bootstrap3 %}
-<div class="container">
 
-  {% include "qa/header.html" %}
+{% block content %}
+<div class="container">
 
   {% if registered %}
   <strong>Thank you for registering!</strong>
-  <a href="/login">You can Login Now!</a><br />
+  <a href="{% url 'login' %}">You can Login Now!</a><br />
   {% else %}
   <h2>Welcome Aboard!</h2><br /><br />
 
@@ -27,5 +28,4 @@
 {% endif %}
 
 </div>
-
-{% include "qa/footer.html" %}
+{% endblock content %}
