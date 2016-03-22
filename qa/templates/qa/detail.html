@@ -109,7 +109,7 @@
 
 {% else %}
 <img class="pull-right" src="{% static "qa/question.jpg" %}" alt="question"/>
-<center><h2>This question is still open, <a href="{% url 'qa_answer' question.id %}" role="button">Write answer!</a></h2></center>
+<center><h2>This question is still open, <a href="{% url 'qa_create_answer' question.id %}" role="button">Write answer!</a></h2></center>
 {% endif %}
 
 
