@@ -46,13 +46,6 @@ class CreateAnswerView(LoginRequired, CreateView):
     success_url = '/'
     fields = ['answer_text']
 
-    def get_context_data(self, **kwargs):
-        """
-        Add question_id to context
-        """
-        kwargs.setdefault('question_id', self.kwargs.get('question_id'))
-        return super(CreateAnswerView, self).get_context_data(**kwargs)
-
     def form_valid(self, form):
         """
         Creates the required relationship between answer
