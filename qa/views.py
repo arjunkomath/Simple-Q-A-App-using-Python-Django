@@ -59,7 +59,7 @@ class CreateAnswerView(LoginRequired, CreateView):
         and user/question
         """
         form.instance.user = self.request.user
-        form.instance.question_id = 1
+        form.instance.question_id = self.kwargs['question_id']
         return super(CreateAnswerView, self).form_valid(form)
 
 
