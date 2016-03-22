@@ -9,9 +9,9 @@
   {% endif %}
 
   <form method="post" action="{% url 'qa_create_answer' question_id %}">
-    {{ form.as_p }}
-    {% csrf_token %}
-    <input class="btn pull-right btn-success" type="submit" value="Submit Question" />
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input class="btn pull-right btn-success" type="submit" value="Submit Answer" />
   </form>
 
 </div>

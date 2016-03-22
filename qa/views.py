@@ -27,7 +27,7 @@ class CreateQuestionView(LoginRequired, CreateView):
     template_name = 'qa/create_question.html'
     model = Question
     success_url = '/'
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'tags']
 
     def form_valid(self, form):
         """
