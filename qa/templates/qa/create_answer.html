@@ -8,7 +8,7 @@
   <strong>Enter a valid Question!</strong>
   {% endif %}
 
-  <form method="post" action="{% url 'qa_create_answer' question_id %}">
+  <form method="post" action="{% url 'qa_create_answer' view.kwargs.question_id %}">
       {% csrf_token %}
       {{ form.as_p }}
       <input class="btn pull-right btn-success" type="submit" value="Submit Answer" />

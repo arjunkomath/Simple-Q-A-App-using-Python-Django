@@ -45,14 +45,20 @@ class Answer(models.Model):
         return self.answer_text
 
 
-class Voter(models.Model):
+class AnswerVote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     answer = models.ForeignKey(Answer)
 
+    class Meta:
+        unique_together = (('user', 'answer'),)
 
-class QVoter(models.Model):
+
+class QuestionVote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     question = models.ForeignKey(Question)
+
+    class Meta:
+        unique_together = (('user', 'question'),)
 
 
 class Comment(models.Model):
