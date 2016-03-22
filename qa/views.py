@@ -63,6 +63,32 @@ class CreateAnswerView(LoginRequired, CreateView):
         return super(CreateAnswerView, self).form_valid(form)
 
 
+class CreateCommentView(LoginRequired, CreateView):
+    """
+    View to create new comments for a given answer
+    """
+    template_name = 'qa/create_comment.html'
+    model = Comment
+    success_url = '/'
+    fields = ['comment_text', ]
+
+    def get_context_data(self, **kwargs):
+        """
+        Add answer_id to context
+        """
+        kwargs.setdefault('answer_id', self.kwargs.get('answer_id'))
+        return super(CreateCommentView, self).get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        """
+        Creates the required relationship between answer
+        and user/comment
+        """
+        form.instance.user = self.request.user
+        form.instance.answer_id = self.kwargs['answer_id']
+        return super(CreateCommentView, self).form_valid(form)
+
+
 def search(request):
     if request.method == 'POST':
         word = request.POST['word']
