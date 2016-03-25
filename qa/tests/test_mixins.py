@@ -12,6 +12,7 @@ class SomeView(LoginRequired, View):
     def get(self, request):
         return HttpResponse('something')
 
+
 class TestMixins(TestCase):
     """
     Tests functionalities for the mixins.
@@ -37,8 +38,8 @@ class TestMixins(TestCase):
         """
         request = self.factory.get('some-random-place')
         request.user = get_user_model().objects.create_user(
-            username = 'test_user',
-            password = 'top_secret'
+            username='test_user',
+            password='top_secret'
         )
         response = SomeView.as_view()(request)
         self.assertEqual(response.status_code, 200)

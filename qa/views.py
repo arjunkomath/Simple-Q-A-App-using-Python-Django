@@ -2,22 +2,15 @@ import datetime
 
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
-from django.views.generic import CreateView
-from django.shortcuts import render, Http404
+from django.views.generic import CreateView, View
+from django.shortcuts import render, Http404, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
-from qa.models import UserQAProfile, Question, Answer, Voter, QVoter, Comment
+from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
+                       QuestionVote, Comment)
 from .mixins import LoginRequired
-
-# Commented lines because bad imported and unnused, but perhaps will be need
-# later so better to keep them here... for now.
-# from django.shortcuts import render, get_object_or_404, render_to_response
-# from django.core.mail import send_mail
-# from django.views.generic.edit import ModelFormMixin
-# from django.core.urlresolvers import reverse
-# from qa.forms import QuestionForm, UserProfileForm
-# from qa.forms import QuestionForm
 
 
 class CreateQuestionView(LoginRequired, CreateView):
@@ -46,13 +39,6 @@ class CreateAnswerView(LoginRequired, CreateView):
     success_url = '/'
     fields = ['answer_text']
 
-    def get_context_data(self, **kwargs):
-        """
-        Add question_id to context
-        """
-        kwargs.setdefault('question_id', self.kwargs.get('question_id'))
-        return super(CreateAnswerView, self).get_context_data(**kwargs)
-
     def form_valid(self, form):
         """
         Creates the required relationship between answer
@@ -72,13 +58,6 @@ class CreateCommentView(LoginRequired, CreateView):
     success_url = '/'
     fields = ['comment_text', ]
 
-    def get_context_data(self, **kwargs):
-        """
-        Add answer_id to context
-        """
-        kwargs.setdefault('answer_id', self.kwargs.get('answer_id'))
-        return super(CreateCommentView, self).get_context_data(**kwargs)
-
     def form_valid(self, form):
         """
         Creates the required relationship between answer
@@ -87,6 +66,28 @@ class CreateCommentView(LoginRequired, CreateView):
         form.instance.user = self.request.user
         form.instance.answer_id = self.kwargs['answer_id']
         return super(CreateCommentView, self).form_valid(form)
+
+
+class VoteView(View):
+    """
+    Base class to create a vote for a given model (question/answer)
+    """
+    model = None
+    template_name = ''
+
+    def post(self, request, object_id):
+        vote_target = get_object_or_404(self.model, object_id)
+        if vote_target.user == request.user:
+            raise ValidationError(
+                'Sorry, voting for your own answer is not possible.')
+
+        else:
+            try:
+                vote = self.model(request.user, answer)
+                vote.full_clean()
+                vote.save()
+            except ValidationError:
+                pass  # vote object already exists
 
 
 def search(request):
