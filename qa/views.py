@@ -221,20 +221,6 @@ def detail(request, question_id):
                   {'answers': answers, 'question': question}, )
 
 
-def answer(request, question_id):  # requires login
-    if request.user.is_anonymous():
-        return HttpResponseRedirect("/login/")
-
-    try:
-        question = Question.objects.get(pk=question_id)
-
-    except Question.DoesNotExist:
-        raise Http404("Question does not exist")
-
-    return render(request, 'qa/answer.html', {'question': question})
-
-
-
 def vote(request, user_id, answer_id, question_id, op_code):
     user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
