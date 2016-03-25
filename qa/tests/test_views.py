@@ -29,8 +29,13 @@ class TestViews(TestCase):
         """
         self.assertTrue(issubclass(CreateQuestionView, LoginRequired))
 
+    def test_create_answer_login(self):
+        """
+        CreateAnswerView should require login.
+        """
+        self.assertTrue(issubclass(CreateAnswerView, LoginRequired))
 
-    def test_create_question_view(self):
+    def test_create_question_view_one(self):
         """
         CreateQuestionView should create a new question object.
         """
@@ -44,15 +49,10 @@ class TestViews(TestCase):
         self.assertEqual(new_question.title, title)
         self.assertEqual(Question.objects.count(), current_question_count+1)
 
-    def test_create_answer_login(self):
+    def test_create_question_view_two(self):
         """
-        CreateAnswerView should require login.
-        """
-        self.assertTrue(issubclass(CreateAnswerView, LoginRequired))
-
-    def test_create_question_view(self):
-        """
-        CreateAnswerView should create a new question object bound to the given question.
+        CreateAnswerView should create a new question object bound to the
+        given question.
         """
         question = Question.objects.create(
             title='a title', description='bla', user=self.user)
