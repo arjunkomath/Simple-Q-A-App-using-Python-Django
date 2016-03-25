@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^answer/(?P<question_id>\d+)/$',
         views.CreateAnswerView.as_view(), name='qa_create_answer'),
     url(r'^comment/(?P<answer_id>\d+)/$',
-        views.CreateCommentView, name='qa_create_comment'),
+        views.CreateCommentView.as_view(), name='qa_create_comment'),
     url(r'^vote/(?P<answer_id>\d+)/$', views.vote, name='qa_vote'),
     url(r'^search/$', views.search, name='qa_search'),
     url(r'^tag/(?P<tag>[-\w]+)/$', views.tag, name='qa_tag'),
