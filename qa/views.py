@@ -49,6 +49,25 @@ class CreateAnswerView(LoginRequired, CreateView):
         return super(CreateAnswerView, self).form_valid(form)
 
 
+class CreateCommentView(LoginRequired, CreateView):
+    """
+    View to create new comments for a given answer
+    """
+    template_name = 'qa/create_comment.html'
+    model = Comment
+    success_url = '/'
+    fields = ['comment_text']
+
+    def form_valid(self, form):
+        """
+        Creates the required relationship between answer
+        and user/comment
+        """
+        form.instance.user = self.request.user
+        form.instance.answer_id = self.kwargs['answer_id']
+        return super(CreateCommentView, self).form_valid(form)
+
+
 class VoteView(View):
     """
     Base class to create a vote for a given model (question/answer)
@@ -175,61 +194,6 @@ def profile(request, user_id):
     user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
-
-
-def comment(request, answer_id):  # requires login
-
-    if request.user.is_anonymous():
-        return HttpResponseRedirect("/login/")
-
-    if request.method == 'POST':
-        comment_text = request.POST['comment']
-        user_id = request.POST['user']
-        user_ob = get_user_model().objects.get(id=user_id)
-        user = UserQAProfile.objects.get(user=user_ob)
-        user.points += 1
-        user.save()
-        if comment_text.strip() == '':
-            return render(request, 'qa/comment.html',
-                          {'answer_id': answer_id, 'message': 'Empty'})
-
-        pub_date = datetime.datetime.now()
-        a = Answer.objects.get(pk=answer_id)
-        q_id = a.question_id
-        c = Comment()
-        c.answer = a
-        c.comment_text = comment_text
-        c.pub_date = pub_date
-        c.user = user_ob
-        c.save()
-        try:
-            question = Question.objects.get(pk=q_id)
-            question.views += 1
-            question.save()
-            answer_list = question.answer_set.order_by('-votes')
-            paginator = Paginator(answer_list, 10)
-            page = request.GET.get('page')
-            try:
-                answers = paginator.page(page)
-
-            except PageNotAnInteger:
-                # If page is not an integer, deliver first page.
-                answers = paginator.page(1)
-
-            except EmptyPage:
-                # If page is out of range (e.g. 9999), deliver last page of
-                # results.
-                answers = paginator.page(paginator.num_pages)
-
-        except Question.DoesNotExist:
-            raise Http404("Question does not exist")
-
-        return render(request, 'qa/detail.html',
-                      {'answers': answers, 'question': question}, )
-
-    template = loader.get_template('qa/comment.html')
-    context = RequestContext(request, {'answer_id': answer_id})
-    return HttpResponse(template.render(context))
 
 
 def detail(request, question_id):
