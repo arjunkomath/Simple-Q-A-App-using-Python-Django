@@ -6,8 +6,10 @@ from django.views.generic import CreateView, View
 from django.shortcuts import render, Http404, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
-from qa.models import UserQAProfile, Question, Answer, AnswerVote, QuestionVote, Comment
+from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
+                       QuestionVote, Comment)
 from .mixins import LoginRequired
 
 
@@ -57,14 +59,16 @@ class VoteView(View):
     def post(self, request, object_id):
         vote_target = get_object_or_404(self.model, object_id)
         if vote_target.user == request.user:
-            pass# Voting for own answer is not possible
+            raise ValidationError(
+                'Sorry, voting for your own answer is not possible.')
+
         else:
             try:
                 vote = self.model(request.user, answer)
                 vote.full_clean()
                 vote.save()
             except ValidationError:
-                pass#vote object already exists
+                pass  # vote object already exists
 
 
 def search(request):
