@@ -3,6 +3,7 @@ import datetime
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic import CreateView, View
+from django.views.generic.detail import DetailView
 from django.shortcuts import render, Http404, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
@@ -66,6 +67,15 @@ class CreateCommentView(LoginRequired, CreateView):
         form.instance.user = self.request.user
         form.instance.answer_id = self.kwargs['answer_id']
         return super(CreateCommentView, self).form_valid(form)
+
+
+class QuestionDetailView(DetailView):
+    """
+    View to call a question and to render all the details about that question.
+    """
+    model = Question
+    template_name = 'qa/detail_question.html'
+    context_object_name = 'question'
 
 
 class VoteView(View):
@@ -194,31 +204,6 @@ def profile(request, user_id):
     user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
-
-
-def detail(request, question_id):
-    try:
-        question = Question.objects.get(pk=question_id)
-        question.views += 1
-        question.save()
-        answer_list = question.answer_set.order_by('-votes')
-
-        paginator = Paginator(answer_list, 10)
-        page = request.GET.get('page')
-        try:
-            answers = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            answers = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of
-            # results.
-            answers = paginator.page(paginator.num_pages)
-
-    except Question.DoesNotExist:
-        raise Http404("Question does not exist")
-    return render(request, 'qa/detail.html',
-                  {'answers': answers, 'question': question}, )
 
 
 def vote(request, user_id, answer_id, question_id, op_code):
