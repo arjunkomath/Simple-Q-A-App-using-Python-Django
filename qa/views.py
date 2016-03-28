@@ -1,5 +1,5 @@
 import datetime
-
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic import CreateView, View
@@ -56,7 +56,7 @@ class CreateCommentView(LoginRequired, CreateView):
     """
     template_name = 'qa/create_comment.html'
     model = Comment
-    success_url = '/'
+    #success_url = '/'
     fields = ['comment_text']
 
     def form_valid(self, form):
@@ -68,6 +68,10 @@ class CreateCommentView(LoginRequired, CreateView):
         form.instance.answer_id = self.kwargs['answer_id']
         return super(CreateCommentView, self).form_valid(form)
 
+    def get_success_url(self):
+        question_pk = Answer.objects.get(
+            id=self.kwargs['answer_id']).question.pk
+        return reverse('qa_detail', kwargs={'pk': question_pk})
 
 class QuestionDetailView(DetailView):
     """
