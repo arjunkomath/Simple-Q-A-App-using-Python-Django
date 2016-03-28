@@ -56,3 +56,13 @@ class TestModels(TestCase, BasicTaggingTest):
         self.assert_tags_equal(self.first_question.tags.all(),
                                ['one tag', 'the next tag', 'another tag'])
         self.assertEqual(self.first_question.views, 3)
+
+    def test_answer(self):
+        answer = Answer.objects.create(
+            question=self.first_question,
+            answer_text="A text body",
+            votes=1,
+            pub_date=timezone.datetime(2016, 2, 7, 0, 0, 0),
+            user=self.user,
+        )
+        self.assertTrue(isinstance(answer, Answer))
