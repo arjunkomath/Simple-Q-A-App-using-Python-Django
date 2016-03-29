@@ -61,11 +61,22 @@ class QuestionVote(models.Model):
         unique_together = (('user', 'question'),)
 
 
-class Comment(models.Model):
-    answer = models.ForeignKey(Answer)
-    comment_text = MarkdownField()
+class BaseComment(models.Model):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return self.comment_text
+
+
+class AnswerComment(BaseComment):
+    comment_text = MarkdownField()
+    answer = models.ForeignKey(Answer)
+
+
+class QuestionComment(BaseComment):
+    comment_text = models.CharField(max_length=250)
+    question = models.ForeignKey(Question)
