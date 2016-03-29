@@ -7,10 +7,10 @@ with open('README.md') as file:
 
 setup(
     name='django-qa',
-    version='0.0.5',
+    version='0.0.6',
     description='Pluggable django app for Q&A',
     long_description=long_description,
-    author='arjunkomath, cdvv7788, sebastian-code',
+    author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
     author_email='dev@swapps.co',
     url='https://github.com/swappsco/django-qa',
     license='MIT',
