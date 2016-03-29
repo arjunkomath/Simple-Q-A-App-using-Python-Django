@@ -10,7 +10,6 @@ urlpatterns = [
         name='qa_create_question'),
     url(r'^answer/(?P<question_id>\d+)/$',
         views.CreateAnswerView.as_view(), name='qa_create_answer'),
-<<<<<<< HEAD
     url(r'^vote/question/(?P<object_id>\d+)/$', views.QuestionVoteView.as_view(), name='qa_question_vote'),
     url(r'^vote/answer/(?P<object_id>\d+)/$', views.AnswerVoteView.as_view(), name='qa_answer_vote'),
     url(r'^comment-answer/(?P<answer_id>\d+)/$',
