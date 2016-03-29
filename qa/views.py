@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
-                       QuestionVote, Comment)
+                       QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired
 
 
@@ -50,13 +50,12 @@ class CreateAnswerView(LoginRequired, CreateView):
         return super(CreateAnswerView, self).form_valid(form)
 
 
-class CreateCommentView(LoginRequired, CreateView):
+class CreateAnswerCommentView(LoginRequired, CreateView):
     """
     View to create new comments for a given answer
     """
     template_name = 'qa/create_comment.html'
-    model = Comment
-    #success_url = '/'
+    model = AnswerComment
     fields = ['comment_text']
 
     def form_valid(self, form):
@@ -66,7 +65,7 @@ class CreateCommentView(LoginRequired, CreateView):
         """
         form.instance.user = self.request.user
         form.instance.answer_id = self.kwargs['answer_id']
-        return super(CreateCommentView, self).form_valid(form)
+        return super(CreateAnswerCommentView, self).form_valid(form)
 
     def get_success_url(self):
         question_pk = Answer.objects.get(
@@ -74,6 +73,30 @@ class CreateCommentView(LoginRequired, CreateView):
         return reverse('qa_detail', kwargs={'pk': question_pk})
 
 
+<<<<<<< HEAD
+=======
+class CreateQuestionCommentView(LoginRequired, CreateView):
+    """
+    View to create new comments for a given question
+    """
+    template_name = 'qa/create_comment.html'
+    model = QuestionComment
+    fields = ['comment_text']
+
+    def form_valid(self, form):
+        """
+        Creates the required relationship between question
+        and user/comment
+        """
+        form.instance.user = self.request.user
+        form.instance.question_id = self.kwargs['question_id']
+        return super(CreateQuestionCommentView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
+
+
+>>>>>>> 272487594572c1de5dfd192aa91678a6359da0d1
 class QuestionDetailView(DetailView):
     """
     View to call a question and to render all the details about that question.
@@ -81,6 +104,12 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = 'qa/detail_question.html'
     context_object_name = 'question'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        context['last_comments'] = self.object.questioncomment_set.order_by(
+            'pub_date')[:5]
+        return context
 
 
 class ParentVoteView(View):
