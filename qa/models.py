@@ -22,6 +22,7 @@ class UserQAProfile(models.Model):
 
 class Question(models.Model):
     title = models.CharField(max_length=200, blank=False)
+    votes = models.IntegerField(default=0)
     description = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = TaggableManager()

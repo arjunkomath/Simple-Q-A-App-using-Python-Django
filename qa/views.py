@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic import CreateView, View
 from django.views.generic.detail import DetailView
-from django.shortcuts import render, Http404, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -73,6 +73,7 @@ class CreateCommentView(LoginRequired, CreateView):
             id=self.kwargs['answer_id']).question.pk
         return reverse('qa_detail', kwargs={'pk': question_pk})
 
+
 class QuestionDetailView(DetailView):
     """
     View to call a question and to render all the details about that question.
@@ -82,26 +83,58 @@ class QuestionDetailView(DetailView):
     context_object_name = 'question'
 
 
-class VoteView(View):
+class ParentVoteView(View):
     """
     Base class to create a vote for a given model (question/answer)
     """
     model = None
-    template_name = ''
+
+    def create_vote_object(self, user, vote_target):
+        """
+        This takes the user and the vote and adjusts the kwargs
+        depending on the used model.
+        """
+        object_kwargs = {'user': user}
+        if self.model == Question:
+            target_key = 'question'
+            target_model = QuestionVote
+        elif self.model == Answer:
+            target_key = 'answer'
+            target_model = AnswerVote
+        else:
+            raise ValidationError('Not a valid model for votes')
+        object_kwargs[target_key] = vote_target
+        return target_model(**object_kwargs)
 
     def post(self, request, object_id):
-        vote_target = get_object_or_404(self.model, object_id)
+        vote_target = get_object_or_404(self.model, pk=object_id)
         if vote_target.user == request.user:
             raise ValidationError(
                 'Sorry, voting for your own answer is not possible.')
-
         else:
             try:
-                vote = self.model(request.user, answer)
+                vote = self.create_vote_object(request.user, vote_target)
                 vote.full_clean()
                 vote.save()
+                vote_target.votes += 1
+                vote_target.save()
             except ValidationError:
-                pass  # vote object already exists
+                pass # User already voted, just ignore the request
+        return redirect('/')
+
+
+class AnswerVoteView(ParentVoteView):
+    """
+    Class to upvote answers
+    """
+    model = Answer
+
+
+class QuestionVoteView(ParentVoteView):
+    """
+    Class to upvote questions
+    """
+    model = Question
 
 
 def search(request):

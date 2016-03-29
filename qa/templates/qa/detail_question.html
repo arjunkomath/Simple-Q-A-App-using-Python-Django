@@ -33,6 +33,17 @@
 {% endif %}
 
 <div class="jumbotron">
+  {% if user.is_authenticated %}
+    <div class="row">
+      <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.votes }}</b></big></div>
+        <div class ="col-sm-1">
+          <form action="{% url 'qa_question_vote' question.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </form>
+          <a class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></div>
+    </div>
+  {% endif %}
     <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
     <h3><cool>Q: </cool>{{ question.title }}</h3>
     <h4>{{ question.description }}</h4>
@@ -55,7 +66,11 @@
       <div class ="col-md-1">
         <div class="row">
           <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.votes }}</b></big></div>
-          <div class ="col-sm-1"><a class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer" href="{% url 'qa_vote' answer.id %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> <a class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer" href="{% url 'qa_vote' answer.id %}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></div>
+          <div class ="col-sm-1"><form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </form>
+              <a class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer" href="{% url 'qa_answer_vote' answer.id %}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></div>
         </div>
       </div>
       {% endif %}
