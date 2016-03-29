@@ -20,7 +20,6 @@ class CreateQuestionView(LoginRequired, CreateView):
     """
     template_name = 'qa/create_question.html'
     model = Question
-    success_url = '/'
     fields = ['title', 'description', 'tags']
 
     def form_valid(self, form):
@@ -30,6 +29,9 @@ class CreateQuestionView(LoginRequired, CreateView):
         form.instance.user = self.request.user
         return super(CreateQuestionView, self).form_valid(form)
 
+    def get_success_url(self):
+        return reverse('qa_index')
+
 
 class CreateAnswerView(LoginRequired, CreateView):
     """
@@ -37,7 +39,6 @@ class CreateAnswerView(LoginRequired, CreateView):
     """
     template_name = 'qa/create_answer.html'
     model = Answer
-    success_url = '/'
     fields = ['answer_text']
 
     def form_valid(self, form):
@@ -48,6 +49,10 @@ class CreateAnswerView(LoginRequired, CreateView):
         form.instance.user = self.request.user
         form.instance.question_id = self.kwargs['question_id']
         return super(CreateAnswerView, self).form_valid(form)
+
+    def get_success_url(self):
+        print self.kwargs
+        return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
 class CreateAnswerCommentView(LoginRequired, CreateView):
@@ -139,7 +144,9 @@ class ParentVoteView(View):
         else:
             upvote = request.POST.get('upvote', None) is not None
             object_kwargs = self.get_vote_kwargs(request.user, vote_target)
-            vote, created = self.vote_model.objects.get_or_create(defaults={'value': upvote},**object_kwargs)
+            vote, created = self.vote_model.objects.get_or_create(
+                defaults={'value': upvote},
+                **object_kwargs)
             if created:
                 vote_target.votes += 1 if upvote else -1
             elif not created:
@@ -151,7 +158,15 @@ class ParentVoteView(View):
                     vote.value = upvote
                     vote.save()
             vote_target.save()
-        return redirect('/')
+        if self.model == Question:
+            redirect_url = reverse('qa_detail',
+                                   kwargs={'pk': object_id})
+        elif self.model == Answer:
+            question_pk = Answer.objects.get(
+                id=object_id).question.pk
+            redirect_url = reverse('qa_detail',
+                                   kwargs={'pk': question_pk})
+        return redirect(redirect_url)
 
 
 class AnswerVoteView(ParentVoteView):
