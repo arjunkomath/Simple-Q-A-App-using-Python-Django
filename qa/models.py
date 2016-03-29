@@ -48,6 +48,7 @@ class Answer(models.Model):
 
 class VoteParent(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    value = models.BooleanField(default=True)
 
     class Meta:
         abstract = True

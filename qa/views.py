@@ -114,8 +114,9 @@ class ParentVoteView(View):
     Base class to create a vote for a given model (question/answer)
     """
     model = None
+    vote_model = None
 
-    def create_vote_object(self, user, vote_target):
+    def get_vote_kwargs(self, user, vote_target):
         """
         This takes the user and the vote and adjusts the kwargs
         depending on the used model.
@@ -123,14 +124,12 @@ class ParentVoteView(View):
         object_kwargs = {'user': user}
         if self.model == Question:
             target_key = 'question'
-            target_model = QuestionVote
         elif self.model == Answer:
             target_key = 'answer'
-            target_model = AnswerVote
         else:
             raise ValidationError('Not a valid model for votes')
         object_kwargs[target_key] = vote_target
-        return target_model(**object_kwargs)
+        return object_kwargs
 
     def post(self, request, object_id):
         vote_target = get_object_or_404(self.model, pk=object_id)
@@ -138,14 +137,20 @@ class ParentVoteView(View):
             raise ValidationError(
                 'Sorry, voting for your own answer is not possible.')
         else:
-            try:
-                vote = self.create_vote_object(request.user, vote_target)
-                vote.full_clean()
-                vote.save()
-                vote_target.votes += 1
-                vote_target.save()
-            except ValidationError:
-                pass # User already voted, just ignore the request
+            upvote = request.POST.get('upvote', None) is not None
+            object_kwargs = self.get_vote_kwargs(request.user, vote_target)
+            vote, created = self.vote_model.objects.get_or_create(defaults={'value': upvote},**object_kwargs)
+            if created:
+                vote_target.votes += 1 if upvote else -1
+            elif not created:
+                if vote.value == upvote:
+                    vote.delete()
+                    vote_target.votes += -1 if upvote else 1
+                else:
+                    vote_target.votes += 2 if upvote else -2
+                    vote.value = upvote
+                    vote.save()
+            vote_target.save()
         return redirect('/')
 
 
@@ -154,6 +159,7 @@ class AnswerVoteView(ParentVoteView):
     Class to upvote answers
     """
     model = Answer
+    vote_model = AnswerVote
 
 
 class QuestionVoteView(ParentVoteView):
@@ -161,6 +167,7 @@ class QuestionVoteView(ParentVoteView):
     Class to upvote questions
     """
     model = Question
+    vote_model = QuestionVote
 
 
 def search(request):
