@@ -33,7 +33,7 @@
 {% endif %}
 
 <div class="jumbotron">
-  {% if user.is_authenticated %}
+  {% if user.is_authenticated and question.user != user %}
     <div class="row">
       <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.votes }}</b></big></div>
         <div class ="col-sm-1">
@@ -76,7 +76,7 @@
 
     {% for answer in question.answer_set.all %}
     <div class="row">
-      {% if user.is_authenticated %}
+      {% if user.is_authenticated and answer.user != user %}
       <div class ="col-md-1">
         <div class="row">
           <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.votes }}</b></big></div>
