@@ -39,11 +39,13 @@
         <div class ="col-sm-1">
           <form action="{% url 'qa_question_vote' question.id %}" method="POST">
           {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
           <input type="hidden" name="upvote" value="on">
           <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
           </form>
           <form action="{% url 'qa_question_vote' question.id %}" method="POST">
           {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
           <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>
           </form>
     </div>
@@ -82,11 +84,13 @@
           <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.votes }}</b></big></div>
           <div class ="col-sm-1"><form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
               {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
               <input type="hidden" name="upvote" value="on">
               <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
           </form>
           <form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
               {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
               <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>
           </form>
         </div>

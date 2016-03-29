@@ -158,15 +158,12 @@ class ParentVoteView(View):
                     vote.value = upvote
                     vote.save()
             vote_target.save()
-        if self.model == Question:
-            redirect_url = reverse('qa_detail',
-                                   kwargs={'pk': object_id})
-        elif self.model == Answer:
-            question_pk = Answer.objects.get(
-                id=object_id).question.pk
-            redirect_url = reverse('qa_detail',
-                                   kwargs={'pk': question_pk})
-        return redirect(redirect_url)
+
+        next_url = request.POST.get('next', None)
+        if next_url is not None:
+            return redirect(next_url)
+        else:
+            return redirect(reverse('qa_index'))
 
 
 class AnswerVoteView(ParentVoteView):
