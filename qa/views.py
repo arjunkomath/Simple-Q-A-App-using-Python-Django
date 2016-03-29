@@ -151,7 +151,12 @@ class ParentVoteView(View):
                     vote.value = upvote
                     vote.save()
             vote_target.save()
-        return redirect('/')
+        print request.POST
+        next_url = request.POST.get('next', None)
+        if next_url is not None:
+            return redirect(next_url)
+        else:
+            return redirect(reverse('qa_index'))
 
 
 class AnswerVoteView(ParentVoteView):
