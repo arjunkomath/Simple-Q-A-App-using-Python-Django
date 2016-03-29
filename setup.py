@@ -7,7 +7,7 @@ with open('README.md') as file:
 
 setup(
     name='django-qa',
-    version='0.0.4',
+    version='0.0.5',
     description='Pluggable django app for Q&A',
     long_description=long_description,
     author='arjunkomath, cdvv7788, sebastian-code',
