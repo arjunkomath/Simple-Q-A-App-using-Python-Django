@@ -1,0 +1,21 @@
+{% extends 'qa/base.html' %}
+{% load bootstrap3 %}
+{% load django_markdown %}
+
+{% block content %}
+
+  {% if message %}
+    <strong>Enter a valid Answer!</strong>
+  {% endif %}
+
+  <form method="post" action="">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input class="btn pull-right btn-success" type="submit" value="Submit Comment" />
+  </form>
+
+</div>
+
+{% markdown_editor "#ans" %}
+{% markdown_media %}
+{% endblock content %}

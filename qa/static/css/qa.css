@@ -1,17 +1,3 @@
-{% load bootstrap3 %}
-
-{% bootstrap_css %}
-
-<title>Simple QA</title>
-<link rel="icon" type="image/png" href="static/qa/icon.ico">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-{% bootstrap_javascript %}
-
-<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
-
-<style>
-
 .ques {
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
@@ -110,25 +96,57 @@ orange {
 
 a:hover {color: #FF8800; }
 
-</style>
+.closed {
+  width:100%;
+  height:7px;
+  position: absolute;
 
-<script>
-$(function () {
-  $('a[href="#search"]').on('click', function(event) {
-    event.preventDefault();
-    $('#search').addClass('open');
-    $('#search > form > input[type="search"]').focus();
-  });
+  background: #FF4444;
+}
 
-  $('#search, #search button.close').on('click keyup', function(event) {
-    if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
-      $(this).removeClass('open');
-    }
-  });
+.open {
+  width:100%;
+  height:7px;
+  position: absolute;
 
-});
-</script>
+  background: #99CC00;
+}
 
-<div class="page-header">
-  <a class="btn btn-lg btn-warning pull-right" href="#search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Find</a><a class="btn btn-lg btn-danger pull-right" href="{% url 'qa:add' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ask Question</a><h1><a href="{% url 'qa:index' %}"><img width="50px" src="http://icons.iconarchive.com/icons/seanau/flat-app/256/Questionmark-icon.png" /><orange>Simple QA</orange> </a><small>Open Questions</small></h1>
-</div>
+.rewarding {
+  width:100%;
+  height:7px;
+  position: absolute;
+
+  background: #AA66CC;
+}
+.custom-big {
+  font-size:20px;
+  padding : 2px 0px 2px 0px;
+}
+cool {
+  font-family: 'Lobster', cursive;
+}
+.custom-code {
+    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+    font-size: 95%;
+    line-height: 140%;
+    white-space: pre;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    background: #faf8f0;
+}
+
+#content code {
+    display: block;
+    padding: 0.5em 1em;
+    border: 1px solid #bebab0;
+}
+.topbar {
+  width:100%;
+  height:7px;
+  position: absolute;
+  z-index:1000;
+
+  background: #FF8800;
+}

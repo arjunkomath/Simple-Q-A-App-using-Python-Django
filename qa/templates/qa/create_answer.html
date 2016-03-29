@@ -1,0 +1,21 @@
+{% extends 'qa/base.html' %}
+{% load bootstrap3 %}
+{% load django_markdown %}
+
+{% block content %}
+
+  {% if message %}
+  <strong>Enter a valid Question!</strong>
+  {% endif %}
+
+  <form method="post" action="{% url 'qa_create_answer' view.kwargs.question_id %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input class="btn pull-right btn-success" type="submit" value="Submit Answer" />
+  </form>
+
+</div>
+
+{% markdown_editor "#ans" %}
+{% markdown_media %}
+{% endblock content %}

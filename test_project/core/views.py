@@ -1,5 +1,6 @@
+from django.contrib.auth import logout
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render, render_to_response
 from django.contrib.auth import authenticate, login
@@ -10,8 +11,10 @@ def register(request):
     # Like before, get the request's context.
     context = RequestContext(request)
 
-    # A boolean value for telling the template whether the registration was successful.
-    # Set to False initially. Code changes value to True when registration succeeds.
+    # A boolean value for telling the template whether
+    # the registration was successful.
+    # Set to False initially.
+    # Code changes value to True when registration succeeds.
     registered = False
 
     # If it's a HTTP POST, we're interested in processing form data.
@@ -30,14 +33,18 @@ def register(request):
             user.set_password(user.password)
             user.save()
 
-            # Update our variable to tell the template registration was successful.
+            # Update our variable to tell the template
+            # registration was successful.
             registered = True
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            print(user_form.errors, profile_form.errors)
+            return render_to_response(
+                'register.html',
+                {'user_form': user_form, 'registered': registered},
+                context)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -46,9 +53,10 @@ def register(request):
 
     # Render the template depending on the context.
     return render_to_response(
-        'qa/register.html',
+        'register.html',
         {'user_form': user_form, 'registered': registered},
         context)
+
 
 def user_login(request):
     # Like before, obtain the context for the user's request.
@@ -66,7 +74,8 @@ def user_login(request):
         user = authenticate(username=username, password=password)
 
         # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
+        # If None (Python's way of representing the absence of a value),
+        # no user
         # with matching credentials was found.
         if user:
             # Is the account active? It could have been disabled.
@@ -88,11 +97,11 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render_to_response('qa/login.html', {}, context)
+        return render_to_response('login.html', {}, context)
 
-from django.contrib.auth import logout
 
-# Use the login_required() decorator to ensure only those logged in can access the view.
+# Use the login_required() decorator to ensure only
+# those logged in can access the view.
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)

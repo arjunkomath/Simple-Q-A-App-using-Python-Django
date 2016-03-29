@@ -1,28 +1,23 @@
+{% extends 'qa/base.html' %}
+{% load bootstrap3 %}
 {% load django_markdown %}
 
-<div class="container">
-
-  {% include "qa/header.html" %}
+{% block content %}
 
 {% if message %}
-<strong>Enter a valid Answer!</strong>
+    <strong>Enter a valid Answer!</strong>
 {% endif %}
-<h4>Answering Question : {{ question.title }}</h4>
+    <h4>Answering Question : {{ question.title }}</h4>
 
-{% if user.is_authenticated %}
-<form id="answer" method="post" action="/answer/">
-  {% csrf_token %}
-  <textarea id="ans" rows="7" style="width:100%" placeholder="Enter your Answer....." type="text" name="answer"></textarea>
-  {% markdown_editor "#ans" %}
-  {% markdown_media %}
-   <br/><br/>
-  <input type="hidden" value="{{ question.id }}" name="question" />
-  <input type="hidden" value="{{ user.id }}" name="user" />
-  <input class="btn btn-success" type="submit" value="Submit Answer" />
-</form>
-{% else %}
-<small><a href="/login">Please Login to Add Questions!</a></small>
-{% endif %}
-</div>
+    <form id="answer" method="post" action="{% url 'add_answer' %}">
+        {% csrf_token %}
+        <textarea id="ans" rows="7" style="width:100%" placeholder="Enter your Answer..." type="text" name="answer"></textarea>
+        {% markdown_editor "#ans" %}
+        {% markdown_media %}
+        <br/><br/>
+        <input type="hidden" value="{{ question.id }}" name="question" />
+        <input type="hidden" value="{{ user.id }}" name="user" />
+        <input class="btn btn-success" type="submit" value="Submit Answer" />
+    </form>
 
-{% include "qa/footer.html" %}
+{% endblock content %}

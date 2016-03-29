@@ -1,8 +1,8 @@
+{% extends 'qa/base.html' %}
+{% load bootstrap3 %}
+{% load django_markdown %}
 
-<div class="container">
-
-  {% include "qa/header.html" %}
-
+{% block content %}
 <h2 class="pull-right">Points: {{ user.points }}</h1>
 <ul>
   <li><b>Website :</b> {{ user.website }} </li>
@@ -13,5 +13,4 @@
 <ul>
 
 </div>
-
-{% include "qa/footer.html" %}
+{% endblock content %}

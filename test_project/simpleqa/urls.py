@@ -4,7 +4,7 @@ from django.contrib import admin
 from core.views import register, user_login, user_logout
 
 from django.contrib.auth.models import User
-from qa.models import Question, Tag
+from qa.models import Question  # , Tag
 #from rest_framework import routers, serializers, viewsets
 
 # Serializers define the API representation.
@@ -42,7 +42,7 @@ urlpatterns = patterns('',
     url(r'^register/$', register, name='register'),
     url(r'^login/$', user_login, name='login'),
     url(r'^logout/$', user_logout, name='logout'),
-    url(r'^', include('qa.urls', namespace='qa')),
+    url(r'^', include('qa.urls')),
     url('^markdown/', include('django_markdown.urls')),
 #    url(r'^', include(router.urls)),
 #    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
