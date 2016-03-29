@@ -73,8 +73,6 @@ class CreateAnswerCommentView(LoginRequired, CreateView):
         return reverse('qa_detail', kwargs={'pk': question_pk})
 
 
-<<<<<<< HEAD
-=======
 class CreateQuestionCommentView(LoginRequired, CreateView):
     """
     View to create new comments for a given question
@@ -96,7 +94,6 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
->>>>>>> 272487594572c1de5dfd192aa91678a6359da0d1
 class QuestionDetailView(DetailView):
     """
     View to call a question and to render all the details about that question.
