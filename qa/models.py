@@ -45,16 +45,21 @@ class Answer(models.Model):
         return self.answer_text
 
 
-class AnswerVote(models.Model):
+class VoteParent(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    class Meta:
+        abstract = True
+
+
+class AnswerVote(VoteParent):
     answer = models.ForeignKey(Answer)
 
     class Meta:
         unique_together = (('user', 'answer'),)
 
 
-class QuestionVote(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+class QuestionVote(VoteParent):
     question = models.ForeignKey(Question)
 
     class Meta:
