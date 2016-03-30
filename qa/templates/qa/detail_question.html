@@ -33,6 +33,23 @@
 {% endif %}
 
 <div class="jumbotron">
+  {% if user.is_authenticated and question.user != user %}
+    <div class="row">
+      <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.votes }}</b></big></div>
+        <div class ="col-sm-1">
+          <form action="{% url 'qa_question_vote' question.id %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <input type="hidden" name="upvote" value="on">
+          <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </form>
+          <form action="{% url 'qa_question_vote' question.id %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>
+          </form>
+    </div>
+  {% endif %}
     <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
     <h3><cool>Q: </cool>{{ question.title }}</h3>
     <h4>{{ question.description }}</h4>
@@ -41,26 +58,46 @@
         <p class="pull-right">This Question has been closed.</p>
     {% else %}
         <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_answer' question.id %}" role="button">Answer this Question!</a>
+        <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_question_comment' question.id %}" role="button">comment this Question!</a>
     {% endif %}
     </p>
 </div>
-
+{% if last_comments %}
+  <h4>comments</h4>
+  {% for comment in last_comments %}
+  <div class="row">
+    <div class="col-md-9 col-md-offset-1">
+    <p><b>{{ comment.comment_text }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+    </div>
+  </div>
+  {% endfor %}
+{% endif %}
 {% if question.answer_set %}
   <h3>Answers</h3>
   <hr/>
 
     {% for answer in question.answer_set.all %}
     <div class="row">
-      {% if user.is_authenticated %}
+      {% if user.is_authenticated and answer.user != user %}
       <div class ="col-md-1">
         <div class="row">
           <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.votes }}</b></big></div>
-          <div class ="col-sm-1"><a class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer" href="{% url 'qa_vote' answer.id %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a> <a class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer" href="{% url 'qa_vote' answer.id %}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></div>
+          <div class ="col-sm-1"><form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <input type="hidden" name="upvote" value="on">
+              <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </form>
+          <form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>
+          </form>
         </div>
       </div>
       {% endif %}
       <div class ="col-md-9">
-        <a href="{% url 'qa_create_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
+        <a href="{% url 'qa_create_answer_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
 
         {% if answer.votes > 0 %}
         <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
@@ -70,8 +107,8 @@
         <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
         {% endif %}
 
-        {% if answer.comment_set %}
-          {% for comment in answer.comment_set.all %}
+        {% if answer.answercomment_set %}
+          {% for comment in answer.answercomment_set.all %}
           <p><b>{{ comment.comment_text }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
           <hr>
           {% endfor %}

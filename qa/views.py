@@ -1,16 +1,16 @@
 import datetime
-
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic import CreateView, View
 from django.views.generic.detail import DetailView
-from django.shortcuts import render, Http404, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
-                       QuestionVote, Comment)
+                       QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired
 
 
@@ -20,7 +20,6 @@ class CreateQuestionView(LoginRequired, CreateView):
     """
     template_name = 'qa/create_question.html'
     model = Question
-    success_url = '/'
     fields = ['title', 'description', 'tags']
 
     def form_valid(self, form):
@@ -30,6 +29,9 @@ class CreateQuestionView(LoginRequired, CreateView):
         form.instance.user = self.request.user
         return super(CreateQuestionView, self).form_valid(form)
 
+    def get_success_url(self):
+        return reverse('qa_index')
+
 
 class CreateAnswerView(LoginRequired, CreateView):
     """
@@ -37,7 +39,6 @@ class CreateAnswerView(LoginRequired, CreateView):
     """
     template_name = 'qa/create_answer.html'
     model = Answer
-    success_url = '/'
     fields = ['answer_text']
 
     def form_valid(self, form):
@@ -49,14 +50,17 @@ class CreateAnswerView(LoginRequired, CreateView):
         form.instance.question_id = self.kwargs['question_id']
         return super(CreateAnswerView, self).form_valid(form)
 
+    def get_success_url(self):
+        print self.kwargs
+        return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
-class CreateCommentView(LoginRequired, CreateView):
+
+class CreateAnswerCommentView(LoginRequired, CreateView):
     """
     View to create new comments for a given answer
     """
     template_name = 'qa/create_comment.html'
-    model = Comment
-    success_url = '/'
+    model = AnswerComment
     fields = ['comment_text']
 
     def form_valid(self, form):
@@ -66,7 +70,33 @@ class CreateCommentView(LoginRequired, CreateView):
         """
         form.instance.user = self.request.user
         form.instance.answer_id = self.kwargs['answer_id']
-        return super(CreateCommentView, self).form_valid(form)
+        return super(CreateAnswerCommentView, self).form_valid(form)
+
+    def get_success_url(self):
+        question_pk = Answer.objects.get(
+            id=self.kwargs['answer_id']).question.pk
+        return reverse('qa_detail', kwargs={'pk': question_pk})
+
+
+class CreateQuestionCommentView(LoginRequired, CreateView):
+    """
+    View to create new comments for a given question
+    """
+    template_name = 'qa/create_comment.html'
+    model = QuestionComment
+    fields = ['comment_text']
+
+    def form_valid(self, form):
+        """
+        Creates the required relationship between question
+        and user/comment
+        """
+        form.instance.user = self.request.user
+        form.instance.question_id = self.kwargs['question_id']
+        return super(CreateQuestionCommentView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
 class QuestionDetailView(DetailView):
@@ -77,27 +107,79 @@ class QuestionDetailView(DetailView):
     template_name = 'qa/detail_question.html'
     context_object_name = 'question'
 
+    def get_context_data(self, **kwargs):
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        context['last_comments'] = self.object.questioncomment_set.order_by(
+            'pub_date')[:5]
+        return context
 
-class VoteView(View):
+
+class ParentVoteView(View):
     """
     Base class to create a vote for a given model (question/answer)
     """
     model = None
-    template_name = ''
+    vote_model = None
+
+    def get_vote_kwargs(self, user, vote_target):
+        """
+        This takes the user and the vote and adjusts the kwargs
+        depending on the used model.
+        """
+        object_kwargs = {'user': user}
+        if self.model == Question:
+            target_key = 'question'
+        elif self.model == Answer:
+            target_key = 'answer'
+        else:
+            raise ValidationError('Not a valid model for votes')
+        object_kwargs[target_key] = vote_target
+        return object_kwargs
 
     def post(self, request, object_id):
-        vote_target = get_object_or_404(self.model, object_id)
+        vote_target = get_object_or_404(self.model, pk=object_id)
         if vote_target.user == request.user:
             raise ValidationError(
                 'Sorry, voting for your own answer is not possible.')
-
         else:
-            try:
-                vote = self.model(request.user, answer)
-                vote.full_clean()
-                vote.save()
-            except ValidationError:
-                pass  # vote object already exists
+            upvote = request.POST.get('upvote', None) is not None
+            object_kwargs = self.get_vote_kwargs(request.user, vote_target)
+            vote, created = self.vote_model.objects.get_or_create(
+                defaults={'value': upvote},
+                **object_kwargs)
+            if created:
+                vote_target.votes += 1 if upvote else -1
+            elif not created:
+                if vote.value == upvote:
+                    vote.delete()
+                    vote_target.votes += -1 if upvote else 1
+                else:
+                    vote_target.votes += 2 if upvote else -2
+                    vote.value = upvote
+                    vote.save()
+            vote_target.save()
+
+        next_url = request.POST.get('next', None)
+        if next_url is not None:
+            return redirect(next_url)
+        else:
+            return redirect(reverse('qa_index'))
+
+
+class AnswerVoteView(ParentVoteView):
+    """
+    Class to upvote answers
+    """
+    model = Answer
+    vote_model = AnswerVote
+
+
+class QuestionVoteView(ParentVoteView):
+    """
+    Class to upvote questions
+    """
+    model = Question
+    vote_model = QuestionVote
 
 
 def search(request):
