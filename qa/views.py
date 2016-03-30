@@ -156,7 +156,6 @@ class ParentVoteView(View):
                     vote_target.votes += -1 if upvote else 1
                     vote_target.user.userqaprofile.points += -1 if upvote else 1
                 else:
-                    print "how to get here??"
                     vote_target.votes += 2 if upvote else -2
                     vote_target.user.userqaprofile.points += 2 if upvote else -2
                     vote.value = upvote
