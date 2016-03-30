@@ -51,7 +51,6 @@ class CreateAnswerView(LoginRequired, CreateView):
         return super(CreateAnswerView, self).form_valid(form)
 
     def get_success_url(self):
-        print self.kwargs
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
@@ -111,6 +110,7 @@ class QuestionDetailView(DetailView):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['last_comments'] = self.object.questioncomment_set.order_by(
             'pub_date')[:5]
+        context['answers'] = self.object.answer_set.all().order_by('pub_date')
         return context
 
 
@@ -149,14 +149,19 @@ class ParentVoteView(View):
                 **object_kwargs)
             if created:
                 vote_target.votes += 1 if upvote else -1
+                vote_target.user.userqaprofile.points += 1 if upvote else -1
             elif not created:
                 if vote.value == upvote:
                     vote.delete()
                     vote_target.votes += -1 if upvote else 1
+                    vote_target.user.userqaprofile.points += -1 if upvote else 1
                 else:
+                    print "how to get here??"
                     vote_target.votes += 2 if upvote else -2
+                    vote_target.user.userqaprofile.points += 2 if upvote else -2
                     vote.value = upvote
                     vote.save()
+            vote_target.user.userqaprofile.save()
             vote_target.save()
 
         next_url = request.POST.get('next', None)
