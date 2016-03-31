@@ -7,7 +7,6 @@ from annoying.fields import AutoOneToOneField
 
 
 class UserQAProfile(models.Model):
-    # This line is required. Links UserQAProfile to a User model instance.
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     points = models.IntegerField(default=0)
     # The additional attributes we wish to include.
@@ -15,7 +14,6 @@ class UserQAProfile(models.Model):
     picture = models.ImageField(upload_to='qa/static/profile_images',
                                 blank=True)
 
-    # Override the __unicode__() method to return out something meaningful!
     def __str__(self):
         return self.user.username
 

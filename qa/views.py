@@ -1,6 +1,5 @@
-import datetime
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic import CreateView, View
 from django.views.generic.detail import DetailView
