@@ -138,7 +138,7 @@
     </div>
   </div>
   {% endif %}
-
+  {% comment %}
   {% if user.is_authenticated %}
 
   <div class="span3 well">
@@ -157,7 +157,7 @@
   </div>
   {% else %}
   <a class="btn btn-block btn-success" href="/login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Login | Sign Up</a><br/>
-  {% endif %}
+  {% endif %}{% endcomment %}
 
 </div>
 

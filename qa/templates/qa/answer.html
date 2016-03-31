@@ -12,8 +12,6 @@
     <form id="answer" method="post" action="{% url 'add_answer' %}">
         {% csrf_token %}
         <textarea id="ans" rows="7" style="width:100%" placeholder="Enter your Answer..." type="text" name="answer"></textarea>
-        {% markdown_editor "#ans" %}
-        {% markdown_media %}
         <br/><br/>
         <input type="hidden" value="{{ question.id }}" name="question" />
         <input type="hidden" value="{{ user.id }}" name="user" />
@@ -21,3 +19,8 @@
     </form>
 
 {% endblock content %}
+
+{% block extra_js %}
+  {% markdown_editor "#ans" %}
+  {% markdown_media %}
+{% endblock %}
