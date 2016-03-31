@@ -72,11 +72,11 @@
   </div>
   {% endfor %}
 {% endif %}
-{% if question.answer_set %}
+{% if answers %}
   <h3>Answers</h3>
   <hr/>
 
-    {% for answer in question.answer_set.all %}
+    {% for answer in answers %}
     <div class="row">
       {% if user.is_authenticated and answer.user != user %}
       <div class ="col-md-1">
