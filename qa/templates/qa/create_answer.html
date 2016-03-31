@@ -16,6 +16,9 @@
 
 </div>
 
-{% markdown_editor "#ans" %}
-{% markdown_media %}
 {% endblock content %}
+
+{% block extra_js %}
+  {% markdown_editor "#id_answer_text" %}
+  {% markdown_media %}
+{% endblock %}
