@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import views
 
 
@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^tag/(?P<tag>[-\w]+)/$', views.tag, name='qa_tag'),
     url(r'^thumb/(?P<user_id>\d+)/(?P<question_id>\d+)/(?P<op_code>\d+)/$',
         views.thumb, name='qa_thumb'),
-
     url(r'^profile/(?P<user_id>\d+)/$', views.profile, name='qa_profile'),
+    url('^markdown/', include('django_markdown.urls')),
 ]
