@@ -12,6 +12,16 @@ from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired
 
+'''
+Dear maintainer:
+
+Once you are done trying to 'optimize' this routine, and have realized what a
+terrible mistake that was, please increment the following counter as a warning
+to the next guy:
+
+total_hours_wasted_here = 2
+'''
+
 
 class CreateQuestionView(LoginRequired, CreateView):
     """
