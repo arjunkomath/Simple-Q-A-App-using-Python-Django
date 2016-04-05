@@ -1,8 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from django.views.generic import CreateView, View, ListView
-from django.views.generic.detail import DetailView
+from django.views.generic import CreateView, View, ListView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
