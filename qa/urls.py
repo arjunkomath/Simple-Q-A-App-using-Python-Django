@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='qa_index'),
+    url(r'^$', views.QuestionIndexView.as_view(), name='qa_index'),
     url(r'^question/(?P<pk>\d+)/$',
         views.QuestionDetailView.as_view(), name='qa_detail'),
     url(r'^new-question/$', views.CreateQuestionView.as_view(),
