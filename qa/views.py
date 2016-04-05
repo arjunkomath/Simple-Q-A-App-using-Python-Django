@@ -165,6 +165,13 @@ class QuestionDetailView(DetailView):
         context['answers'] = self.object.answer_set.all().order_by('pub_date')
         return context
 
+    def get_object(self):
+        # Call the superclass
+        question = super(QuestionDetailView, self).get_object()
+        question.views += 1
+        question.save()
+        return question
+
 
 class ParentVoteView(View):
     """
@@ -277,61 +284,3 @@ def profile(request, user_id):
     user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
-
-
-def thumb(request, user_id, question_id, op_code):
-    user_ob = get_user_model().objects.get(id=user_id)
-    user = UserQAProfile.objects.get(user=user_ob)
-    question = Question.objects.get(pk=question_id)
-    answer_list = question.answer_set.order_by('-votes')
-    paginator = Paginator(answer_list, 10)
-    page = request.GET.get('page')
-
-    try:
-        answers = paginator.page(page)
-
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        answers = paginator.page(1)
-
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        answers = paginator.page(paginator.num_pages)
-
-    if QVoter.objects.filter(question_id=question_id, user=user_ob).exists():
-        return render(request, 'qa/detail.html',
-                      {'question': question, 'answers': answers,
-                       'message': "You've already cast vote on this question!"}
-                      )
-
-    if op_code == '0':
-        question.reward += 5
-        user.points += 5
-        user.save()
-
-    if op_code == '1':
-        question.reward -= 5
-        user.points -= 5
-        user.save()
-
-    question.save()
-    answer_list = question.answer_set.order_by('-votes')
-    paginator = Paginator(answer_list, 10)
-    page = request.GET.get('page')
-    try:
-        answers = paginator.page(page)
-
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        answers = paginator.page(1)
-
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        answers = paginator.page(paginator.num_pages)
-
-    v = QVoter()
-    v.user = user_ob
-    v.question = question
-    v.save()
-    return render(request, 'qa/detail.html',
-                  {'question': question, 'answers': answers})
