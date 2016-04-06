@@ -1,3 +1,5 @@
+import operator
+from functools import reduce
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template import RequestContext, loader
@@ -6,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
@@ -40,6 +43,38 @@ class QuestionIndexView(ListView):
         context['reward'] = Question.objects.order_by('-reward').filter(
             answer__isnull=True, reward__gte=1)[:10]
         return context
+
+
+class QuestionsSearchView(QuestionIndexView):
+    """
+    Display a ListView page inherithed from the QuestionIndexView filtered by
+    the search query and sorted by the different elements aggregated.
+    """
+
+    def get_queryset(self):
+        result = super(QuestionsSearchView, self).get_queryset()
+        query = self.request.GET.get('word')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(title__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(description__icontains=q) for q in query_list))
+            )
+
+        return result
+
+        def get_context_data(self, *args, **kwargs):
+            context = super(
+                QuestionsSearchView, self).get_context_data(*args, **kwargs)
+            context['totalcount'] = Question.objects.count
+            context['anscount'] = Answer.objects.count
+            context['noans'] = Question.objects.order_by('-pub_date').filter(
+                answer__isnull=True)[:10]
+            context['reward'] = Question.objects.order_by('-reward').filter(
+                answer__isnull=True, reward__gte=1)[:10]
+            return context
 
 
 class QuestionsByTagView(ListView):

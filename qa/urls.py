@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^comment-question/(?P<question_id>\d+)/$',
         views.CreateQuestionCommentView.as_view(),
         name='qa_create_question_comment'),
-    url(r'^search/$', views.search, name='qa_search'),
+    url(r'^search/$', views.QuestionsSearchView.as_view(), name='qa_search'),
     url(r'^tag/(?P<tag>[-\w]+)/$',
         views.QuestionsByTagView.as_view(), name='qa_tag'),
     url(r'^profile/(?P<user_id>\d+)/$', views.profile, name='qa_profile'),
