@@ -78,3 +78,11 @@ class TestModels(TestCase, BasicTaggingTest):
             pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
             user=self.user)
         self.assertTrue(isinstance(comment, AnswerComment))
+
+    def test_question_comment(self):
+        comment = QuestionComment.objects.create(
+            question=self.first_question,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.user)
+        self.assertTrue(isinstance(comment, QuestionComment))
