@@ -52,7 +52,7 @@
   {% endif %}
     <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
     <h3><cool>Q: </cool>{{ question.title }}</h3>
-    <h4>{{ question.description }}</h4>
+    <h4>{{ question.description|markdown }}</h4>
     <p>
     {% if question.closed %}
         <p class="pull-right">This Question has been closed.</p>
@@ -67,7 +67,7 @@
   {% for comment in last_comments %}
   <div class="row">
     <div class="col-md-9 col-md-offset-1">
-    <p><b>{{ comment.comment_text }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+    <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
     </div>
   </div>
   {% endfor %}
@@ -109,7 +109,7 @@
 
         {% if answer.answercomment_set %}
           {% for comment in answer.answercomment_set.all %}
-          <p><b>{{ comment.comment_text }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+          <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
           <hr>
           {% endfor %}
         {% endif %}
