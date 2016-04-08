@@ -1,11 +1,9 @@
 import operator
 from functools import reduce
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
-from django.template import RequestContext, loader
-from django.views.generic import CreateView, View, ListView, DetailView, UpdateView
+from django.views.generic import (CreateView, View, ListView, DetailView,
+                                  UpdateView)
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -14,20 +12,19 @@ from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired
 
-'''
-Dear maintainer:
+"""Dear maintainer:
 
 Once you are done trying to 'optimize' this routine, and have realized what a
 terrible mistake that was, please increment the following counter as a warning
 to the next guy:
 
 total_hours_wasted_here = 2
-'''
+"""
 
 
 class QuestionIndexView(ListView):
-    '''CBV to render the index view
-    '''
+    """CBV to render the index view
+    """
     model = Question
     paginate_by = 10
     context_object_name = 'questions'
@@ -78,8 +75,8 @@ class QuestionsSearchView(QuestionIndexView):
 
 
 class QuestionsByTagView(ListView):
-    '''View to call all the questions clasiffied under one specific tag.
-    '''
+    """View to call all the questions clasiffied under one specific tag.
+    """
     model = Question
     paginate_by = 10
     context_object_name = 'questions'
