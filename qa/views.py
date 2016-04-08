@@ -3,7 +3,7 @@ from functools import reduce
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-from django.views.generic import CreateView, View, ListView, DetailView
+from django.views.generic import CreateView, View, ListView, DetailView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
@@ -139,6 +139,20 @@ class CreateAnswerView(LoginRequired, CreateView):
 
     def get_success_url(self):
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
+
+
+class UpdateAnswerView(LoginRequired, UpdateView):
+    """
+    Updates the question
+    """
+    template_name = 'qa/update_answer.html'
+    model = Answer
+    pk_url_kwarg = 'answer_id'
+    fields = ['answer_text']
+
+    def get_success_url(self):
+        answer = self.get_object()
+        return reverse('qa_detail', kwargs={'pk': answer.pk})
 
 
 class CreateAnswerCommentView(LoginRequired, CreateView):

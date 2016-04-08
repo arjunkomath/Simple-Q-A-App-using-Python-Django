@@ -10,6 +10,8 @@ urlpatterns = [
         name='qa_create_question'),
     url(r'^answer/(?P<question_id>\d+)/$',
         views.CreateAnswerView.as_view(), name='qa_create_answer'),
+    url(r'^answer/edit/(?P<answer_id>\d+)/$',
+        views.UpdateAnswerView.as_view(), name='qa_update_answer'),
     url(r'^vote/question/(?P<object_id>\d+)/$',
         views.QuestionVoteView.as_view(), name='qa_question_vote'),
     url(r'^vote/answer/(?P<object_id>\d+)/$',
