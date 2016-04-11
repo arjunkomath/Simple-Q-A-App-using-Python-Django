@@ -120,6 +120,20 @@ class CreateQuestionView(LoginRequired, CreateView):
         return reverse('qa_index')
 
 
+class UpdateQuestionView(LoginRequired, UpdateView):
+    """
+    Updates the question
+    """
+    template_name = 'qa/update_question.html'
+    model = Question
+    pk_url_kwarg = 'question_id'
+    fields = ['title', 'description', 'tags']
+
+    def get_success_url(self):
+        question = self.get_object()
+        return reverse('qa_detail', kwargs={'pk': question.pk})
+
+
 class CreateAnswerView(LoginRequired, CreateView):
     """
     View to create new answers for a given question
@@ -143,7 +157,7 @@ class CreateAnswerView(LoginRequired, CreateView):
 
 class UpdateAnswerView(LoginRequired, UpdateView):
     """
-    Updates the question
+    Updates the question answer
     """
     template_name = 'qa/update_answer.html'
     model = Answer

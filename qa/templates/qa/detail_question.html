@@ -51,6 +51,7 @@
     </div>
   {% endif %}
     <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
+    <a href="{% url 'qa_update_question' question.id %}"><small class="pull-right">Edit &nbsp;</small></a>
     <h3><cool>Q: </cool>{{ question.title }}</h3>
     <h4>{{ question.description|markdown }}</h4>
     <p>

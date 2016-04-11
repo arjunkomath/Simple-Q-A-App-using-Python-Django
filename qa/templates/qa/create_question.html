@@ -8,7 +8,7 @@
   <strong>Enter a valid Question!</strong>
   {% endif %}
 
-  <form method="post" action="{% url 'qa_create_question' %}">
+  <form method="post" action="{% block action_url %}{% url 'qa_create_question' %}{% endblock action_url %}">
     {{ form.as_p }}
     {% csrf_token %}
     <input class="btn pull-right btn-success" type="submit" value="Submit Question" />
