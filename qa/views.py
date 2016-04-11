@@ -152,7 +152,7 @@ class UpdateAnswerView(LoginRequired, UpdateView):
 
     def get_success_url(self):
         answer = self.get_object()
-        return reverse('qa_detail', kwargs={'pk': answer.pk})
+        return reverse('qa_detail', kwargs={'pk': answer.question.pk})
 
 
 class CreateAnswerCommentView(LoginRequired, CreateView):
