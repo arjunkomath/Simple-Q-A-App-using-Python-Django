@@ -1,9 +1,9 @@
 from django.test import TestCase, Client
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
-from qa.models import Question, Answer, QuestionComment, QuestionVote, AnswerVote
+from qa.models import (Question, Answer, QuestionComment, QuestionVote,
+                       AnswerVote)
 from qa.mixins import LoginRequired
 from qa.views import CreateQuestionView, CreateAnswerView
 
@@ -96,7 +96,9 @@ class TestViews(TestCase):
         question = Question.objects.create(
             title='a title', description='bla', user=self.user)
         with self.assertRaises(ValidationError):
-            response = self.client.post(reverse('qa_question_vote', kwargs={'object_id': question.id}), data={'upvote': 'on'})
+            response = self.client.post(reverse(
+                'qa_question_vote', kwargs={'object_id': question.id}),
+                data={'upvote': 'on'})
 
     def test_can_upvote_question(self):
         """
@@ -104,34 +106,41 @@ class TestViews(TestCase):
         and a new instance of QuestionVote is created.
         Shares same base class as answer votes.
         """
-        user = get_user_model().objects.create_user(username='user2', password='top_secret')
+        user = get_user_model().objects.create_user(username='user2',
+                                                    password='top_secret')
         question = Question.objects.create(
             title='a title', description='bla', user=user)
         previous_votes = question.votes
         previous_vote_instances = QuestionVote.objects.count()
-        response = self.client.post(reverse('qa_question_vote', kwargs={'object_id': question.id}), data={'upvote': 'on'})
+        response = self.client.post(reverse(
+            'qa_question_vote', kwargs={'object_id': question.id}),
+            data={'upvote': 'on'})
         self.assertEqual(response.status_code, 302)
         question.refresh_from_db()
         self.assertEqual(previous_votes + 1, question.votes)
-        self.assertEqual(previous_vote_instances + 1, QuestionVote.objects.count())
+        self.assertEqual(previous_vote_instances + 1,
+                         QuestionVote.objects.count())
 
     def test_can_downvote_answer(self):
         """
         When i downvote an answer, the answer field gets updated
         and a new instance of AnswerVote is created.
         """
-        user = get_user_model().objects.create_user(username='user2', password='top_secret')
+        user = get_user_model().objects.create_user(username='user2',
+                                                    password='top_secret')
         question = Question.objects.create(
             title='a title', description='bla', user=user)
         answer = Answer.objects.create(
             answer_text='a title', user=user, question=question)
         previous_votes = question.votes
         previous_vote_instances = AnswerVote.objects.count()
-        response = self.client.post(reverse('qa_answer_vote', kwargs={'object_id': answer.id}))
+        response = self.client.post(reverse('qa_answer_vote',
+                                    kwargs={'object_id': answer.id}))
         self.assertEqual(response.status_code, 302)
         answer.refresh_from_db()
         self.assertEqual(previous_votes - 1, answer.votes)
-        self.assertEqual(previous_vote_instances + 1, AnswerVote.objects.count())
+        self.assertEqual(previous_vote_instances + 1,
+                         AnswerVote.objects.count())
 
     def test_upvote_question_deletes_instance(self):
         """
@@ -139,31 +148,40 @@ class TestViews(TestCase):
         is reverted. This means that the vote count goes down and the
         vote instance is removed.
         """
-        user = get_user_model().objects.create_user(username='user2', password='top_secret')
+        user = get_user_model().objects.create_user(username='user2',
+                                                    password='top_secret')
         question = Question.objects.create(
             title='a title', description='bla', user=user)
-        QuestionVote.objects.create(user=self.user, question=question, value=True)
+        QuestionVote.objects.create(user=self.user, question=question,
+                                    value=True)
         previous_vote_instances = QuestionVote.objects.count()
         previous_votes = question.votes
-        response = self.client.post(reverse('qa_question_vote', kwargs={'object_id': question.id}), data={'upvote': 'on'})
-        self.assertEqual(previous_vote_instances - 1, QuestionVote.objects.count())
+        response = self.client.post(reverse('qa_question_vote',
+                                    kwargs={'object_id': question.id}),
+                                    data={'upvote': 'on'})
+        self.assertEqual(previous_vote_instances - 1,
+                         QuestionVote.objects.count())
         question.refresh_from_db()
         self.assertEqual(previous_votes - 1, question.votes)
 
     def test_switching_vote_updates_correctly(self):
         """
         If i downvote an already upvoted question, the count should
-        shift downwards by 2 because i am not only retiring my upvote,
-        i am adding a negative vote too. The vote instance should be updated too.
+        shift downwards by 2 because i am not only retiring my upvote, I am
+        adding a negative vote too. The vote instance should be updated too.
         """
-        user = get_user_model().objects.create_user(username='user2', password='top_secret')
+        user = get_user_model().objects.create_user(username='user2',
+                                                    password='top_secret')
         question = Question.objects.create(
             title='a title', description='bla', user=user)
-        question_vote = QuestionVote.objects.create(user=self.user, question=question, value=True)
+        question_vote = QuestionVote.objects.create(user=self.user,
+                                                    question=question,
+                                                    value=True)
         previous_vote_instances = QuestionVote.objects.count()
         previous_votes = question.votes
         previous_question_vote = question_vote.value
-        response = self.client.post(reverse('qa_question_vote', kwargs={'object_id': question.id}))
+        response = self.client.post(reverse('qa_question_vote',
+                                    kwargs={'object_id': question.id}))
         self.assertEqual(previous_vote_instances, QuestionVote.objects.count())
         question.refresh_from_db()
         question_vote.refresh_from_db()

@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from qa.models import Question, Answer
+from qa.models import Question, Answer, AnswerComment, QuestionComment
 
 
 class BasicTaggingTest(object):
@@ -56,3 +56,33 @@ class TestModels(TestCase, BasicTaggingTest):
         self.assert_tags_equal(self.first_question.tags.all(),
                                ['one tag', 'the next tag', 'another tag'])
         self.assertEqual(self.first_question.views, 3)
+
+    def test_answer(self):
+        answer = Answer.objects.create(
+            question=self.first_question,
+            answer_text="A text body",
+            votes=1,
+            pub_date=timezone.datetime(2016, 2, 7, 0, 0, 0),
+            user=self.user,
+        )
+        self.assertTrue(isinstance(answer, Answer))
+        self.assertTrue(isinstance(self.first_answer, Answer))
+        self.assertEqual(self.first_answer.answer_text,
+                         "I hope this text is acceptable by django_markdown")
+        self.assertEqual(answer.answer_text, "A text body")
+
+    def test_answer_comment(self):
+        comment = AnswerComment.objects.create(
+            answer=self.first_answer,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.user)
+        self.assertTrue(isinstance(comment, AnswerComment))
+
+    def test_question_comment(self):
+        comment = QuestionComment.objects.create(
+            question=self.first_question,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.user)
+        self.assertTrue(isinstance(comment, QuestionComment))
