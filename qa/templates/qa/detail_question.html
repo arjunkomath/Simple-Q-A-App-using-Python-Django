@@ -67,7 +67,7 @@
   {% for comment in last_comments %}
   <div class="row">
     <div class="col-md-9 col-md-offset-1">
-    <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+    <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_question_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
     </div>
   </div>
   {% endfor %}
@@ -110,7 +110,7 @@
 
         {% if answer.answercomment_set %}
           {% for comment in answer.answercomment_set.all %}
-          <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+          <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_answer_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
           <hr>
           {% endfor %}
         {% endif %}
