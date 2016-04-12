@@ -20,7 +20,6 @@ class UserQAProfile(models.Model):
 
 class Question(models.Model):
     title = models.CharField(max_length=200, blank=False)
-    votes = models.IntegerField(default=0)
     description = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = TaggableManager()
@@ -29,6 +28,18 @@ class Question(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     closed = models.BooleanField(default=False)
 
+    @property
+    def positive_votes(self):
+        return self.questionvote_set.filter(value=True).count()
+
+    @property
+    def negative_votes(self):
+        return self.questionvote_set.filter(value=False).count()
+
+    @property
+    def total_points(self):
+        return self.positive_votes - self.negative_votes
+
     def __str__(self):
         return self.title
 
@@ -36,9 +47,20 @@ class Question(models.Model):
 class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer_text = MarkdownField()
-    votes = models.IntegerField(default=0)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    @property
+    def positive_votes(self):
+        return self.answervote_set.filter(value=True).count()
+
+    @property
+    def negative_votes(self):
+        return self.answervote_set.filter(value=False).count()
+
+    @property
+    def total_points(self):
+        return self.positive_votes - self.negative_votes
 
     def __str__(self):
         return self.answer_text

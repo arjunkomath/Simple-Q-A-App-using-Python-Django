@@ -110,14 +110,14 @@ class TestViews(TestCase):
                                                     password='top_secret')
         question = Question.objects.create(
             title='a title', description='bla', user=user)
-        previous_votes = question.votes
+        previous_votes = question.total_points
         previous_vote_instances = QuestionVote.objects.count()
         response = self.client.post(reverse(
             'qa_question_vote', kwargs={'object_id': question.id}),
             data={'upvote': 'on'})
         self.assertEqual(response.status_code, 302)
         question.refresh_from_db()
-        self.assertEqual(previous_votes + 1, question.votes)
+        self.assertEqual(previous_votes + 1, question.total_points)
         self.assertEqual(previous_vote_instances + 1,
                          QuestionVote.objects.count())
 
@@ -132,13 +132,13 @@ class TestViews(TestCase):
             title='a title', description='bla', user=user)
         answer = Answer.objects.create(
             answer_text='a title', user=user, question=question)
-        previous_votes = question.votes
+        previous_votes = question.total_points
         previous_vote_instances = AnswerVote.objects.count()
         response = self.client.post(reverse('qa_answer_vote',
                                     kwargs={'object_id': answer.id}))
         self.assertEqual(response.status_code, 302)
         answer.refresh_from_db()
-        self.assertEqual(previous_votes - 1, answer.votes)
+        self.assertEqual(previous_votes - 1, answer.total_points)
         self.assertEqual(previous_vote_instances + 1,
                          AnswerVote.objects.count())
 
@@ -155,14 +155,14 @@ class TestViews(TestCase):
         QuestionVote.objects.create(user=self.user, question=question,
                                     value=True)
         previous_vote_instances = QuestionVote.objects.count()
-        previous_votes = question.votes
+        previous_votes = question.total_points
         response = self.client.post(reverse('qa_question_vote',
                                     kwargs={'object_id': question.id}),
                                     data={'upvote': 'on'})
         self.assertEqual(previous_vote_instances - 1,
                          QuestionVote.objects.count())
         question.refresh_from_db()
-        self.assertEqual(previous_votes - 1, question.votes)
+        self.assertEqual(previous_votes - 1, question.total_points)
 
     def test_switching_vote_updates_correctly(self):
         """
@@ -178,12 +178,12 @@ class TestViews(TestCase):
                                                     question=question,
                                                     value=True)
         previous_vote_instances = QuestionVote.objects.count()
-        previous_votes = question.votes
+        previous_votes = question.total_points
         previous_question_vote = question_vote.value
         response = self.client.post(reverse('qa_question_vote',
                                     kwargs={'object_id': question.id}))
         self.assertEqual(previous_vote_instances, QuestionVote.objects.count())
         question.refresh_from_db()
         question_vote.refresh_from_db()
-        self.assertEqual(previous_votes - 2, question.votes)
+        self.assertEqual(previous_votes - 2, question.total_points)
         self.assertNotEqual(previous_question_vote, question_vote.value)
