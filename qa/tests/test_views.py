@@ -187,3 +187,16 @@ class TestViews(TestCase):
         question_vote.refresh_from_db()
         self.assertEqual(previous_votes - 2, question.total_points)
         self.assertNotEqual(previous_question_vote, question_vote.value)
+
+    def test_answer_delete_view(self):
+        """
+        Answer delete view should delete the answer instance
+        identified by answer_id
+        """
+        question = Question.objects.create(
+            title='a title', description='bla', user=self.user)
+        answer = Answer.objects.create(
+            question=question, answer_text="asasda", user=self.user)
+        response = self.client.post(
+            reverse('qa_delete_answer', kwargs={'answer_id': answer.id}))
+        self.assertEqual(0, Answer.objects.all().count())

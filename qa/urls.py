@@ -18,6 +18,8 @@ urlpatterns = [
 
     url(r'^answer/edit/(?P<answer_id>\d+)/$',
         views.UpdateAnswerView.as_view(), name='qa_update_answer'),
+    url(r'^answer/delete/(?P<answer_id>\d+)/$',
+        views.DeleteAnswerView.as_view(), name='qa_delete_answer'),
 
     url(r'^vote/question/(?P<object_id>\d+)/$',
         views.QuestionVoteView.as_view(), name='qa_question_vote'),
