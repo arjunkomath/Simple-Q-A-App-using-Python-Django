@@ -105,7 +105,7 @@
       {% endif %}
       <div class ="col-md-9">
         <a href="{% url 'qa_create_answer_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
-        {% if answer.user == user %}<a href="{% url 'qa_delete_answer' answer.id %}" class="pull-right"><small>Delete &nbsp;</small></a><a href="{% url 'qa_update_answer' answer.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
+        {% if answer.user == user %}<a href="{% url 'qa_update_answer' answer.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
 
         <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
 

@@ -2,7 +2,7 @@ import operator
 from functools import reduce
 from django.core.urlresolvers import reverse
 from django.views.generic import (CreateView, View, ListView, DetailView,
-                                  UpdateView, DeleteView)
+                                  UpdateView)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -345,12 +345,3 @@ def profile(request, user_id):
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
 
-
-class DeleteAnswerView(DeleteView):
-    model = Answer
-    pk_url_kwarg = 'answer_id'
-    template_name = 'qa/delete_answer.html'
-
-    def get_success_url(self):
-        answer = self.get_object()
-        return reverse('qa_detail', args=(answer.question.id,))
