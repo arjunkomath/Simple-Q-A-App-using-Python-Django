@@ -297,15 +297,12 @@ class ParentVoteView(View):
                 defaults={'value': upvote},
                 **object_kwargs)
             if created:
-                vote_target.votes += 1 if upvote else -1
                 vote_target.user.userqaprofile.points += 1 if upvote else -1
             elif not created:
                 if vote.value == upvote:
                     vote.delete()
-                    vote_target.votes += -1 if upvote else 1
                     vote_target.user.userqaprofile.points += -1 if upvote else 1
                 else:
-                    vote_target.votes += 2 if upvote else -2
                     vote_target.user.userqaprofile.points += 2 if upvote else -2
                     vote.value = upvote
                     vote.save()

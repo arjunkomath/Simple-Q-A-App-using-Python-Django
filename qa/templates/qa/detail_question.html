@@ -35,7 +35,7 @@
 <div class="jumbotron">
   {% if user.is_authenticated and question.user != user %}
     <div class="row">
-      <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.votes }}</b></big></div>
+      <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.total_points }}</b></big></div>
         <div class ="col-sm-1">
           <form action="{% url 'qa_question_vote' question.id %}" method="POST">
           {% csrf_token %}
@@ -82,8 +82,9 @@
       {% if user.is_authenticated and answer.user != user %}
       <div class ="col-md-1">
         <div class="row">
-          <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.votes }}</b></big></div>
-          <div class ="col-sm-1"><form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
+          <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.total_points }}</b></big></div>
+          <div class ="col-sm-1">
+          <form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
               {% csrf_token %}
               <input type="hidden" name="next" value="{{ request.path }}">
               <input type="hidden" name="upvote" value="on">
@@ -101,13 +102,7 @@
         <a href="{% url 'qa_create_answer_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
         {% if answer.user == user %}<a href="{% url 'qa_update_answer' answer.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
 
-        {% if answer.votes > 0 %}
         <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
-        {% elif answer.votes == 0 %}
-        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
-        {% else %}
-        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
-        {% endif %}
 
         {% if answer.answercomment_set %}
           {% for comment in answer.answercomment_set.all %}
