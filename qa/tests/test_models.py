@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from qa.models import Question, Answer, AnswerComment, QuestionComment
+from qa.models import Question, Answer, AnswerComment, QuestionComment,\
+    QuestionVote, AnswerVote, VoteParent
 
 
 class BasicTaggingTest(object):
@@ -31,6 +32,11 @@ class TestModels(TestCase, BasicTaggingTest):
             email='test@swapps.co',
             password='top_secret'
         )
+        self.other_user = get_user_model().objects.create_user(
+            username='other_test_user',
+            email='other_test@swapps.co',
+            password='top_secret'
+        )
         self.first_question = Question.objects.create(
             title="Another Question",
             description="A not so long random text to fill this field",
@@ -43,7 +49,6 @@ class TestModels(TestCase, BasicTaggingTest):
         self.first_answer = Answer.objects.create(
             question=self.first_question,
             answer_text="I hope this text is acceptable by django_markdown",
-            votes=4,
             pub_date=timezone.datetime(2016, 2, 6, 0, 0, 0),
             user=self.user,
         )
@@ -61,7 +66,6 @@ class TestModels(TestCase, BasicTaggingTest):
         answer = Answer.objects.create(
             question=self.first_question,
             answer_text="A text body",
-            votes=1,
             pub_date=timezone.datetime(2016, 2, 7, 0, 0, 0),
             user=self.user,
         )
@@ -86,3 +90,58 @@ class TestModels(TestCase, BasicTaggingTest):
             pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
             user=self.user)
         self.assertTrue(isinstance(comment, QuestionComment))
+
+    def test_question_vote(self):
+        vote = QuestionVote.objects.create(user=self.user,
+                                           value=True,
+                                           question=self.first_question)
+        self.assertTrue(isinstance(vote, QuestionVote))
+
+    def test_answer_vote(self):
+        vote = AnswerVote.objects.create(user=self.user,
+                                         value=True,
+                                         answer=self.first_answer)
+        self.assertTrue(isinstance(vote, AnswerVote))
+
+    def test_question_positive_votes(self):
+        vote = QuestionVote.objects.create(user=self.user,
+                                           value=True,
+                                           question=self.first_question)
+        self.assertEqual(self.first_question.positive_votes, 1)
+
+    def test_question_negative_votes(self):
+        vote = QuestionVote.objects.create(user=self.user,
+                                           value=False,
+                                           question=self.first_question)
+        self.assertEqual(self.first_question.negative_votes, 1)
+
+    def test_question_total_points(self):
+        upvote = QuestionVote.objects.create(user=self.user,
+                                             value=True,
+                                             question=self.first_question)
+        downvote = QuestionVote.objects.create(user=self.other_user,
+                                               value=False,
+                                               question=self.first_question)
+        self.assertEqual(self.first_question.total_points, 0)
+
+    def test_answer_positive_votes(self):
+        vote = AnswerVote.objects.create(user=self.user,
+                                         value=True,
+                                         answer=self.first_answer)
+        self.assertEqual(self.first_answer.positive_votes, 1)
+
+    def test_answer_negative_votes(self):
+        vote = AnswerVote.objects.create(user=self.user,
+                                         value=False,
+                                         answer=self.first_answer)
+        self.assertEqual(self.first_answer.negative_votes, 1)
+
+    def test_answer_total_points(self):
+        upvote = AnswerVote.objects.create(user=self.user,
+                                           value=True,
+                                           answer=self.first_answer)
+        downvote = AnswerVote.objects.create(user=self.other_user,
+                                             value=False,
+                                             answer=self.first_answer)
+        self.assertEqual(self.first_answer.total_points, 0)
+
