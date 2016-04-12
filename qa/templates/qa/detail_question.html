@@ -35,7 +35,7 @@
 <div class="jumbotron">
   {% if user.is_authenticated and question.user != user %}
     <div class="row">
-      <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.votes }}</b></big></div>
+      <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.total_points }}</b></big></div>
         <div class ="col-sm-1">
           <form action="{% url 'qa_question_vote' question.id %}" method="POST">
           {% csrf_token %}
@@ -51,6 +51,7 @@
     </div>
   {% endif %}
     <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
+    <a href="{% url 'qa_update_question' question.id %}"><small class="pull-right">Edit &nbsp;</small></a>
     <h3><cool>Q: </cool>{{ question.title }}</h3>
     <h4>{{ question.description|markdown }}</h4>
     <p>
@@ -67,7 +68,7 @@
   {% for comment in last_comments %}
   <div class="row">
     <div class="col-md-9 col-md-offset-1">
-    <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+    <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_question_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
     </div>
   </div>
   {% endfor %}
@@ -81,8 +82,9 @@
       {% if user.is_authenticated and answer.user != user %}
       <div class ="col-md-1">
         <div class="row">
-          <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.votes }}</b></big></div>
-          <div class ="col-sm-1"><form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
+          <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.total_points }}</b></big></div>
+          <div class ="col-sm-1">
+          <form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
               {% csrf_token %}
               <input type="hidden" name="next" value="{{ request.path }}">
               <input type="hidden" name="upvote" value="on">
@@ -98,18 +100,13 @@
       {% endif %}
       <div class ="col-md-9">
         <a href="{% url 'qa_create_answer_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
+        {% if answer.user == user %}<a href="{% url 'qa_update_answer' answer.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
 
-        {% if answer.votes > 0 %}
         <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
-        {% elif answer.votes == 0 %}
-        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
-        {% else %}
-        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
-        {% endif %}
 
         {% if answer.answercomment_set %}
           {% for comment in answer.answercomment_set.all %}
-          <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>
+          <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_answer_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
           <hr>
           {% endfor %}
         {% endif %}
