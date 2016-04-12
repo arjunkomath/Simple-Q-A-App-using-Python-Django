@@ -117,6 +117,20 @@ class CreateQuestionView(LoginRequired, CreateView):
         return reverse('qa_index')
 
 
+class UpdateQuestionView(LoginRequired, UpdateView):
+    """
+    Updates the question
+    """
+    template_name = 'qa/update_question.html'
+    model = Question
+    pk_url_kwarg = 'question_id'
+    fields = ['title', 'description', 'tags']
+
+    def get_success_url(self):
+        question = self.get_object()
+        return reverse('qa_detail', kwargs={'pk': question.pk})
+
+
 class CreateAnswerView(LoginRequired, CreateView):
     """
     View to create new answers for a given question
@@ -140,7 +154,7 @@ class CreateAnswerView(LoginRequired, CreateView):
 
 class UpdateAnswerView(LoginRequired, UpdateView):
     """
-    Updates the question
+    Updates the question answer
     """
     template_name = 'qa/update_answer.html'
     model = Answer
@@ -149,7 +163,7 @@ class UpdateAnswerView(LoginRequired, UpdateView):
 
     def get_success_url(self):
         answer = self.get_object()
-        return reverse('qa_detail', kwargs={'pk': answer.pk})
+        return reverse('qa_detail', kwargs={'pk': answer.question.pk})
 
 
 class CreateAnswerCommentView(LoginRequired, CreateView):
@@ -194,6 +208,33 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
 
     def get_success_url(self):
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
+
+
+class UpdateQuestionCommentView(LoginRequired, UpdateView):
+    """
+    Updates the comment question
+    """
+    template_name = 'qa/create_comment.html'
+    model = QuestionComment
+    pk_url_kwarg = 'comment_id'
+    fields = ['comment_text']
+
+    def get_success_url(self):
+        question_comment = self.get_object()
+        return reverse(
+            'qa_detail', kwargs={'pk': question_comment.question.pk})
+
+
+class UpdateAnswerCommentView(UpdateQuestionCommentView):
+    """
+    Updates the comment answer
+    """
+    model = AnswerComment
+
+    def get_success_url(self):
+        answer_comment = self.get_object()
+        return reverse(
+            'qa_detail', kwargs={'pk': answer_comment.answer.question.pk})
 
 
 class QuestionDetailView(DetailView):
