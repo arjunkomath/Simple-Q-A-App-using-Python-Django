@@ -1,37 +1,35 @@
 import operator
 from functools import reduce
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
-from django.template import RequestContext, loader
-from django.views.generic import CreateView, View, ListView, DetailView, UpdateView
+from django.views.generic import (CreateView, View, ListView, DetailView,
+                                  UpdateView)
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
-from .mixins import LoginRequired
+from .mixins import LoginRequired, AuthorRequiredMixin
 
-'''
-Dear maintainer:
+"""Dear maintainer:
 
 Once you are done trying to 'optimize' this routine, and have realized what a
 terrible mistake that was, please increment the following counter as a warning
 to the next guy:
 
 total_hours_wasted_here = 2
-'''
+"""
 
 
 class QuestionIndexView(ListView):
-    '''CBV to render the index view
-    '''
+    """CBV to render the index view
+    """
     model = Question
     paginate_by = 10
     context_object_name = 'questions'
     template_name = 'qa/index.html'
+    ordering = '-pub_date'
 
     def get_context_data(self, *args, **kwargs):
         context = super(
@@ -78,8 +76,8 @@ class QuestionsSearchView(QuestionIndexView):
 
 
 class QuestionsByTagView(ListView):
-    '''View to call all the questions clasiffied under one specific tag.
-    '''
+    """View to call all the questions clasiffied under one specific tag.
+    """
     model = Question
     paginate_by = 10
     context_object_name = 'questions'
@@ -120,7 +118,7 @@ class CreateQuestionView(LoginRequired, CreateView):
         return reverse('qa_index')
 
 
-class UpdateQuestionView(LoginRequired, UpdateView):
+class UpdateQuestionView(LoginRequired, AuthorRequiredMixin, UpdateView):
     """
     Updates the question
     """
@@ -155,7 +153,7 @@ class CreateAnswerView(LoginRequired, CreateView):
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
-class UpdateAnswerView(LoginRequired, UpdateView):
+class UpdateAnswerView(LoginRequired, AuthorRequiredMixin, UpdateView):
     """
     Updates the question answer
     """
@@ -213,7 +211,8 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
-class UpdateQuestionCommentView(LoginRequired, UpdateView):
+class UpdateQuestionCommentView(LoginRequired,
+                                AuthorRequiredMixin, UpdateView):
     """
     Updates the comment question
     """
@@ -249,10 +248,19 @@ class QuestionDetailView(DetailView):
     context_object_name = 'question'
 
     def get_context_data(self, **kwargs):
+        answers_list = self.object.answer_set.all().order_by('pub_date')
+        paginator = Paginator(answers_list, 10)
+        page = self.request.GET.get('page')
+        try:
+            answers = paginator.page(page)
+        except PageNotAnInteger:
+            answers = paginator.page(1)
+        except EmptyPage:
+            answers = paginator.page(paginator.num_pages)
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['last_comments'] = self.object.questioncomment_set.order_by(
             'pub_date')[:5]
-        context['answers'] = self.object.answer_set.all().order_by('pub_date')
+        context['answers'] = answers
         return context
 
     def get_object(self):
@@ -336,3 +344,4 @@ def profile(request, user_id):
     user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
+
