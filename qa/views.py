@@ -10,7 +10,7 @@ from django.db.models import Q
 
 from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
-from .mixins import LoginRequired
+from .mixins import LoginRequired, AuthorRequiredMixin
 
 """Dear maintainer:
 
@@ -117,7 +117,7 @@ class CreateQuestionView(LoginRequired, CreateView):
         return reverse('qa_index')
 
 
-class UpdateQuestionView(LoginRequired, UpdateView):
+class UpdateQuestionView(LoginRequired, AuthorRequiredMixin, UpdateView):
     """
     Updates the question
     """
@@ -152,7 +152,7 @@ class CreateAnswerView(LoginRequired, CreateView):
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
-class UpdateAnswerView(LoginRequired, UpdateView):
+class UpdateAnswerView(LoginRequired, AuthorRequiredMixin, UpdateView):
     """
     Updates the question answer
     """
@@ -210,7 +210,8 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
-class UpdateQuestionCommentView(LoginRequired, UpdateView):
+class UpdateQuestionCommentView(LoginRequired,
+                                AuthorRequiredMixin, UpdateView):
     """
     Updates the comment question
     """
