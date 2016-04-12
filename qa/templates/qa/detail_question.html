@@ -33,35 +33,40 @@
 {% endif %}
 
 <div class="jumbotron">
-  {% if user.is_authenticated and question.user != user %}
-    <div class="row">
-      <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ question.total_points }}</b></big></div>
-        <div class ="col-sm-1">
-          <form action="{% url 'qa_question_vote' question.id %}" method="POST">
+  <div class="row">
+    {% if user.is_authenticated and question.user != user %}
+      <div class ="col-sm-1">
+        <big class="pull-left custom-big"><b>{{ question.total_points }}</b></big>
+      </div>
+      <div class ="col-sm-1">
+        <form action="{% url 'qa_question_vote' question.id %}" method="POST">
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.path }}">
           <input type="hidden" name="upvote" value="on">
           <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-          </form>
+        </form>
           <form action="{% url 'qa_question_vote' question.id %}" method="POST">
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.path }}">
-          <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>
-          </form>
-    </div>
-  {% endif %}
-    <small class="pull-right">Posted by {{ question.user_data.user.username }}, {{ question.pub_date }}</small>
-    <a href="{% url 'qa_update_question' question.id %}"><small class="pull-right">Edit &nbsp;</small></a>
-    <h3><cool>Q: </cool>{{ question.title }}</h3>
-    <h4>{{ question.description|markdown }}</h4>
-    <p>
-    {% if question.closed %}
-        <p class="pull-right">This Question has been closed.</p>
-    {% else %}
-        <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_answer' question.id %}" role="button">Answer this Question!</a>
-        <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_question_comment' question.id %}" role="button">comment this Question!</a>
+          <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+        </form>
+      </div>
     {% endif %}
-    </p>
+    <div class="col-sm-10">
+      <small class="pull-right">Posted by {{ question.user.username }}, {{ question.pub_date }}</small>
+      {% if user.is_authenticated and question.user == user %}<a href="{% url 'qa_update_question' question.id %}"><small class="pull-right">Edit &nbsp;</small></a>{% endif %}
+      <h3><cool>Q: </cool>{{ question.title }}</h3>
+      <h4>{{ question.description|markdown }}</h4>
+      <p>
+      {% if question.closed %}
+          <p class="pull-right">This Question has been closed.</p>
+      {% else %}
+          <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_answer' question.id %}" role="button">Answer this Question!</a>
+          <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_question_comment' question.id %}" role="button">comment this Question!</a>
+      {% endif %}
+      </p>
+    </div>
+  </div>
 </div>
 {% if last_comments %}
   <h4>comments</h4>
