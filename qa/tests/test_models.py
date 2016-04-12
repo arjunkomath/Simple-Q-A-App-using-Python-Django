@@ -104,44 +104,35 @@ class TestModels(TestCase, BasicTaggingTest):
         self.assertTrue(isinstance(vote, AnswerVote))
 
     def test_question_positive_votes(self):
-        vote = QuestionVote.objects.create(user=self.user,
-                                           value=True,
-                                           question=self.first_question)
+        QuestionVote.objects.create(user=self.user,
+                                    value=True,  question=self.first_question)
         self.assertEqual(self.first_question.positive_votes, 1)
 
     def test_question_negative_votes(self):
-        vote = QuestionVote.objects.create(user=self.user,
-                                           value=False,
-                                           question=self.first_question)
+        QuestionVote.objects.create(user=self.user,
+                                    value=False,  question=self.first_question)
         self.assertEqual(self.first_question.negative_votes, 1)
 
     def test_question_total_points(self):
-        upvote = QuestionVote.objects.create(user=self.user,
-                                             value=True,
-                                             question=self.first_question)
-        downvote = QuestionVote.objects.create(user=self.other_user,
-                                               value=False,
-                                               question=self.first_question)
+        QuestionVote.objects.create(user=self.user,
+                                    value=True,  question=self.first_question)
+        QuestionVote.objects.create(user=self.other_user,
+                                    value=False, question=self.first_question)
         self.assertEqual(self.first_question.total_points, 0)
 
     def test_answer_positive_votes(self):
-        vote = AnswerVote.objects.create(user=self.user,
-                                         value=True,
-                                         answer=self.first_answer)
+        AnswerVote.objects.create(user=self.user,
+                                  value=True, answer=self.first_answer)
         self.assertEqual(self.first_answer.positive_votes, 1)
 
     def test_answer_negative_votes(self):
-        vote = AnswerVote.objects.create(user=self.user,
-                                         value=False,
-                                         answer=self.first_answer)
+        AnswerVote.objects.create(user=self.user,
+                                  value=False, answer=self.first_answer)
         self.assertEqual(self.first_answer.negative_votes, 1)
 
     def test_answer_total_points(self):
-        upvote = AnswerVote.objects.create(user=self.user,
-                                           value=True,
-                                           answer=self.first_answer)
-        downvote = AnswerVote.objects.create(user=self.other_user,
-                                             value=False,
-                                             answer=self.first_answer)
+        AnswerVote.objects.create(user=self.user,
+                                  value=True, answer=self.first_answer)
+        AnswerVote.objects.create(user=self.other_user,
+                                  value=False, answer=self.first_answer)
         self.assertEqual(self.first_answer.total_points, 0)
-
