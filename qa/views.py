@@ -249,10 +249,19 @@ class QuestionDetailView(DetailView):
     context_object_name = 'question'
 
     def get_context_data(self, **kwargs):
+        answers_list = self.object.answer_set.all().order_by('pub_date')
+        paginator = Paginator(answers_list, 10)
+        page = self.request.GET.get('page')
+        try:
+            answers = paginator.page(page)
+        except PageNotAnInteger:
+            answers = paginator.page(1)
+        except EmptyPage:
+            answers = paginator.page(paginator.num_pages)
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['last_comments'] = self.object.questioncomment_set.order_by(
             'pub_date')[:5]
-        context['answers'] = self.object.answer_set.all().order_by('pub_date')
+        context['answers'] = answers
         return context
 
     def get_object(self):
