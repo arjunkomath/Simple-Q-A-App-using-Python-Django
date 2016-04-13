@@ -1,6 +1,8 @@
 import operator
 from functools import reduce
 from django.core.urlresolvers import reverse
+from django.conf import settings
+from django.utils.translation import ugettext as _
 from django.views.generic import (CreateView, View, ListView, DetailView,
                                   UpdateView)
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,6 +14,14 @@ from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired, AuthorRequiredMixin
 
+try:
+    qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\
+        settings.QA_MESSAGES
+except AttributeError:
+    qa_messages = False
+
+if qa_messages:
+    from django.contrib import messages
 """Dear maintainer:
 
 Once you are done trying to 'optimize' this routine, and have realized what a
@@ -115,6 +125,9 @@ class CreateQuestionView(LoginRequired, CreateView):
         return super(CreateQuestionView, self).form_valid(form)
 
     def get_success_url(self):
+        if qa_messages:
+            messages.success(
+                self.request, _('Thank you! your question has been created.'))
         return reverse('qa_index')
 
 
@@ -150,6 +163,9 @@ class CreateAnswerView(LoginRequired, CreateView):
         return super(CreateAnswerView, self).form_valid(form)
 
     def get_success_url(self):
+        if qa_messages:
+            messages.success(
+                self.request, _('Thank you! your answer has been posted.'))
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
@@ -185,6 +201,9 @@ class CreateAnswerCommentView(LoginRequired, CreateView):
         return super(CreateAnswerCommentView, self).form_valid(form)
 
     def get_success_url(self):
+        if qa_messages:
+            messages.success(
+                self.request, _('Thank you! your comment has been posted.'))
         question_pk = Answer.objects.get(
             id=self.kwargs['answer_id']).question.pk
         return reverse('qa_detail', kwargs={'pk': question_pk})
@@ -208,6 +227,9 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
         return super(CreateQuestionCommentView, self).form_valid(form)
 
     def get_success_url(self):
+        if qa_messages:
+            messages.success(
+                self.request, _('Thank you! your comment has been posted.'))
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
