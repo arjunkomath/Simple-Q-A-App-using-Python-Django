@@ -49,6 +49,7 @@ class Answer(models.Model):
     answer_text = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    answer = models.BooleanField(default=False)
 
     @property
     def positive_votes(self):
