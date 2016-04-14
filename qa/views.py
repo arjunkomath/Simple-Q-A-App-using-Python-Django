@@ -9,7 +9,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired, AuthorRequiredMixin
@@ -116,6 +115,7 @@ class CreateQuestionView(LoginRequired, CreateView):
     template_name = 'qa/create_question.html'
     model = Question
     fields = ['title', 'description', 'tags']
+    message = _('Thank you! your question has been created.')
 
     def form_valid(self, form):
         """
@@ -127,7 +127,7 @@ class CreateQuestionView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your question has been created.'))
+                self.request, self.message)
         return reverse('qa_index')
 
 
@@ -152,6 +152,7 @@ class CreateAnswerView(LoginRequired, CreateView):
     template_name = 'qa/create_answer.html'
     model = Answer
     fields = ['answer_text']
+    message = _('Thank you! your answer has been posted.')
 
     def form_valid(self, form):
         """
@@ -165,7 +166,7 @@ class CreateAnswerView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your answer has been posted.'))
+                self.request, self.message)
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
@@ -190,6 +191,7 @@ class CreateAnswerCommentView(LoginRequired, CreateView):
     template_name = 'qa/create_comment.html'
     model = AnswerComment
     fields = ['comment_text']
+    message = _('Thank you! your comment has been posted.')
 
     def form_valid(self, form):
         """
@@ -203,7 +205,7 @@ class CreateAnswerCommentView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your comment has been posted.'))
+                self.request, self.message)
         question_pk = Answer.objects.get(
             id=self.kwargs['answer_id']).question.pk
         return reverse('qa_detail', kwargs={'pk': question_pk})
@@ -216,6 +218,7 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
     template_name = 'qa/create_comment.html'
     model = QuestionComment
     fields = ['comment_text']
+    message = _('Thank you! your comment has been posted.')
 
     def form_valid(self, form):
         """
@@ -229,7 +232,7 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your comment has been posted.'))
+                self.request, self.message)
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
@@ -270,15 +273,7 @@ class QuestionDetailView(DetailView):
     context_object_name = 'question'
 
     def get_context_data(self, **kwargs):
-        answers_list = self.object.answer_set.all().order_by('pub_date')
-        paginator = Paginator(answers_list, 10)
-        page = self.request.GET.get('page')
-        try:
-            answers = paginator.page(page)
-        except PageNotAnInteger:
-            answers = paginator.page(1)
-        except EmptyPage:
-            answers = paginator.page(paginator.num_pages)
+        answers = self.object.answer_set.all().order_by('pub_date')
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['last_comments'] = self.object.questioncomment_set.order_by(
             'pub_date')[:5]
@@ -366,4 +361,3 @@ def profile(request, user_id):
     user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
     return render(request, 'qa/profile.html', {'user': user})
-
