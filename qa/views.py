@@ -73,10 +73,13 @@ class QuestionIndexView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(
             QuestionIndexView, self).get_context_data(*args, **kwargs)
+        noans = Question.objects.order_by('-pub_date').filter(
+            answer__isnull=True)[:10].select_related('user')\
+            .annotate(num_answers=Count('answer'))\
+            .annotate(num_question_comments=Count('questioncomment'))
         context['totalcount'] = Question.objects.count
         context['anscount'] = Answer.objects.count
-        context['noans'] = Question.objects.order_by('-pub_date').filter(
-            answer__isnull=True)[:10]
+        context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
             answer__isnull=True, reward__gte=1)[:10]
         return context
