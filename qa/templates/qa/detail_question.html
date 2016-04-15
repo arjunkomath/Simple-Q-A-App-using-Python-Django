@@ -106,26 +106,33 @@
       <div class ="col-md-9">
         <a href="{% url 'qa_create_answer_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
         {% if answer.user == user %}<a href="{% url 'qa_update_answer' answer.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
-
-        <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
-
+            <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
         {% if answer.answercomment_set %}
           {% for comment in answer.answercomment_set.all %}
-          <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_answer_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
+            <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_answer_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
           <hr>
           {% endfor %}
         {% endif %}
       </div>
-      <div class ="col-md-2">
-
-        {% if answer.user.userqaprofile.picture %}
-        <img class="pull-right" src="{{ answer.user.userqaprofile.picture }}">
-        {% else %}
-        <img class="pull-right" width="50px" height="50px" src="{% static "qa/user.png" %}">
-        {% endif %}
-
-        <p class="pull-right">- <b><a href="{% url 'qa_profile' answer.user.id %}">{{ answer.user.username }}</a> ({{ answer.user.userqaprofile.points }})</b></p>
-      </div>
+          <div class ="col-md-2">
+            {% if answer.user.userqaprofile.picture %}
+                <img class="pull-right" src="{{ answer.user.userqaprofile.picture }}">
+            {% else %}
+                <img class="pull-right" width="50px" height="50px" src="{% static "qa/user.png" %}">
+            {% endif %}
+            <p class="pull-right">- <b><a href="{% url 'qa_profile' answer.user.id %}">{{ answer.user.username }}</a> ({{ answer.user.userqaprofile.points }})</b></p>
+                {% if user.is_authenticated and answer.question.user == user and answer.question.closed == False %}
+                    <form action="{% url 'qa_close_question' answer.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <button type="submit" class="btn btn-success btn-sm pull-right" data-toggle="tooltip" data-placement="bottom" title="Close this question"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div>
+                    </form>
+                {% else %}
+                    {% if  answer.answer == True %}
+                        <button class="btn btn-success btn-sm pull-right" title="Picked Answer"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button></div>
+                    {% endif %}
+                {% endif %}
+          </div>
     </div>
   <hr>
     {% endfor %}
