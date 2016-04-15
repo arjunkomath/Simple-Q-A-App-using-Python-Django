@@ -130,7 +130,7 @@ class QuestionsByTagView(ListView):
     template_name = 'qa/index.html'
 
     def get_queryset(self, **kwargs):
-        return Question.objects.filter(tags__name__contains=self.kwargs['tag'])
+        return Question.objects.filter(tags__slug=self.kwargs['tag'])
 
     def get_context_data(self, *args, **kwargs):
         context = super(
