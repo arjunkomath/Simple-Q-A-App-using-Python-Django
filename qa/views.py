@@ -79,6 +79,10 @@ class QuestionIndexView(ListView):
             answer__isnull=True, reward__gte=1)[:10]
         return context
 
+    def get_queryset(self):
+        queryset = super(QuestionIndexView, self).get_queryset().select_related('user')
+        return queryset
+
 
 class QuestionsSearchView(QuestionIndexView):
     """
