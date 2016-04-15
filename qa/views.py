@@ -21,6 +21,8 @@ except AttributeError:
 
 if qa_messages:
     from django.contrib import messages
+
+
 """Dear maintainer:
 
 Once you are done trying to 'optimize' this routine, and have realized what a
@@ -29,6 +31,27 @@ to the next guy:
 
 total_hours_wasted_here = 2
 """
+
+
+class AnswerQuestionView(LoginRequired, View):
+    """View to select an answer as the satisfying answer to the question and to
+    mark the question as closed, validating than the user who created que
+    question is the only one allowed to make those changes.
+    """
+    model = Answer
+
+    def post(self, request, answer_id):
+        answer = get_object_or_404(self.model, pk=answer_id)
+        if answer.question.user != request.user:
+            raise ValidationError(
+                "Sorry, you're not allowed to close this question.")
+        else:
+            answer.question.closed = True
+            answer.question.save()
+            answer.answer = True
+            answer.save()
+
+        return redirect(reverse('qa_index'))
 
 
 class QuestionIndexView(ListView):
