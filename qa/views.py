@@ -2,6 +2,7 @@ import operator
 from functools import reduce
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 from django.views.generic import (CreateView, View, ListView, DetailView,
                                   UpdateView)
@@ -21,6 +22,8 @@ except AttributeError:
 
 if qa_messages:
     from django.contrib import messages
+
+
 """Dear maintainer:
 
 Once you are done trying to 'optimize' this routine, and have realized what a
@@ -29,6 +32,32 @@ to the next guy:
 
 total_hours_wasted_here = 2
 """
+
+
+class AnswerQuestionView(LoginRequired, View):
+    """View to select an answer as the satisfying answer to the question and to
+    mark the question as closed, validating than the user who created que
+    question is the only one allowed to make those changes.
+    """
+    model = Answer
+
+    def post(self, request, answer_id):
+        answer = get_object_or_404(self.model, pk=answer_id)
+        if answer.question.user != request.user:
+            raise ValidationError(
+                "Sorry, you're not allowed to close this question.")
+        else:
+            answer.question.closed = True
+            answer.question.save()
+            answer.answer = True
+            answer.save()
+
+        next_url = request.POST.get('next', None)
+        if next_url is not None:
+            return redirect(next_url)
+
+        else:
+            return redirect(reverse('qa_index'))
 
 
 class QuestionIndexView(ListView):
@@ -283,6 +312,15 @@ class QuestionDetailView(DetailView):
             'pub_date')[:5]
         context['answers'] = answers
         return context
+
+    def get(self, request, **kwargs):
+        my_object = self.get_object()
+        slug = kwargs.get('slug', '')
+        if slug!=slugify(my_object.title):
+            kwargs['slug'] = slugify(my_object.title)
+            return redirect(reverse('qa_detail', kwargs=kwargs))
+        else:
+            return super(QuestionDetailView, self).get(request, **kwargs)
 
     def get_object(self):
         # Call the superclass
