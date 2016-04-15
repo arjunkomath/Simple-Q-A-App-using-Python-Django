@@ -138,6 +138,7 @@ class CreateQuestionView(LoginRequired, CreateView):
     template_name = 'qa/create_question.html'
     model = Question
     fields = ['title', 'description', 'tags']
+    message = _('Thank you! your question has been created.')
 
     def form_valid(self, form):
         """
@@ -149,7 +150,7 @@ class CreateQuestionView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your question has been created.'))
+                self.request, self.message)
         return reverse('qa_index')
 
 
@@ -174,6 +175,7 @@ class CreateAnswerView(LoginRequired, CreateView):
     template_name = 'qa/create_answer.html'
     model = Answer
     fields = ['answer_text']
+    message = _('Thank you! your answer has been posted.')
 
     def form_valid(self, form):
         """
@@ -187,7 +189,7 @@ class CreateAnswerView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your answer has been posted.'))
+                self.request, self.message)
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
@@ -212,6 +214,7 @@ class CreateAnswerCommentView(LoginRequired, CreateView):
     template_name = 'qa/create_comment.html'
     model = AnswerComment
     fields = ['comment_text']
+    message = _('Thank you! your comment has been posted.')
 
     def form_valid(self, form):
         """
@@ -225,7 +228,7 @@ class CreateAnswerCommentView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your comment has been posted.'))
+                self.request, self.message)
         question_pk = Answer.objects.get(
             id=self.kwargs['answer_id']).question.pk
         return reverse('qa_detail', kwargs={'pk': question_pk})
@@ -238,6 +241,7 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
     template_name = 'qa/create_comment.html'
     model = QuestionComment
     fields = ['comment_text']
+    message = _('Thank you! your comment has been posted.')
 
     def form_valid(self, form):
         """
@@ -251,7 +255,7 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
     def get_success_url(self):
         if qa_messages:
             messages.success(
-                self.request, _('Thank you! your comment has been posted.'))
+                self.request, self.message)
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
