@@ -16,7 +16,7 @@
 {% if questions %}
   {% for question in questions %}
     <div class="row">
-      <div class="col-sm-1 ans"><small><div class="ques">{{ question.answer_set.count }}</div>Answers</small></div>
+      <div class="col-sm-1 ans"><small><div class="ques">{{ question.num_answers }}</div>Answers</small></div>
       <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
       <p>
         {% if question.reward %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %}
@@ -58,10 +58,10 @@
 {% if noans %}
   {% for question in noans %}
   <div class="row">
-  <div class="col-sm-1 ans"><small><div class="ques">{{ question.answer_set.count }}</div>Answers</small></div>
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.num_answers }}</div>Answers</small></div>
   <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
   <p>
-    {% if question.answer_set.count %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
+    {% if question.num_answers %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
     <br/>
     {% for tag in question.tags.all %}
         <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
@@ -81,10 +81,10 @@
 {% if reward %}
   {% for question in reward %}
   <div class="row">
-  <div class="col-sm-1 ans"><small><div class="ques">{{ question.answer_set.count }}</div>Answers</small></div>
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.num_answers }}</div>Answers</small></div>
   <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
   <p>
-    {% if question.answer_set.count %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
+    {% if question.num_answers %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
     <br/>
     <reward>Earn <b>{{ question.reward }}</b> points</reward>
     {% for tag in question.tags.all %}
