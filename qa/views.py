@@ -2,6 +2,7 @@ import operator
 from functools import reduce
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 from django.views.generic import (CreateView, View, ListView, DetailView,
                                   UpdateView)
@@ -311,6 +312,15 @@ class QuestionDetailView(DetailView):
             'pub_date')[:5]
         context['answers'] = answers
         return context
+
+    def get(self, request, **kwargs):
+        my_object = self.get_object()
+        slug = kwargs.get('slug', '')
+        if slug!=slugify(my_object.title):
+            kwargs['slug'] = slugify(my_object.title)
+            return redirect(reverse('qa_detail', kwargs=kwargs))
+        else:
+            return super(QuestionDetailView, self).get(request, **kwargs)
 
     def get_object(self):
         # Call the superclass
