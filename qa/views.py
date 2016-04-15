@@ -54,7 +54,7 @@ class AnswerQuestionView(LoginRequired, View):
         next_url = request.POST.get('next', None)
         if next_url is not None:
             return redirect(next_url)
-            
+
         else:
             return redirect(reverse('qa_index'))
 
