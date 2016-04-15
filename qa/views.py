@@ -1,6 +1,7 @@
 import operator
 from functools import reduce
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.conf import settings
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
@@ -81,7 +82,10 @@ class QuestionIndexView(ListView):
         return context
 
     def get_queryset(self):
-        queryset = super(QuestionIndexView, self).get_queryset().select_related('user')
+        queryset = super(QuestionIndexView, self).get_queryset()\
+            .select_related('user')\
+            .annotate(num_answers=Count('answer'))\
+            .annotate(num_question_comments=Count('questioncomment'))
         return queryset
 
 
@@ -126,7 +130,7 @@ class QuestionsByTagView(ListView):
     template_name = 'qa/index.html'
 
     def get_queryset(self, **kwargs):
-        return Question.objects.filter(tags__name__contains=self.kwargs['tag'])
+        return Question.objects.filter(tags__slug=self.kwargs['tag'])
 
     def get_context_data(self, *args, **kwargs):
         context = super(
