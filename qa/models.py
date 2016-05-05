@@ -48,6 +48,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer_text = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
+    updated = models.DateTimeField('date updated', auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     answer = models.BooleanField(default=False)
 
