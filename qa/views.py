@@ -323,7 +323,7 @@ class QuestionDetailView(DetailView):
     def get(self, request, **kwargs):
         my_object = self.get_object()
         slug = kwargs.get('slug', '')
-        if slug!=slugify(my_object.title):
+        if slug != slugify(my_object.title):
             kwargs['slug'] = slugify(my_object.title)
             return redirect(reverse('qa_detail', kwargs=kwargs))
         else:
