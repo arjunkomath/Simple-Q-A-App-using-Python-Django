@@ -14,7 +14,7 @@ from django.db.models import Q
 from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired, AuthorRequiredMixin
-
+from .utils import question_score
 try:
     qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\
         settings.QA_MESSAGES
@@ -81,7 +81,7 @@ class QuestionIndexView(ListView):
         context['anscount'] = Answer.objects.count
         context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
-            answer__isnull=True, reward__gte=1)[:10]
+            reward__gte=1)[:10]
         return context
 
     def get_queryset(self):
@@ -120,7 +120,7 @@ class QuestionsSearchView(QuestionIndexView):
             context['noans'] = Question.objects.order_by('-pub_date').filter(
                 answer__isnull=True)[:10]
             context['reward'] = Question.objects.order_by('-reward').filter(
-                answer__isnull=True, reward__gte=1)[:10]
+                reward__gte=1)[:10]
             return context
 
 
@@ -143,7 +143,7 @@ class QuestionsByTagView(ListView):
         context['noans'] = Question.objects.order_by('-pub_date').filter(
             tags__name__contains=self.kwargs['tag'], answer__isnull=True)[:10]
         context['reward'] = Question.objects.order_by('-reward').filter(
-            tags__name__contains=self.kwargs['tag'], answer__isnull=True,
+            tags__name__contains=self.kwargs['tag'],
             reward__gte=1)[:10]
         return context
 
@@ -381,6 +381,12 @@ class ParentVoteView(View):
                     vote.value = upvote
                     vote.save()
             vote_target.user.userqaprofile.save()
+            if self.model == Question:
+                vote_target.reward = question_score(vote_target)
+            if self.model == Answer:
+                vote_target.question.reward = question_score(
+                    vote_target.question)
+                vote_target.question.save()
             vote_target.save()
 
         next_url = request.POST.get('next', None)

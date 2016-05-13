@@ -23,7 +23,8 @@
         </button>
     </div>
 {% endif %}
-
+{% comment %}
+  
 {% if question.reward %}
     <div class="alert alert-info" role="alert">This question has been marked to be worth a reward of <b>{{ question.reward }}<b> points!
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -31,6 +32,7 @@
         </button>
     </div>
 {% endif %}
+{% endcomment %}
 
 <div class="jumbotron">
   <div class="row">
