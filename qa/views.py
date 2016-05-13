@@ -81,7 +81,7 @@ class QuestionIndexView(ListView):
         context['anscount'] = Answer.objects.count
         context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
-            answer__isnull=False, reward__gte=1)[:10]
+            reward__gte=1)[:10]
         return context
 
     def get_queryset(self):
@@ -120,7 +120,7 @@ class QuestionsSearchView(QuestionIndexView):
             context['noans'] = Question.objects.order_by('-pub_date').filter(
                 answer__isnull=True)[:10]
             context['reward'] = Question.objects.order_by('-reward').filter(
-                answer__isnull=False, reward__gte=1)[:10]
+                reward__gte=1)[:10]
             return context
 
 
@@ -143,7 +143,7 @@ class QuestionsByTagView(ListView):
         context['noans'] = Question.objects.order_by('-pub_date').filter(
             tags__name__contains=self.kwargs['tag'], answer__isnull=True)[:10]
         context['reward'] = Question.objects.order_by('-reward').filter(
-            tags__name__contains=self.kwargs['tag'], answer__isnull=False,
+            tags__name__contains=self.kwargs['tag'],
             reward__gte=1)[:10]
         return context
 
