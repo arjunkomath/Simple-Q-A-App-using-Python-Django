@@ -32,6 +32,7 @@ setup(
         'django_markdown',
         'pillow',
         'django-taggit',
+        'pytz==2015.6'
     ],
     extras_require={
         'i18n': [

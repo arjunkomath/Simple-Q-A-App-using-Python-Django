@@ -86,7 +86,6 @@
   <p>
     {% if question.num_answers %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
     <br/>
-    <reward>Earn <b>{{ question.reward }}</b> points</reward>
     {% for tag in question.tags.all %}
         <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
     {% endfor %}
