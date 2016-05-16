@@ -329,13 +329,13 @@ class QuestionDetailView(DetailView):
             kwargs['slug'] = slugify(my_object.title)
             return redirect(reverse('qa_detail', kwargs=kwargs))
         else:
+            my_object.views += 1
+            my_object.save()
             return super(QuestionDetailView, self).get(request, **kwargs)
 
     def get_object(self):
         # Call the superclass
         question = super(QuestionDetailView, self).get_object()
-        question.views += 1
-        question.save()
         return question
 
 
