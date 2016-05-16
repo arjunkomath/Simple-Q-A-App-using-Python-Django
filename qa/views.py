@@ -75,8 +75,9 @@ class QuestionIndexView(ListView):
             QuestionIndexView, self).get_context_data(*args, **kwargs)
         noans = Question.objects.order_by('-pub_date').filter(
             answer__isnull=True)[:10].select_related('user')\
-            .annotate(num_answers=Count('answer'))\
-            .annotate(num_question_comments=Count('questioncomment'))
+            .annotate(num_answers=Count('answer', distinct=True),
+                      num_question_comments=Count('questioncomment',
+                      distinct=True))
         context['totalcount'] = Question.objects.count
         context['anscount'] = Answer.objects.count
         context['noans'] = noans
@@ -87,8 +88,9 @@ class QuestionIndexView(ListView):
     def get_queryset(self):
         queryset = super(QuestionIndexView, self).get_queryset()\
             .select_related('user')\
-            .annotate(num_answers=Count('answer'))\
-            .annotate(num_question_comments=Count('questioncomment'))
+            .annotate(num_answers=Count('answer', distinct=True),
+                      num_question_comments=Count('questioncomment',
+                      distinct=True))
         return queryset
 
 
