@@ -319,7 +319,7 @@ class QuestionDetailView(DetailView):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['last_comments'] = self.object.questioncomment_set.order_by(
             'pub_date')[:5]
-        context['answers'] = answers
+        context['answers'] = answers.select_related('user')
         return context
 
     def get(self, request, **kwargs):
