@@ -391,9 +391,11 @@ class ParentVoteView(View):
                     vote.value = upvote
                     vote.save()
                     if upvote:
-                        vote_target.positive_votes += 2
+                        vote_target.positive_votes += 1
+                        vote_target.negative_votes -= 1
                     else:
-                        vote_target.negative_votes -= 2
+                        vote_target.negative_votes += 1
+                        vote_target.positive_votes -= 1
 
             vote_target.user.userqaprofile.save()
             if self.model == Question:

@@ -29,10 +29,11 @@ class Question(models.Model):
     closed = models.BooleanField(default=False)
     positive_votes = models.IntegerField(default=0)
     negative_votes = models.IntegerField(default=0)
+    total_points = models.IntegerField(default=0)
 
-    @property
-    def total_points(self):
-        return self.positive_votes - self.negative_votes
+    def save(self, *args, **kwargs):
+        self.total_points = self.positive_votes - self.negative_votes
+        super(Question, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -47,10 +48,11 @@ class Answer(models.Model):
     answer = models.BooleanField(default=False)
     positive_votes = models.IntegerField(default=0)
     negative_votes = models.IntegerField(default=0)
+    total_points = models.IntegerField(default=0)
 
-    @property
-    def total_points(self):
-        return self.positive_votes - self.negative_votes
+    def save(self, *args, **kwargs):
+        self.total_points = self.positive_votes - self.negative_votes
+        super(Answer, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.answer_text
