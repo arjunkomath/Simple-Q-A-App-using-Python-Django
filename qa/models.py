@@ -27,18 +27,13 @@ class Question(models.Model):
     views = models.IntegerField(default=0)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     closed = models.BooleanField(default=False)
+    positive_votes = models.IntegerField(default=0)
+    negative_votes = models.IntegerField(default=0)
+    total_points = models.IntegerField(default=0)
 
-    @property
-    def positive_votes(self):
-        return self.questionvote_set.filter(value=True).count()
-
-    @property
-    def negative_votes(self):
-        return self.questionvote_set.filter(value=False).count()
-
-    @property
-    def total_points(self):
-        return self.positive_votes - self.negative_votes
+    def save(self, *args, **kwargs):
+        self.total_points = self.positive_votes - self.negative_votes
+        super(Question, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -51,18 +46,13 @@ class Answer(models.Model):
     updated = models.DateTimeField('date updated', auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     answer = models.BooleanField(default=False)
+    positive_votes = models.IntegerField(default=0)
+    negative_votes = models.IntegerField(default=0)
+    total_points = models.IntegerField(default=0)
 
-    @property
-    def positive_votes(self):
-        return self.answervote_set.filter(value=True).count()
-
-    @property
-    def negative_votes(self):
-        return self.answervote_set.filter(value=False).count()
-
-    @property
-    def total_points(self):
-        return self.positive_votes - self.negative_votes
+    def save(self, *args, **kwargs):
+        self.total_points = self.positive_votes - self.negative_votes
+        super(Answer, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.answer_text
