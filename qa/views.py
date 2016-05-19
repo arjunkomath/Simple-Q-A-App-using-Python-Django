@@ -374,14 +374,27 @@ class ParentVoteView(View):
                 **object_kwargs)
             if created:
                 vote_target.user.userqaprofile.points += 1 if upvote else -1
-            elif not created:
+                if upvote:
+                    vote_target.positive_votes += 1
+                else:
+                    vote_target.negative_votes += 1
+            else:
                 if vote.value == upvote:
                     vote.delete()
                     vote_target.user.userqaprofile.points += -1 if upvote else 1
+                    if upvote:
+                        vote_target.positive_votes -= 1
+                    else:
+                        vote_target.negative_votes -= 1
                 else:
                     vote_target.user.userqaprofile.points += 2 if upvote else -2
                     vote.value = upvote
                     vote.save()
+                    if upvote:
+                        vote_target.positive_votes += 2
+                    else:
+                        vote_target.negative_votes -= 2
+
             vote_target.user.userqaprofile.save()
             if self.model == Question:
                 vote_target.reward = question_score(vote_target)

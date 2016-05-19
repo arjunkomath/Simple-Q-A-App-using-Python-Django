@@ -27,14 +27,8 @@ class Question(models.Model):
     views = models.IntegerField(default=0)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     closed = models.BooleanField(default=False)
-
-    @property
-    def positive_votes(self):
-        return self.questionvote_set.filter(value=True).count()
-
-    @property
-    def negative_votes(self):
-        return self.questionvote_set.filter(value=False).count()
+    positive_votes = models.IntegerField(default=0)
+    negative_votes = models.IntegerField(default=0)
 
     @property
     def total_points(self):
@@ -51,14 +45,8 @@ class Answer(models.Model):
     updated = models.DateTimeField('date updated', auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     answer = models.BooleanField(default=False)
-
-    @property
-    def positive_votes(self):
-        return self.answervote_set.filter(value=True).count()
-
-    @property
-    def negative_votes(self):
-        return self.answervote_set.filter(value=False).count()
+    positive_votes = models.IntegerField(default=0)
+    negative_votes = models.IntegerField(default=0)
 
     @property
     def total_points(self):
