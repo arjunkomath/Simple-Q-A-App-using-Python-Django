@@ -66,7 +66,7 @@ class QuestionIndexView(ListView):
     """CBV to render the index view
     """
     model = Question
-    paginate_by = 3
+    paginate_by = 10
     context_object_name = 'questions'
     template_name = 'qa/index.html'
     ordering = '-pub_date'
@@ -81,7 +81,7 @@ class QuestionIndexView(ListView):
                       distinct=True))
         context['totalcount'] = Question.objects.count()
         context['anscount'] = Answer.objects.count()
-        paginator = Paginator(noans, 3)
+        paginator = Paginator(noans, 10)
         page = self.request.GET.get('noans_page')
         context['active_tab'] = self.request.GET.get('active_tab', 'latest')
         try:
