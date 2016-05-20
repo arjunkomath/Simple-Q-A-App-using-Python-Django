@@ -6,13 +6,13 @@
 <div class="col-md-8">
 
     <ul class="nav nav-tabs nav-justified">
-        <li role="presentation" class="active"><a href="#latest" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Latest</a></li>
-        <li role="presentation"><a href="#unans" data-toggle="tab"><span class="glyphicon glyphicon-question-sign"></span> Unanswered <span class="badge">{{ noans.count }}</span></a></li>
-        <li role="presentation"><a href="#reward" data-toggle="tab"><span class="glyphicon glyphicon-star"></span> Most Rewarding <span class="badge">{{ reward.count }}</span></a></li>
+        <li role="presentation" {% if active_tab == 'latest' %}class="active"{% endif %}><a href="#latest" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Latest</a></li>
+        <li role="presentation" {% if active_tab == 'unans' %}class="active"{% endif %}><a href="#unans" data-toggle="tab"><span class="glyphicon glyphicon-question-sign"></span> Unanswered <span class="badge">{{ totalnoans }}</span></a></li>
+        <li role="presentation" {% if active_tab == 'reward' %}class="active"{% endif %}><a href="#reward" data-toggle="tab"><span class="glyphicon glyphicon-star"></span> Most Rewarding <span class="badge">{{ reward | length }}</span></a></li>
     </ul>
     <br/>
 <div class="tab-content">
-<div class="tab-pane active" id="latest">
+<div class="tab-pane {% if active_tab == 'latest' %}active{% endif %}" id="latest">
 {% if questions %}
   {% for question in questions %}
     <div class="row">
@@ -54,7 +54,7 @@
 {% endif %}
 </div>
 
-<div class="tab-pane" id="unans">
+<div class="tab-pane {% if active_tab == 'unans' %}active{% endif %}" id="unans">
 {% if noans %}
   {% for question in noans %}
   <div class="row">
@@ -66,7 +66,7 @@
     {% for tag in question.tags.all %}
         <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
     {% endfor %}
-    <small> {{ question.pub_date}}</small>
+    <small> {{ question.pub_date }}</small>
   </p>
 </div>
 <hr>
@@ -75,9 +75,24 @@
 {% else %}
 <div class="alert alert-warning" role="alert">No Questions are available!</div>
 {% endif %}
+<div class="pagination">
+    <span class="step-links">
+        {% if noans.has_previous %}
+            <a href="?noans_page={{ noans.previous_page_number }}&active_tab=unans">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ noans.number }} of {{ noans.paginator.num_pages }}.
+        </span>
+
+        {% if noans.has_next %}
+            <a href="?noans_page={{ noans.next_page_number }}&active_tab=unans">next</a>
+        {% endif %}
+    </span>
+</div>
 </div>
 
-<div class="tab-pane" id="reward">
+<div class="tab-pane {% if active_tab == 'reward' %}active{% endif %}" id="reward">
 {% if reward %}
   {% for question in reward %}
   <div class="row">
