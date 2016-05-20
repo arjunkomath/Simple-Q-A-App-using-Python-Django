@@ -1,5 +1,6 @@
 import operator
 from functools import reduce
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.conf import settings
@@ -65,7 +66,7 @@ class QuestionIndexView(ListView):
     """CBV to render the index view
     """
     model = Question
-    paginate_by = 10
+    paginate_by = 3
     context_object_name = 'questions'
     template_name = 'qa/index.html'
     ordering = '-pub_date'
@@ -78,8 +79,18 @@ class QuestionIndexView(ListView):
             .annotate(num_answers=Count('answer', distinct=True),
                       num_question_comments=Count('questioncomment',
                       distinct=True))
-        context['totalcount'] = Question.objects.count
-        context['anscount'] = Answer.objects.count
+        context['totalcount'] = Question.objects.count()
+        context['anscount'] = Answer.objects.count()
+        paginator = Paginator(noans, 3)
+        page = self.request.GET.get('noans_page')
+        context['active_tab'] = self.request.GET.get('active_tab', 'latest')
+        try:
+            noans = paginator.page(page)
+        except PageNotAnInteger:
+            noans = paginator.page(1)
+        except EmptyPage:
+            noans = paginator.page(paginator.num_pages)
+        context['totalnoans'] = paginator.count
         context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
             reward__gte=1)[:10]
