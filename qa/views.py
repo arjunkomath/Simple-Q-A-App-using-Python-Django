@@ -75,7 +75,7 @@ class QuestionIndexView(ListView):
         context = super(
             QuestionIndexView, self).get_context_data(*args, **kwargs)
         noans = Question.objects.order_by('-pub_date').filter(
-            answer__isnull=True)[:10].select_related('user')\
+            answer__isnull=True).select_related('user')\
             .annotate(num_answers=Count('answer', distinct=True),
                       num_question_comments=Count('questioncomment',
                       distinct=True))
@@ -84,6 +84,9 @@ class QuestionIndexView(ListView):
         paginator = Paginator(noans, 10)
         page = self.request.GET.get('noans_page')
         context['active_tab'] = self.request.GET.get('active_tab', 'latest')
+        tabs = ['latest', 'unans', 'reward']
+        context['active_tab'] = 'latest' if context['active_tab'] not in\
+            tabs else context['active_tab']
         try:
             noans = paginator.page(page)
         except PageNotAnInteger:
