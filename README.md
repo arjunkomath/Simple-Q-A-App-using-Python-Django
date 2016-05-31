@@ -50,19 +50,19 @@ python manage.py migrate
 
 And that's it!
 
-## Short text about the functionality
+## About the functionality
 
 * The package is integrated with the framework authentication process, right now the package defines an user profile linked to Django's user model, this models was created to contain information related to the user's activities inside the package functionalities.
 * It has comments on questions and answers.
 * It has no support for anonymous questions nor answers or comments.
-* It has not REST support yet.
 * It has tagging support through django-taggit.
 * It has a basic implementation for score and reputation records.
-* The package has no moderation options yet.
 
 ## Next steps
 With this setup you will have a functional questions and answers section inside of your project. Probably you will need to work on changing the default templates to fit the look and feel of your site. 
 
 If your project has an user profile already, you may want to merge it with the data provided by this app (questions, answers, comments, reputation, etc). That requires some extra work, but can be done without using ugly hacks.
+
+The package has no moderation options on none of the models yet and still lacks REST support.
 
 If you think that something essential for this kind of application is missing, you can request a feature by adding an issue to our repository.
