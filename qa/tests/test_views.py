@@ -139,6 +139,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 302)
         answer.refresh_from_db()
         self.assertEqual(previous_votes - 1, answer.total_points)
+        self.assertEqual(answer.negative_votes, 1)
         self.assertEqual(previous_vote_instances + 1,
                          AnswerVote.objects.count())
 

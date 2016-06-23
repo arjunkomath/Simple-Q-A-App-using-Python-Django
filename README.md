@@ -1,5 +1,7 @@
 **WELCOME TO DJANGO-QA**
 =========================
+[![Build Status](https://travis-ci.org/swappsco/django-qa.svg?branch=master)](https://travis-ci.org/swappsco/django-qa)
+
 ## A Simple Q&A App using Python Django
 
 [django-qa](http://swappsco.github.io/django-qa/) is a fork from [Simple-Q-A-App-using-Python-Django](http://arjunkomath.github.io/Simple-Q-A-App-using-Python-Django) aimed to create a pluggable package than allows to implement a StackOverflow-like forum site for your Django web project.
