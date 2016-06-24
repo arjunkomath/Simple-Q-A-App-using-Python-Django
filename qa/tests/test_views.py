@@ -44,11 +44,12 @@ class TestViews(TestCase):
         current_question_count = Question.objects.count()
         response = self.client.post(
             reverse('qa_create_question'),
-            {'title': title, 'description': 'babla', 'tags': ' '})
+            {'title': title, 'description': 'babla', 'tags': 'test tag'})
         self.assertEqual(response.status_code, 302)
         new_question = Question.objects.first()
         self.assertEqual(new_question.title, title)
-        self.assertEqual(Question.objects.count(), current_question_count+1)
+        self.assertEqual(Question.objects.count(),
+                         current_question_count + 1)
 
     def test_create_question_view_two(self):
         """
@@ -139,6 +140,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 302)
         answer.refresh_from_db()
         self.assertEqual(previous_votes - 1, answer.total_points)
+        self.assertEqual(answer.negative_votes, 1)
         self.assertEqual(previous_vote_instances + 1,
                          AnswerVote.objects.count())
 
