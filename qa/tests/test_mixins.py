@@ -99,6 +99,5 @@ class TestMixins(TestCase):
             closed=False,
         )
         with self.assertRaises(PermissionDenied):
-            response = SomeAuthorRequiredView.as_view()(
+            SomeAuthorRequiredView.as_view()(
                 request, pk=question.pk)
-            self.assertEqual(response.status_code, 403)

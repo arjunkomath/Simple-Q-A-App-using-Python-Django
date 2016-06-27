@@ -14,7 +14,7 @@ class UserQAProfile(models.Model):
     picture = models.ImageField(upload_to='qa/static/profile_images',
                                 blank=True)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.user.username
 
 
@@ -54,7 +54,7 @@ class Answer(models.Model):
         self.total_points = self.positive_votes - self.negative_votes
         super(Answer, self).save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.answer_text
 
 
@@ -87,7 +87,7 @@ class BaseComment(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.comment_text
 
 
