@@ -1,6 +1,7 @@
 **WELCOME TO DJANGO-QA**
 =========================
 [![Build Status](https://travis-ci.org/swappsco/django-qa.svg?branch=master)](https://travis-ci.org/swappsco/django-qa)
+[![Coverage Status](https://coveralls.io/repos/github/swappsco/django-qa/badge.svg?branch=master)](https://coveralls.io/github/swappsco/django-qa?branch=master) 
 
 ## A Simple Q&A App using Python Django
 

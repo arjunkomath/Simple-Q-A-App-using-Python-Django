@@ -1,15 +1,26 @@
-from django.test import TestCase, Client, RequestFactory
+from django.utils import timezone
+from django.core.exceptions import PermissionDenied
+from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.http import HttpResponse
-from django.views.generic import View
-from ..mixins import LoginRequired
+from django.views.generic import View, DetailView
+from ..mixins import LoginRequired, AuthorRequiredMixin
+from ..models import Question
 
 
 class SomeView(LoginRequired, View):
 
     def get(self, request):
+        return HttpResponse('something')
+
+
+class SomeAuthorRequiredView(AuthorRequiredMixin, DetailView):
+
+    model = Question
+
+    def get(self, request, pk):
         return HttpResponse('something')
 
 
@@ -43,3 +54,50 @@ class TestMixins(TestCase):
         )
         response = SomeView.as_view()(request)
         self.assertEqual(response.status_code, 200)
+
+    def test_author_required_allow_object_user(self):
+        """
+        The owner of the object should be able to access
+        the view
+        """
+        request = self.factory.get('some-random-place')
+        request.user = get_user_model().objects.create_user(
+            username='test_user',
+            password='top_secret'
+        )
+        question = Question.objects.create(
+            title="Another Question",
+            description="A not so long random text to fill this field",
+            pub_date=timezone.datetime(2016, 1, 6, 0, 0, 0),
+            reward=0,
+            views=3,
+            user=request.user,
+            closed=False,
+        )
+        response = SomeAuthorRequiredView.as_view()(request, pk=question.pk)
+        self.assertEqual(response.status_code, 200)
+
+    def test_author_required_not_allow_not_object_user(self):
+        """
+        A different user than the object's owner should not
+        be able to access the view, a PermissionDenied should
+        be raised
+        """
+        request = self.factory.get('some-random-place')
+        request.user = AnonymousUser()
+        user = get_user_model().objects.create_user(
+            username='test_user',
+            password='top_secret'
+        )
+        question = Question.objects.create(
+            title="Another Question",
+            description="A not so long random text to fill this field",
+            pub_date=timezone.datetime(2016, 1, 6, 0, 0, 0),
+            reward=0,
+            views=3,
+            user=user,
+            closed=False,
+        )
+        with self.assertRaises(PermissionDenied):
+            SomeAuthorRequiredView.as_view()(
+                request, pk=question.pk)

@@ -116,7 +116,7 @@ class QuestionsSearchView(QuestionIndexView):
 
     def get_queryset(self):
         result = super(QuestionsSearchView, self).get_queryset()
-        query = self.request.GET.get('word')
+        query = self.request.GET.get('word', '')
         if query:
             query_list = query.split()
             result = result.filter(
@@ -128,16 +128,16 @@ class QuestionsSearchView(QuestionIndexView):
 
         return result
 
-        def get_context_data(self, *args, **kwargs):
-            context = super(
-                QuestionsSearchView, self).get_context_data(*args, **kwargs)
-            context['totalcount'] = Question.objects.count
-            context['anscount'] = Answer.objects.count
-            context['noans'] = Question.objects.order_by('-pub_date').filter(
-                answer__isnull=True)[:10]
-            context['reward'] = Question.objects.order_by('-reward').filter(
-                reward__gte=1)[:10]
-            return context
+    def get_context_data(self, *args, **kwargs):
+        context = super(
+            QuestionsSearchView, self).get_context_data(*args, **kwargs)
+        context['totalcount'] = Question.objects.count
+        context['anscount'] = Answer.objects.count
+        context['noans'] = Question.objects.order_by('-pub_date').filter(
+            answer__isnull=True)[:10]
+        context['reward'] = Question.objects.order_by('-reward').filter(
+            reward__gte=1)[:10]
+        return context
 
 
 class QuestionsByTagView(ListView):
@@ -448,4 +448,5 @@ class QuestionVoteView(ParentVoteView):
 def profile(request, user_id):
     user_ob = get_user_model().objects.get(id=user_id)
     user = UserQAProfile.objects.get(user=user_ob)
-    return render(request, 'qa/profile.html', {'user': user})
+    context = {'user': user}
+    return render(request, 'qa/profile.html', context)
