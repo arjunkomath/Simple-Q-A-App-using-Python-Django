@@ -1,5 +1,3 @@
-{% load bootstrap3 %}
-
 <div class="topbar"></div>
 <div class="container">
 <title>Simple QA</title>
@@ -15,8 +13,6 @@
   <a class="btn btn-lg btn-warning pull-right" href="#search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Find</a><a class="btn btn-lg btn-danger pull-right" href="{% url 'qa_create_question' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ask Question</a><h1><a href="{% url 'qa_index' %}"><img width="50px" src="http://icons.iconarchive.com/icons/seanau/flat-app/256/Questionmark-icon.png" /><orange>Simple QA</orange> </a><small>Open Questions</small></h1>
 </div>
 <div class="container">
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 {% if messages %}
   {% for message in messages %}
     <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
