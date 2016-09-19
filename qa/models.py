@@ -56,7 +56,7 @@ class Answer(models.Model):
         return self.answer_text
 
     class Meta:
-        ordering = ['answer', '-pub_date']
+        ordering = ['-answer', '-pub_date']
 
 
 class VoteParent(models.Model):
