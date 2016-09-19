@@ -57,6 +57,9 @@ class Answer(models.Model):
     def __str__(self):  # pragma: no cover
         return self.answer_text
 
+    class Meta:
+        ordering = ['answer', '-pub_date']
+
 
 class VoteParent(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)

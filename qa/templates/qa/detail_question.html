@@ -126,7 +126,7 @@
                 {% if user.is_authenticated and answer.question.user == user and answer.question.closed == False %}
                     <form action="{% url 'qa_close_question' answer.id %}" method="POST">
                         {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <input type="hidden" name="next" value="{{ request.path }}"/>
                         <button type="submit" class="btn btn-success btn-sm pull-right" data-toggle="tooltip" data-placement="bottom" title="Close this question"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div>
                     </form>
                 {% else %}

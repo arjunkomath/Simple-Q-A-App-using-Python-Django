@@ -11,8 +11,11 @@ urlpatterns = [
     url(r'^question/(?P<pk>\d+)/(?P<slug>[-_\w]+)$',
         views.QuestionDetailView.as_view(), name='qa_detail'),
 
-    url(r'^question/close/(?P<answer_id>\d+)/$',
-        views.AnswerQuestionView.as_view(), name='qa_close_question'),
+    url(r'^question/answer/(?P<answer_id>\d+)/$',
+        views.AnswerQuestionView.as_view(), name='qa_answer_question'),
+
+    url(r'^question/close/(?P<question_id>\d+)/$',
+        views.CloseQuestionView.as_view(), name='qa_close_question'),
 
     url(r'^new-question/$', views.CreateQuestionView.as_view(),
         name='qa_create_question'),
