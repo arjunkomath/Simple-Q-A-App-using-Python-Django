@@ -37,8 +37,9 @@ total_hours_wasted_here = 2
 
 
 class AnswerQuestionView(LoginRequired, View):
-    """View to select an answer as the satisfying answer to the question and to
-    mark the question as closed, validating than the user who created que
+    """
+    View to select an answer as the satisfying answer to the question,
+    validating than the user who created que
     question is the only one allowed to make those changes.
     """
     model = Answer
@@ -49,10 +50,40 @@ class AnswerQuestionView(LoginRequired, View):
             raise ValidationError(
                 "Sorry, you're not allowed to close this question.")
         else:
-            answer.question.closed = True
-            answer.question.save()
+            # answer.question.closed = True
+            # answer.question.save()
+            answer.question.answer_set.update(answer=False)
             answer.answer = True
             answer.save()
+
+        next_url = request.POST.get('next', None)
+        if next_url is not None:
+            return redirect(next_url)
+
+        else:
+            return redirect(reverse('qa_index'))
+
+
+class CloseQuestionView(LoginRequired, View):
+    """View to
+    mark the question as closed, validating than the user who created que
+    question is the only one allowed to make those changes.
+    """
+    model = Question
+
+    def post(self, request, question_id):
+        question = get_object_or_404(self.model, pk=question_id)
+        if question.user != request.user:
+            raise ValidationError(
+                "Sorry, you're not allowed to close this question.")
+        else:
+            if not question.closed:
+                question.closed = True
+            else:
+                question.closed = False
+            question.save()
+            # answer.answer = True
+            # answer.save()
 
         next_url = request.POST.get('next', None)
         if next_url is not None:
