@@ -196,7 +196,7 @@ class TestViews(TestCase):
     def test_can_mark_answer_as_satisfying_answer(self):
         """
         The owner of the question should be able to mark an answer
-        as the satisfying one.
+        as the satisfying one. The question should be kept open
         """
 
         user = get_user_model().objects.create_user(username='user2',
@@ -205,17 +205,17 @@ class TestViews(TestCase):
             title='a title', description='bla', user=self.user)
         answer = Answer.objects.create(
             answer_text='a title', user=user, question=question)
-        response = self.client.post(reverse('qa_close_question',
+        response = self.client.post(reverse('qa_answer_question',
                                     kwargs={'answer_id': answer.id}))
         answer.refresh_from_db()
         question.refresh_from_db()
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(question.closed)
+        self.assertFalse(question.closed)
         self.assertTrue(answer.answer)
 
     def test_can_provide_next_url_when_marking_satisfying_answer(self):
         """
-        The if an url is provided at the post request, the view should
+        If an url is provided at the post request, the view should
         redirect there.
         """
 
@@ -226,7 +226,7 @@ class TestViews(TestCase):
         answer = Answer.objects.create(
             answer_text='a title', user=user, question=question)
         response = self.client.post(
-            reverse('qa_close_question',
+            reverse('qa_answer_question',
                     kwargs={'answer_id': answer.id}),
             data={'next': reverse('qa_create_question')})
         answer.refresh_from_db()
@@ -247,11 +247,54 @@ class TestViews(TestCase):
         answer = Answer.objects.create(
             answer_text='a title', user=self.user, question=question)
         with self.assertRaises(ValidationError):
-            self.client.post(reverse('qa_close_question',
+            self.client.post(reverse('qa_answer_question',
                              kwargs={'answer_id': answer.id}))
             answer.refresh_from_db()
-            self.assertFalse(answer.question.closed)
             self.assertFalse(answer.answer)
+
+# CloseQuestionView
+
+    def test_can_mark_close_question(self):
+        """
+        The owner of the question should be able to
+        close it
+        """
+        question = Question.objects.create(
+            title='a title', description='bla', user=self.user)
+        response = self.client.post(reverse('qa_close_question',
+                                    kwargs={'question_id': question.id}))
+        question.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(question.closed)
+
+    def test_can_provide_next_url_when_closing_question(self):
+        """
+        If an url is provided at the post request, the view should
+        redirect there.
+        """
+        question = Question.objects.create(
+            title='a title', description='bla', user=self.user)
+        response = self.client.post(
+            reverse('qa_close_question',
+                    kwargs={'question_id': question.id}),
+            data={'next': reverse('qa_create_question')})
+        question.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('qa_create_question'))
+
+    def test_not_owner_cannot_close_question(self):
+        """
+        Any user that is not the owner of the question should not be able
+        to close question.
+        """
+        user = get_user_model().objects.create_user(username='user2',
+                                                    password='top_secret')
+        question = Question.objects.create(
+            title='a title', description='bla', user=user)
+        with self.assertRaises(ValidationError):
+            self.client.post(reverse('qa_close_question',
+                             kwargs={'question_id': question.id}))
+            self.assertFalse(question.closed)
 
 
 # QuestionIndexView
