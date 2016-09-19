@@ -30,9 +30,8 @@ setup(
         'django-annoying',
         'django_bootstrap3',
         'django_markdown',
-        'pillow',
         'django-taggit',
-        'pytz==2015.6'
+        'pytz==2016.6.1'
     ],
     extras_require={
         'i18n': [
