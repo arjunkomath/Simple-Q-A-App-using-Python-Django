@@ -11,8 +11,6 @@ class UserQAProfile(models.Model):
     points = models.IntegerField(default=0)
     # The additional attributes we wish to include.
     website = models.URLField(blank=True)
-    picture = models.ImageField(upload_to='qa/static/profile_images',
-                                blank=True)
 
     def __str__(self):  # pragma: no cover
         return self.user.username
