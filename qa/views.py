@@ -2,6 +2,9 @@ import operator
 from functools import reduce
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
+from taggit.models import TaggedItem, Tag
+
 from django.db.models import Count
 from django.conf import settings
 from django.utils.text import slugify
@@ -128,6 +131,12 @@ class QuestionIndexView(ListView):
         context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
             reward__gte=1)[:10]
+
+        question_contenttype = ContentType.objects.get_for_model(Question)
+        items = TaggedItem.objects.filter(content_type=question_contenttype)
+        context['tags'] = Tag.objects.filter(
+            taggit_taggeditem_items__in=items).order_by('-id').distinct()[:10]
+
         return context
 
     def get_queryset(self):

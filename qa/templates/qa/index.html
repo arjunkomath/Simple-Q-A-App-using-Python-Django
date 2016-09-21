@@ -132,10 +132,8 @@
       <h3 class="panel-title"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Recent Tags</h3>
     </div>
     <div class="panel-body">
-      {% for question in questions %}
-      {% for tag in question.tags.all %}
+      {% for tag in tags %}
           <a href="{% url 'qa_tag' tag.slug %}"><tag>{{ tag.slug }}</tag></a>
-      {% endfor %}
       {% endfor %}
     </div>
   </div>
