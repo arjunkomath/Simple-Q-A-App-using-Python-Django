@@ -1,7 +1,7 @@
 **WELCOME TO DJANGO-QA**
 =========================
 [![Build Status](https://travis-ci.org/swappsco/django-qa.svg?branch=master)](https://travis-ci.org/swappsco/django-qa)
-[![Coverage Status](https://coveralls.io/repos/github/swappsco/django-qa/badge.svg?branch=master)](https://coveralls.io/github/swappsco/django-qa?branch=master) 
+[![Coverage Status](https://coveralls.io/repos/github/swappsco/django-qa/badge.svg?branch=master)](https://coveralls.io/github/swappsco/django-qa?branch=master)
 
 ## A Simple Q&A App using Python Django
 
@@ -39,11 +39,11 @@ qa,
 
 Add our urls to the project:
 ```python
-urlpatterns = patterns(
+urlpatterns = [
     ...,
     url(r'^', include('qa.urls')),
     ...
-)
+    ]
 ```
 
 Run migrations:
@@ -62,7 +62,7 @@ And that's it!
 * It has a basic implementation for score and reputation records.
 
 ## Next steps
-With this setup you will have a functional questions and answers section inside of your project. Probably you will need to work on changing the default templates to fit the look and feel of your site. 
+With this setup you will have a functional questions and answers section inside of your project. Probably you will need to work on changing the default templates to fit the look and feel of your site.
 
 If your project has an user profile already, you may want to merge it with the data provided by this app (questions, answers, comments, reputation, etc). That requires some extra work, but can be done without using ugly hacks.
 
