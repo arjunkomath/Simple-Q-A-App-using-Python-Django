@@ -1,10 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
 from django_markdown.models import MarkdownField
 
 from taggit.managers import TaggableManager
 from annoying.fields import AutoOneToOneField
-
 
 class UserQAProfile(models.Model):
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
@@ -17,6 +17,7 @@ class UserQAProfile(models.Model):
 
 
 class Question(models.Model):
+    slug = models.SlugField(max_length=200)
     title = models.CharField(max_length=200, blank=False)
     description = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
@@ -30,6 +31,8 @@ class Question(models.Model):
     total_points = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self.name)
         self.total_points = self.positive_votes - self.negative_votes
         super(Question, self).save(*args, **kwargs)
 

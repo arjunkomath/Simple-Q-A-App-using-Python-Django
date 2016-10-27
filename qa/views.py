@@ -358,6 +358,7 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = 'qa/detail_question.html'
     context_object_name = 'question'
+    slug_field = 'slug'
 
     def get_context_data(self, **kwargs):
         answers = self.object.answer_set.all().order_by('pub_date')
@@ -372,8 +373,8 @@ class QuestionDetailView(DetailView):
     def get(self, request, **kwargs):
         my_object = self.get_object()
         slug = kwargs.get('slug', '')
-        if slug != slugify(my_object.title):
-            kwargs['slug'] = slugify(my_object.title)
+        if slug != my_object.slug:
+            kwargs['slug'] = my_object.slug
             return redirect(reverse('qa_detail', kwargs=kwargs))
         else:
             my_object.views += 1
