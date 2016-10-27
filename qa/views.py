@@ -374,8 +374,9 @@ class QuestionDetailView(DetailView):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['last_comments'] = self.object.questioncomment_set.order_by(
             'pub_date')[:5]
-        context['answers'] = list(answers.select_related('user')\
-            .select_related('user__userqaprofile')\
+        context['answers'] = list(answers.select_related(
+            'user').select_related(
+            'user__userqaprofile')
             .annotate(answercomment_count=Count('answercomment')))
         return context
 
