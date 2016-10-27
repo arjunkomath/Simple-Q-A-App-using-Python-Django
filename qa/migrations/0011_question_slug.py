@@ -6,7 +6,7 @@ from django.db import migrations, models
 from django.utils.text import slugify
 
 
-def gen_slug(apps, schema_editor):
+def generate_slug(apps, schema_editor):
     MyModel = apps.get_model('qa', 'Question')
     for row in MyModel.objects.all():
         row.slug = slugify(row.title)
@@ -27,5 +27,5 @@ class Migration(migrations.Migration):
             preserve_default=False,
         ),
         migrations.RunPython(
-            gen_slug, reverse_code=migrations.RunPython.noop),
+            generate_slug, reverse_code=migrations.RunPython.noop),
     ]
