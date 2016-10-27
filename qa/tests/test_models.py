@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.utils.text import slugify
 
 from qa.models import Question, Answer, AnswerComment, QuestionComment,\
     QuestionVote, AnswerVote, VoteParent
@@ -102,6 +103,11 @@ class TestModels(TestCase, BasicTaggingTest):
                                          value=True,
                                          answer=self.first_answer)
         self.assertTrue(isinstance(vote, AnswerVote))
+
+
+    def test_autogenerate_slug(self):
+        """Test that creates a slug when question save"""
+        self.assertEqual(self.first_question.slug, slugify(self.first_question.slug))
 
 # this should be tested at the views, it is not a property of the model anymore
 

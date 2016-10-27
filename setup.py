@@ -7,7 +7,7 @@ with open('README.md') as file:
 
 setup(
     name='django-qa',
-    version='0.0.30',
+    version='0.0.31',
     description='Pluggable django app for Q&A',
     long_description=long_description,
     author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
@@ -27,10 +27,10 @@ setup(
         'Programming Language :: Python :: 3.3',
     ],
     install_requires=[
-        'django-annoying',
-        'django_bootstrap3',
-        'django_markdown',
-        'django-taggit',
+        'django-annoying==0.9.0',
+        'django_bootstrap3==7.0.0',
+        'django-markdown-app==0.8.6',
+        'django-taggit==0.18.0',
         'pytz==2016.6.1'
     ],
     extras_require={

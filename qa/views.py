@@ -2,6 +2,9 @@ import operator
 from functools import reduce
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
+from taggit.models import TaggedItem, Tag
+
 from django.db.models import Count
 from django.conf import settings
 from django.utils.text import slugify
@@ -128,6 +131,12 @@ class QuestionIndexView(ListView):
         context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
             reward__gte=1)[:10]
+
+        question_contenttype = ContentType.objects.get_for_model(Question)
+        items = TaggedItem.objects.filter(content_type=question_contenttype)
+        context['tags'] = Tag.objects.filter(
+            taggit_taggeditem_items__in=items).order_by('-id').distinct()[:10]
+
         return context
 
     def get_queryset(self):
@@ -358,22 +367,24 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = 'qa/detail_question.html'
     context_object_name = 'question'
+    slug_field = 'slug'
 
     def get_context_data(self, **kwargs):
         answers = self.object.answer_set.all().order_by('pub_date')
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['last_comments'] = self.object.questioncomment_set.order_by(
             'pub_date')[:5]
-        context['answers'] = list(answers.select_related('user')\
-            .select_related('user__userqaprofile')\
+        context['answers'] = list(answers.select_related(
+            'user').select_related(
+            'user__userqaprofile')
             .annotate(answercomment_count=Count('answercomment')))
         return context
 
     def get(self, request, **kwargs):
         my_object = self.get_object()
         slug = kwargs.get('slug', '')
-        if slug != slugify(my_object.title):
-            kwargs['slug'] = slugify(my_object.title)
+        if slug != my_object.slug:
+            kwargs['slug'] = my_object.slug
             return redirect(reverse('qa_detail', kwargs=kwargs))
         else:
             my_object.views += 1
