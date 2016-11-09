@@ -365,28 +365,22 @@ class TestViews(TestCase):
         QuestionsByTagView should return questions related
         with searched tag
         """
-        self.client.post(
-            reverse('qa_create_question'),
-            {'title': "first title",
-             'description': 'first description',
-             'tags': 'tag'})
-        self.client.post(
-            reverse('qa_create_question'),
-            {'title': "second title",
-             'description': 'second description',
-             'tags': 'test'})
-        response = self.client.get(
-            reverse('qa_tag', kwargs={'tag': 'tag'}))
+        self.client.post(reverse('qa_create_question'),
+                         {'title': "first title",
+                          'description': 'first description',
+                          'tags': 'tag'})
+        self.client.post(reverse('qa_create_question'),
+                         {'title': "second title",
+                          'description': 'second description',
+                          'tags': 'test'})
+        response = self.client.get(reverse('qa_tag', kwargs={'tag': 'tag'}))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            len(response.context['questions']),
-            len(Question.objects.filter(title="first title")))
-        response = self.client.get(
-            reverse('qa_tag', kwargs={'tag': 'test'}))
+        self.assertEqual(len(response.context['questions']),
+                         len(Question.objects.filter(title="first title")))
+        response = self.client.get(reverse('qa_tag', kwargs={'tag': 'test'}))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            len(response.context['questions']),
-            len(Question.objects.filter(title="second title")))
+        self.assertEqual(len(response.context['questions']),
+                         len(Question.objects.filter(title="second title")))
 
 # UpdateQuestionView
 
@@ -395,10 +389,9 @@ class TestViews(TestCase):
         UpdateQuestionView updates the required question
         """
         self.client.post(
-            reverse('qa_create_question'),
-            {'title': "first title",
-             'description': 'first description',
-             'tags': 'tag'})
+            reverse('qa_create_question'), {'title': "first title",
+                                            'description': 'first description',
+                                            'tags': 'tag'})
         question = Question.objects.latest('pub_date')
         question_title = question.title
         question_description = question.description

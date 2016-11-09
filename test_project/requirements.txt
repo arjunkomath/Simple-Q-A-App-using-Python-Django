@@ -3,3 +3,6 @@
 
 # Your app in editable mode.
 -e ../
+
+# This project requirements
+django-bootstrap3==7.1.0

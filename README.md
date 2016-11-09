@@ -66,6 +66,8 @@ With this setup you will have a functional questions and answers section inside 
 
 If your project has an user profile already, you may want to merge it with the data provided by this app (questions, answers, comments, reputation, etc). That requires some extra work, but can be done without using ugly hacks.
 
+The template structure serves as a foundation for your project, but you can (and should) override the defaults to better suit your needs. For example we load bootstrap3 from a CDN, but if your application already has bootstrap in a package you can just extend from your main base template.
+
 The package has no moderation options on none of the models yet and still lacks REST support.
 
 If you think that something essential for this kind of application is missing, you can request a feature by adding an issue to our repository.
