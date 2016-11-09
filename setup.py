@@ -28,7 +28,6 @@ setup(
     ],
     install_requires=[
         'django-annoying==0.9.0',
-        'django_bootstrap3==7.0.0',
         'django-markdown-app==0.8.6',
         'django-taggit==0.18.0',
         'pytz==2016.6.1'
