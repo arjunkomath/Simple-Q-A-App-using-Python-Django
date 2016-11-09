@@ -194,6 +194,10 @@ class QuestionsByTagView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(
             QuestionsByTagView, self).get_context_data(*args, **kwargs)
+        context['active_tab'] = self.request.GET.get('active_tab', 'latest')
+        tabs = ['latest', 'unans', 'reward']
+        context['active_tab'] = 'latest' if context['active_tab'] not in\
+            tabs else context['active_tab']
         context['totalcount'] = Question.objects.count
         context['anscount'] = Answer.objects.count
         context['noans'] = Question.objects.order_by('-pub_date').filter(
@@ -201,6 +205,7 @@ class QuestionsByTagView(ListView):
         context['reward'] = Question.objects.order_by('-reward').filter(
             tags__name__contains=self.kwargs['tag'],
             reward__gte=1)[:10]
+        context['totalnoans'] = len(context['noans'])
         return context
 
 

@@ -6,6 +6,7 @@ env:
   matrix:
    - DJANGO="Django<1.9"
    - DJANGO="Django<1.10"
+   - DJANGO="Django<1.11"
 # branches:
 #   only:
 #     - master
