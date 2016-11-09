@@ -29,7 +29,7 @@ setup(
     install_requires=[
         'django-annoying==0.9.0',
         'django-markdown-app==0.8.6',
-        'django-taggit==0.18.0',
+        'django-taggit==0.21.3',
         'pytz==2016.6.1'
     ],
     extras_require={
