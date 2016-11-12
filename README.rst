@@ -35,9 +35,7 @@ Installation
 ============
 Django-QA aims at keeping things simple. To install it you have to do what you would do with most django apps.
 
-Install with pip:
-
-.. code-block:: bash
+Install with pip::
 
     pip install django-qa
 
