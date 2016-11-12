@@ -18,3 +18,15 @@ The development of this package is kindly supported by SWAPPS_ and constantly de
 .. _Simple-Q-A-App-using-Python-Django: http://arjunkomath.github.io/Simple-Q-A-App-using-Python-Django
 .. _SWAPPS: https://www.swapps.io/
 .. _lines: https://www.swapps.io/contact/
+
+Please take in considerations than this application is still under active development and we cannot guarantee that nothing will break between versions. Most of the core features are already there, so we expect to release a beta version soon.
+
+Features
+========
+* Assumes nothing about the rest of your application.
+* Create questions and answers.
+* Comment on questions and answers.
+* Upvote/Downvote questions and answers.
+* Users have a reputation and a profile.
+* Support for tagging questions with django-taggit.
+* Questions are categorized by latest, popular and most voted.
