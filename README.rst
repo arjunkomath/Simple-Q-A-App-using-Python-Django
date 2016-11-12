@@ -35,11 +35,15 @@ Installation
 ============
 Django-QA aims at keeping things simple. To install it you have to do what you would do with most django apps.
 
-Install with pip::
+Install with pip:
+
+.. code-block:: bash
 
     pip install django-qa
 
-Add to INSTALLED_APPS in your project settings.::
+Add to INSTALLED_APPS in your project settings:
+
+.. code-block:: python
 
     INSTALLED_APPS = (
     ...
@@ -47,7 +51,9 @@ Add to INSTALLED_APPS in your project settings.::
     ...
     )
 
-Add the package urls to the project::
+Add the package urls to the project:
+
+.. code-block:: python
 
     urlpatterns = [
         ...,
