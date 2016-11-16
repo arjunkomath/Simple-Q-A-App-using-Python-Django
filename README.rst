@@ -64,6 +64,12 @@ Run migrations::
 
 And that's it!
 
+
+Settings
+========
+QA_DESCRIPTION_OPTIONAL (False). This flag disables validation for description field, allowing title only questions.
+
+
 About the functionality
 =======================
 * The package is integrated with the framework authentication process, right now the package defines an user profile linked to Django's user model, this models was created to contain information related to the user's activities inside the package functionalities.
