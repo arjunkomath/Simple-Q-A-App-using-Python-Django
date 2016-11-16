@@ -34,10 +34,10 @@ setup(
         'Framework :: Django :: 1.10',
     ],
     install_requires=[
-        'django-annoying==0.9.0',
-        'django-markdown-app==0.8.6',
+        'django-annoying==0.10.3',
+        'django-markdown-app==0.9.0',
         'django-taggit==0.21.3',
-        'pytz==2016.6.1'
+        'pytz==2016.7'
     ],
     extras_require={
         'i18n': [
