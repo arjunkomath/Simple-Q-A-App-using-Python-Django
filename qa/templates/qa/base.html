@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <div class="topbar"></div>
 <div class="container">
 <title>Simple QA</title>
@@ -8,7 +9,7 @@
 
 <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="static/css/qa.css" rel="stylesheet"/>
+<link href="{% static 'css/qa.css' %}" rel="stylesheet"/>
 
 <div class="page-header">
   <a class="btn btn-lg btn-warning pull-right" href="#search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Find</a><a class="btn btn-lg btn-danger pull-right" href="{% url 'qa_create_question' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ask Question</a><h1><a href="{% url 'qa_index' %}"><img width="50px" src="http://icons.iconarchive.com/icons/seanau/flat-app/256/Questionmark-icon.png" /><orange>Simple QA</orange> </a><small>Open Questions</small></h1>
