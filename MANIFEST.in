@@ -1,5 +1,6 @@
 include README.rst
-CONTRIBUTORS.md
+include CONTRIBUTORS.md
+include LICENCE.md
 recursive-include qa/templates *
 recursive-include qa/static *
 recursive-include qa/migrations *
