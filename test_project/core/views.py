@@ -2,7 +2,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from .forms import UserForm
 
@@ -41,10 +41,9 @@ def register(request):
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            return render_to_response(
+            return render(request,
                 'register.html',
-                {'user_form': user_form, 'registered': registered},
-                context)
+                {'user_form': user_form, 'registered': registered})
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -52,10 +51,9 @@ def register(request):
         user_form = UserForm()
 
     # Render the template depending on the context.
-    return render_to_response(
+    return render(request, 
         'register.html',
-        {'user_form': user_form, 'registered': registered},
-        context)
+        {'user_form': user_form, 'registered': registered})
 
 
 def user_login(request):
@@ -97,7 +95,7 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render_to_response('login.html', {}, context)
+        return render(request, 'login.html', {})
 
 
 # Use the login_required() decorator to ensure only
