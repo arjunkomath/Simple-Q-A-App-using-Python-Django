@@ -1,8 +1,14 @@
-from qa.models import UserQAProfile
+from qa.models import UserQAProfile, Question
+from django.conf import settings
 from django import forms
 
 
-class UserProfileForm(forms.ModelForm):
+class QuestionForm(forms.ModelForm):
     class Meta:
-        model = UserQAProfile
-        fields = ('website', 'picture')
+        model = Question
+        fields = ['title', 'description', 'tags']
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionForm, self).__init__(*args, **kwargs)
+        if hasattr(settings, 'QA_DESCRIPTION_OPTIONAL'):
+            self.fields['description'].required = not settings.QA_DESCRIPTION_OPTIONAL

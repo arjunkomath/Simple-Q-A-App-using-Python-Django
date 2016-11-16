@@ -19,6 +19,8 @@ from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
                        QuestionVote, AnswerComment, QuestionComment)
 from .mixins import LoginRequired, AuthorRequiredMixin
 from .utils import question_score
+from .forms import QuestionForm
+
 try:
     qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\
         settings.QA_MESSAGES
@@ -214,9 +216,8 @@ class CreateQuestionView(LoginRequired, CreateView):
     View to handle the creation of a new question
     """
     template_name = 'qa/create_question.html'
-    model = Question
-    fields = ['title', 'description', 'tags']
     message = _('Thank you! your question has been created.')
+    form_class = QuestionForm
 
     def form_valid(self, form):
         """

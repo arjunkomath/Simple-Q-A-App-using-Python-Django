@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
@@ -50,6 +50,36 @@ class TestViews(TestCase):
         self.assertEqual(new_question.title, title)
         self.assertEqual(Question.objects.count(),
                          current_question_count + 1)
+
+    @override_settings(QA_DESCRIPTION_OPTIONAL=True)
+    def test_create_question_optional_description(self):
+        """
+        When QA_DESCRIPTION_OPTIONAL is True, the validation for description
+        should be disabled on the form, allowing the object to be created without specifying it.
+        """
+        title = 'This is my question'
+        current_question_count = Question.objects.count()
+        response = self.client.post(
+            reverse('qa_create_question'),
+            {'title': title, 'tags': 'test tag'})
+        self.assertEqual(response.status_code, 302)
+        new_question = Question.objects.last()
+        self.assertEqual(new_question.title, title)
+        self.assertEqual(Question.objects.count(), current_question_count + 1)
+
+    @override_settings(QA_DESCRIPTION_OPTIONAL=False)
+    def test_create_question_optional_description_false(self):
+        """
+        When QA_DESCRIPTION_OPTIONAL is False (default), the validation for description
+        will be on place, and a question cannot be created without setting some content for it.
+        """
+        title = 'This is my question'
+        current_question_count = Question.objects.count()
+        response = self.client.post(
+            reverse('qa_create_question'),
+            {'title': title, 'tags': 'test tag'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Question.objects.count(), current_question_count)
 
     def test_create_question_view_two(self):
         """

@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 from setuptools import find_packages, setup
 
-with open('README.md') as file:
+with open('README.rst') as file:
     long_description = file.read()
 
 setup(
     name='django-qa',
-    version='0.0.33',
+    version='0.0.34',
     description='Pluggable django app for Q&A',
     long_description=long_description,
     author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
