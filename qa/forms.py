@@ -11,4 +11,4 @@ class QuestionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
         if hasattr(settings, 'QA_DESCRIPTION_OPTIONAL'):
-            self.fields['description'].required = not settings.QA_DESCRIPTION_OPTIONAL
+            self.fields['description'].required = settings.QA_DESCRIPTION_OPTIONAL
