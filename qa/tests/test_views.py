@@ -55,7 +55,8 @@ class TestViews(TestCase):
     def test_create_question_optional_description(self):
         """
         When QA_DESCRIPTION_OPTIONAL is True, the validation for description
-        should be disabled on the form, allowing the object to be created without specifying it.
+        should be disabled on the form, allowing the object to be created
+        without specifying it.
         """
         title = 'This is my question'
         current_question_count = Question.objects.count()
@@ -70,8 +71,9 @@ class TestViews(TestCase):
     @override_settings(QA_DESCRIPTION_OPTIONAL=False)
     def test_create_question_optional_description_false(self):
         """
-        When QA_DESCRIPTION_OPTIONAL is False (default), the validation for description
-        will be on place, and a question cannot be created without setting some content for it.
+        When QA_DESCRIPTION_OPTIONAL is False (default), the validation for
+        description will be on place, and a question cannot be created without
+        setting some content for it.
         """
         title = 'This is my question'
         current_question_count = Question.objects.count()
