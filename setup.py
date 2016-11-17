@@ -14,7 +14,6 @@ setup(
     author_email='dev@swapps.co',
     url='https://github.com/swappsco/django-qa',
     license='MIT',
-
     packages=find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
