@@ -1,4 +1,5 @@
 .. django-qa documentation master file.
+.. include:: base.rst
 
 Welcome to django-qa's documentation!
 =====================================
