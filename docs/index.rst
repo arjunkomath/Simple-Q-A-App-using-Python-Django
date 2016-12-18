@@ -8,6 +8,7 @@ Welcome to django-qa's documentation!
    :maxdepth: 2
    :caption: Contents:
    installation
+   settings
 
 Indices and tables
 ==================
