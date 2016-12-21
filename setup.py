@@ -7,14 +7,13 @@ with open('README.rst') as file:
 
 setup(
     name='django-qa',
-    version='0.0.35',
+    version='0.1.0',
     description='Pluggable django app for Q&A',
     long_description=long_description,
     author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
     author_email='dev@swapps.co',
     url='https://github.com/swappsco/django-qa',
     license='MIT',
-
     packages=find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -37,7 +36,7 @@ setup(
         'django-annoying==0.10.3',
         'django-markdown-app==0.9.0',
         'django-taggit==0.21.3',
-        'pytz==2016.7'
+        'pytz==2016.10'
     ],
     extras_require={
         'i18n': [

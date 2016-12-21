@@ -4,21 +4,20 @@ WELCOME TO DJANGO-QA
 .. image:: https://travis-ci.org/swappsco/django-qa.svg?branch=master
    :alt: Build Status
    :target: https://travis-ci.org/swappsco/django-qa
-
 .. image:: https://coveralls.io/repos/github/swappsco/django-qa/badge.svg?branch=master
    :alt: Coveralls Status
    :target: https://coveralls.io/github/swappsco/django-qa?branch=master
-
 .. image:: https://img.shields.io/pypi/v/django-qa.svg
    :alt: PyPi latest version
    :target: https://pypi.python.org/pypi/django-qa/
-
 .. image:: https://img.shields.io/pypi/status/django-qa.svg
    :alt: Development status
-
 .. image:: https://requires.io/github/swappsco/django-qa/requirements.svg?branch=master
-     :target: https://requires.io/github/swappsco/django-qa/requirements/?branch=master
-     :alt: Requirements Status
+   :target: https://requires.io/github/swappsco/django-qa/requirements/?branch=master
+   :alt: Requirements Status
+.. image:: https://readthedocs.org/projects/django-qa/badge/?version=latest
+   :target: http://django-qa.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
 
 A Simple Q&A App using Python Django
 ====================================

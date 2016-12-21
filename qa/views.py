@@ -7,7 +7,6 @@ from taggit.models import TaggedItem, Tag
 
 from django.db.models import Count
 from django.conf import settings
-from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 from django.views.generic import (CreateView, View, ListView, DetailView,
                                   UpdateView)
