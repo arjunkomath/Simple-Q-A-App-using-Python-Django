@@ -20,6 +20,10 @@ WELCOME TO DJANGO-QA
    :target: https://requires.io/github/swappsco/django-qa/requirements/?branch=master
    :alt: Requirements Status
 
+.. image:: https://readthedocs.org/projects/django-qa/badge/?version=latest
+   :target: http://django-qa.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 A Simple Q&A App using Python Django
 ====================================
 django-qa_ is a fork from Simple-Q-A-App-using-Python-Django_ aimed to create a pluggable package than allows to implement a StackOverflow-like forum site for your Django web project.
