@@ -17,10 +17,8 @@
    :alt: Requirements Status
    :target: https://requires.io/github/swappsco/django-qa/requirements/?branch=master
 
-django-qa_ is a pluggable package than allows to implement a StackOverflow-like forum site for your Django web project.
-The development of this package is kindly supported by SWAPPS_ and constantly developed by it's colaborators. Feel free to use it, add some issues if you find bugs or think of a really cool feature, even clone it and generate a pull requests to incorporate those cool features made by yourself.
-.. _django-qa: http://swappsco.github.io/django-qa/
-.. _SWAPPS: https://www.swapps.io/
+`django-qa <http://swappsco.github.io/django-qa/>`_ is a pluggable package than allows to implement a StackOverflow-like forum site for your Django web project.
+The development of this package is kindly supported by `SWAPPS <https://www.swapps.io/>`_ and constantly developed by it's colaborators. Feel free to use it, add some issues if you find bugs or think of a really cool feature, even clone it and generate a pull requests to incorporate those cool features made by yourself.
 
 Features
 --------
