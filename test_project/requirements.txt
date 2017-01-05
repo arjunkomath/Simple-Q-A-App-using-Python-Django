@@ -6,3 +6,4 @@
 
 # This project requirements
 django-bootstrap3==7.1.0
+django-hitcount==1.2.2

@@ -3,3 +3,4 @@ django_bootstrap3==7.1.0
 django-markdown-app==0.9.0
 django-taggit==0.21.3
 pytz==2016.10
+django-hitcount==1.2.2

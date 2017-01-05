@@ -3,8 +3,10 @@ from django.conf import settings
 from django.utils.text import slugify
 from django_markdown.models import MarkdownField
 
+from hitcount.models import HitCountMixin
 from taggit.managers import TaggableManager
 from annoying.fields import AutoOneToOneField
+
 
 class UserQAProfile(models.Model):
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
@@ -16,14 +18,13 @@ class UserQAProfile(models.Model):
         return self.user.username
 
 
-class Question(models.Model):
+class Question(models.Model, HitCountMixin):
     slug = models.SlugField(max_length=200)
     title = models.CharField(max_length=200, blank=False)
     description = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = TaggableManager()
     reward = models.IntegerField(default=0)
-    views = models.IntegerField(default=0)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     closed = models.BooleanField(default=False)
     positive_votes = models.IntegerField(default=0)

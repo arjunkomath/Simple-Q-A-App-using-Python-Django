@@ -70,7 +70,6 @@ class TestMixins(TestCase):
             description="A not so long random text to fill this field",
             pub_date=timezone.datetime(2016, 1, 6, 0, 0, 0),
             reward=0,
-            views=3,
             user=request.user,
             closed=False,
         )
@@ -94,7 +93,6 @@ class TestMixins(TestCase):
             description="A not so long random text to fill this field",
             pub_date=timezone.datetime(2016, 1, 6, 0, 0, 0),
             reward=0,
-            views=3,
             user=user,
             closed=False,
         )

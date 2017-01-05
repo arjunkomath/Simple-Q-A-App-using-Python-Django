@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 from taggit.models import TaggedItem, Tag
-
+from hitcount.views import HitCountDetailView
 from django.db.models import Count
 from django.conf import settings
 from django.utils.translation import ugettext as _
@@ -365,11 +365,12 @@ class UpdateAnswerCommentView(UpdateQuestionCommentView):
             'qa_detail', kwargs={'pk': answer_comment.answer.question.pk})
 
 
-class QuestionDetailView(DetailView):
+class QuestionDetailView(HitCountDetailView):
     """
     View to call a question and to render all the details about that question.
     """
     model = Question
+    count_hit = True
     template_name = 'qa/detail_question.html'
     context_object_name = 'question'
     slug_field = 'slug'
@@ -392,8 +393,6 @@ class QuestionDetailView(DetailView):
             kwargs['slug'] = my_object.slug
             return redirect(reverse('qa_detail', kwargs=kwargs))
         else:
-            my_object.views += 1
-            my_object.save()
             return super(QuestionDetailView, self).get(request, **kwargs)
 
     def get_object(self):

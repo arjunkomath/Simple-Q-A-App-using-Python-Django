@@ -7,13 +7,15 @@ Install with pip::
 
     pip install django-qa
 
-Add to INSTALLED_APPS in your project settings:
+Add qa and its requirements to INSTALLED_APPS in your project settings:
 
 .. code-block:: python
 
     INSTALLED_APPS = (
     ...
-    qa,
+    'qa',
+    'taggit',
+    'hitcount',
     ...
     )
 

@@ -51,6 +51,7 @@ INSTALLED_APPS = (
         'django_markdown',
         'taggit',
         'qa',
+        'hitcount',
 
         )
 

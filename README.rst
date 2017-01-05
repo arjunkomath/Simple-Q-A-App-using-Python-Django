@@ -38,6 +38,7 @@ Features
 * Upvote/Downvote questions and answers.
 * Users have a reputation and a profile.
 * Support for tagging questions with django-taggit.
+* Support for hit counts with django-hitcounts.
 * Questions are categorized by latest, popular and most voted.
 
 Installation
@@ -54,7 +55,9 @@ Add to INSTALLED_APPS in your project settings:
 
     INSTALLED_APPS = (
     ...
-    qa,
+    'qa',
+    'taggit',
+    'hitcount',
     ...
     )
 
@@ -78,6 +81,8 @@ And that's it!
 Settings
 ========
 QA_DESCRIPTION_OPTIONAL (False). This flag disables validation for description field, allowing title only questions.
+
+Django qa uses `django-hitcount <https://github.com/thornomad/django-hitcount>`_ . If you want to have a custom behaviour for the hitcounts feature, feel free to use django-hitcount settings.
 
 
 About the functionality

@@ -36,7 +36,8 @@ setup(
         'django-annoying==0.10.3',
         'django-markdown-app==0.9.0',
         'django-taggit==0.21.3',
-        'pytz==2016.10'
+        'pytz==2016.10',
+        'django-hitcount==1.2.2'
     ],
     extras_require={
         'i18n': [
