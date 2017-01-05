@@ -43,7 +43,6 @@ class TestModels(TestCase, BasicTaggingTest):
             description="A not so long random text to fill this field",
             pub_date=timezone.datetime(2016, 1, 6, 0, 0, 0),
             reward=0,
-            views=3,
             user=self.user,
             closed=False,
         )
@@ -61,7 +60,6 @@ class TestModels(TestCase, BasicTaggingTest):
         self.assertNotEqual(self.first_question.pub_date, timezone.now())
         self.assert_tags_equal(self.first_question.tags.all(),
                                ['one tag', 'the next tag', 'another tag'])
-        self.assertEqual(self.first_question.views, 3)
 
     def test_answer(self):
         answer = Answer.objects.create(

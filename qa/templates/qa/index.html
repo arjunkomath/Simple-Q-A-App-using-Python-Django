@@ -17,7 +17,7 @@
   {% for question in questions %}
     <div class="row">
       <div class="col-sm-1 ans"><small><div class="ques">{{ question.num_answers }}</div>Answers</small></div>
-      <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
+      <div class="col-sm-1 ans"><small><div class="ques">{{ question.hit_count.hits }}</div>Views</small></div>
       <p>
         {% if question.reward %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %}
         <h3><a href="{% url 'qa_detail' question.id %}">{{ question.title }}</a></h3>
@@ -59,7 +59,7 @@
   {% for question in noans %}
   <div class="row">
   <div class="col-sm-1 ans"><small><div class="ques">{{ question.num_answers }}</div>Answers</small></div>
-  <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.hit_count.hits }}</div>Views</small></div>
   <p>
     {% if question.num_answers %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
     <br/>
@@ -97,7 +97,7 @@
   {% for question in reward %}
   <div class="row">
   <div class="col-sm-1 ans"><small><div class="ques">{{ question.num_answers }}</div>Answers</small></div>
-  <div class="col-sm-1 ans"><small><div class="ques">{{ question.views }}</div>Views</small></div>
+  <div class="col-sm-1 ans"><small><div class="ques">{{ question.hit_count.hits }}</div>Views</small></div>
   <p>
     {% if question.num_answers %}<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>{% endif %} <a class="ques" href="{% url 'qa_detail' question.id %}">{{ question.title }}</a>
     <br/>

@@ -60,4 +60,7 @@ urlpatterns = [
     url(r'^profile/(?P<user_id>\d+)/$', views.profile, name='qa_profile'),
 
     url('^markdown/', include('django_markdown.urls')),
+
+    url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
+
 ]
