@@ -1,4 +1,4 @@
-from qa.models import UserQAProfile, Question
+from qa.models import Question
 from django.conf import settings
 from django import forms
 

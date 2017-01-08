@@ -8,8 +8,7 @@ from hitcount.views import HitCountDetailView
 from django.db.models import Count
 from django.conf import settings
 from django.utils.translation import ugettext as _
-from django.views.generic import (CreateView, View, ListView, DetailView,
-                                  UpdateView)
+from django.views.generic import (CreateView, View, ListView, UpdateView)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -54,8 +53,6 @@ class AnswerQuestionView(LoginRequired, View):
             raise ValidationError(
                 "Sorry, you're not allowed to close this question.")
         else:
-            # answer.question.closed = True
-            # answer.question.save()
             answer.question.answer_set.update(answer=False)
             answer.answer = True
             answer.save()
@@ -83,11 +80,10 @@ class CloseQuestionView(LoginRequired, View):
         else:
             if not question.closed:
                 question.closed = True
+
             else:
                 question.closed = False
             question.save()
-            # answer.answer = True
-            # answer.save()
 
         next_url = request.POST.get('next', None)
         if next_url is not None:
@@ -124,10 +120,13 @@ class QuestionIndexView(ListView):
             tabs else context['active_tab']
         try:
             noans = paginator.page(page)
+
         except PageNotAnInteger:
             noans = paginator.page(1)
+
         except EmptyPage:
             noans = paginator.page(paginator.num_pages)
+
         context['totalnoans'] = paginator.count
         context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
@@ -227,8 +226,8 @@ class CreateQuestionView(LoginRequired, CreateView):
 
     def get_success_url(self):
         if qa_messages:
-            messages.success(
-                self.request, self.message)
+            messages.success(self.request, self.message)
+
         return reverse('qa_index')
 
 
@@ -266,8 +265,8 @@ class CreateAnswerView(LoginRequired, CreateView):
 
     def get_success_url(self):
         if qa_messages:
-            messages.success(
-                self.request, self.message)
+            messages.success(self.request, self.message)
+
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
@@ -305,8 +304,8 @@ class CreateAnswerCommentView(LoginRequired, CreateView):
 
     def get_success_url(self):
         if qa_messages:
-            messages.success(
-                self.request, self.message)
+            messages.success(self.request, self.message)
+
         question_pk = Answer.objects.get(
             id=self.kwargs['answer_id']).question.pk
         return reverse('qa_detail', kwargs={'pk': question_pk})
@@ -332,8 +331,8 @@ class CreateQuestionCommentView(LoginRequired, CreateView):
 
     def get_success_url(self):
         if qa_messages:
-            messages.success(
-                self.request, self.message)
+            messages.success(self.request, self.message)
+
         return reverse('qa_detail', kwargs={'pk': self.kwargs['question_id']})
 
 
@@ -349,8 +348,8 @@ class UpdateQuestionCommentView(LoginRequired,
 
     def get_success_url(self):
         question_comment = self.get_object()
-        return reverse(
-            'qa_detail', kwargs={'pk': question_comment.question.pk})
+        return reverse('qa_detail',
+                       kwargs={'pk': question_comment.question.pk})
 
 
 class UpdateAnswerCommentView(UpdateQuestionCommentView):
@@ -361,8 +360,8 @@ class UpdateAnswerCommentView(UpdateQuestionCommentView):
 
     def get_success_url(self):
         answer_comment = self.get_object()
-        return reverse(
-            'qa_detail', kwargs={'pk': answer_comment.answer.question.pk})
+        return reverse('qa_detail',
+                       kwargs={'pk': answer_comment.answer.question.pk})
 
 
 class QuestionDetailView(HitCountDetailView):
@@ -392,6 +391,7 @@ class QuestionDetailView(HitCountDetailView):
         if slug != my_object.slug:
             kwargs['slug'] = my_object.slug
             return redirect(reverse('qa_detail', kwargs=kwargs))
+
         else:
             return super(QuestionDetailView, self).get(request, **kwargs)
 
@@ -416,10 +416,13 @@ class ParentVoteView(View):
         object_kwargs = {'user': user}
         if self.model == Question:
             target_key = 'question'
+
         elif self.model == Answer:
             target_key = 'answer'
+
         else:
             raise ValidationError('Not a valid model for votes')
+
         object_kwargs[target_key] = vote_target
         return object_kwargs
 
@@ -428,6 +431,7 @@ class ParentVoteView(View):
         if vote_target.user == request.user:
             raise ValidationError(
                 'Sorry, voting for your own answer is not possible.')
+
         else:
             upvote = request.POST.get('upvote', None) is not None
             object_kwargs = self.get_vote_kwargs(request.user, vote_target)
@@ -438,16 +442,20 @@ class ParentVoteView(View):
                 vote_target.user.userqaprofile.points += 1 if upvote else -1
                 if upvote:
                     vote_target.positive_votes += 1
+
                 else:
                     vote_target.negative_votes += 1
+
             else:
                 if vote.value == upvote:
                     vote.delete()
                     vote_target.user.userqaprofile.points += -1 if upvote else 1
                     if upvote:
                         vote_target.positive_votes -= 1
+
                     else:
                         vote_target.negative_votes -= 1
+
                 else:
                     vote_target.user.userqaprofile.points += 2 if upvote else -2
                     vote.value = upvote
@@ -455,6 +463,7 @@ class ParentVoteView(View):
                     if upvote:
                         vote_target.positive_votes += 1
                         vote_target.negative_votes -= 1
+
                     else:
                         vote_target.negative_votes += 1
                         vote_target.positive_votes -= 1
@@ -462,15 +471,18 @@ class ParentVoteView(View):
             vote_target.user.userqaprofile.save()
             if self.model == Question:
                 vote_target.reward = question_score(vote_target)
+
             if self.model == Answer:
                 vote_target.question.reward = question_score(
                     vote_target.question)
                 vote_target.question.save()
+
             vote_target.save()
 
         next_url = request.POST.get('next', None)
         if next_url is not None:
             return redirect(next_url)
+
         else:
             return redirect(reverse('qa_index'))
 
