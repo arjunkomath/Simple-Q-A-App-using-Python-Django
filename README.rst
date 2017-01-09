@@ -59,4 +59,4 @@ If your project has an user profile already, you may want to merge it with the d
 
 The template structure serves as a foundation for your project, but you can (and should) override the defaults to better suit your needs. For example we load bootstrap3 from a CDN, but if your application already has bootstrap in a package you can just extend from your main base template.
 
-.. _documentation: https://readthedocs.org/projects/django-qa/badge/?version=latest
+.. _documentation: https://django-qa.readthedocs.io/en/latest/?badge=latest
