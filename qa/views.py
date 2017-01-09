@@ -22,6 +22,7 @@ from .forms import QuestionForm
 try:
     qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\
         settings.QA_MESSAGES
+
 except AttributeError:
     qa_messages = False
 
@@ -52,6 +53,7 @@ class AnswerQuestionView(LoginRequired, View):
         if answer.question.user != request.user:
             raise ValidationError(
                 "Sorry, you're not allowed to close this question.")
+
         else:
             answer.question.answer_set.update(answer=False)
             answer.answer = True
@@ -131,7 +133,6 @@ class QuestionIndexView(ListView):
         context['noans'] = noans
         context['reward'] = Question.objects.order_by('-reward').filter(
             reward__gte=1)[:10]
-
         question_contenttype = ContentType.objects.get_for_model(Question)
         items = TaggedItem.objects.filter(content_type=question_contenttype)
         context['tags'] = Tag.objects.filter(
@@ -163,8 +164,7 @@ class QuestionsSearchView(QuestionIndexView):
                 reduce(operator.and_,
                        (Q(title__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
-                       (Q(description__icontains=q) for q in query_list))
-            )
+                       (Q(description__icontains=q) for q in query_list)))
 
         return result
 
@@ -396,14 +396,12 @@ class QuestionDetailView(HitCountDetailView):
             return super(QuestionDetailView, self).get(request, **kwargs)
 
     def get_object(self):
-        # Call the superclass
         question = super(QuestionDetailView, self).get_object()
         return question
 
 
 class ParentVoteView(View):
-    """
-    Base class to create a vote for a given model (question/answer)
+    """Base class to create a vote for a given model (question/answer)
     """
     model = None
     vote_model = None
