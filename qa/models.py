@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.conf import settings
 from django.utils.text import slugify
 
@@ -13,6 +14,11 @@ class UserQAProfile(models.Model):
     points = models.IntegerField(default=0)
     # The additional attributes we wish to include.
     website = models.URLField(blank=True)
+
+    def modify_reputation(self, added_points):
+        self.points = F('points') + added_points
+        self.save()
+        self.refresh_from_db()
 
     def __str__(self):  # pragma: no cover
         return self.user.username
