@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
-from django_markdown.models import MarkdownField
 
+from django_markdown.models import MarkdownField
 from hitcount.models import HitCountMixin
 from taggit.managers import TaggableManager
 from annoying.fields import AutoOneToOneField
