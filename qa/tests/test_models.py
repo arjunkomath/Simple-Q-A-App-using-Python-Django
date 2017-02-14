@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from qa.models import (Question, Answer, AnswerComment, QuestionComment,
-                       QuestionVote, AnswerVote)  # , VoteParent)
+                       QuestionVote, AnswerVote, UserQAProfile)
 
 
 class BasicTaggingTest(object):
@@ -106,6 +106,20 @@ class TestModels(TestCase, BasicTaggingTest):
         """Test that creates a slug when question saves"""
         self.assertEqual(
             self.first_question.slug, slugify(self.first_question.slug))
+
+    def test_user_creation(self):
+        qa_user = UserQAProfile.objects.create(user=self.user)
+        self.assertEqual(qa_user.user, self.user)
+        self.assertEqual(qa_user.user.username, 'test_user')
+        self.assertTrue(isinstance(qa_user, UserQAProfile))
+
+    def test_reputation_modification(self):
+        qa_user = UserQAProfile.objects.create(user=self.user)
+        self.assertEqual(qa_user.points, 0)
+        qa_user.modify_reputation(3)
+        self.assertEqual(qa_user.points, 3)
+        qa_user.modify_reputation(1)
+        self.assertEqual(qa_user.points, 4)
 
 # this should be tested at the views, it is not a property of the model anymore
 
