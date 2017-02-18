@@ -21,7 +21,7 @@ from .forms import QuestionForm
 
 try:
     qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\
-        settings.QA_SETTINGS['QA_MESSAGES']
+        settings.QA_SETTINGS['qa_messages']
 
 except AttributeError:
     qa_messages = False
