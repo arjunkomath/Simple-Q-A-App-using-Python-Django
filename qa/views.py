@@ -58,6 +58,14 @@ class AnswerQuestionView(LoginRequired, View):
             answer.question.answer_set.update(answer=False)
             answer.answer = True
             answer.save()
+            try:
+                points = settings.QA_SETTINGS['reputation']['ACCEPT_ANSWER']
+
+            except AttributeError:
+                points = 0
+
+            qa_user = UserQAProfile.objects.get(user=answer.user)
+            qa_user.modify_reputation(points)
 
         next_url = request.POST.get('next', None)
         if next_url is not None:

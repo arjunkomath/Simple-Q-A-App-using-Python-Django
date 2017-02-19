@@ -75,8 +75,39 @@ TEMPLATES = [
             },
         ]
 
-
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_REDIRECT_URL = '/foo/list/'
+
+QA_SETTINGS = {
+    'qa_messages': True,
+    'qa_description_optional': False,
+    'reputation': {
+        'CREATE_QUESTION': 0,
+        'CREATE_ANSWER': 0,
+        'CREATE_COMMENT': 0,
+        'ACCEPT_ANSWER': 0,
+        'UPVOTE_QUESTION': 0,
+        'UPVOTE_ANSWER': 0,
+        'UPVOTE_COMMENT': 0,
+        'DOWNVOTE_QUESTION': 0,
+        'DOWNVOTE_ANSWER': 0,
+        'DOWNVOTE_COMMENT': 0,
+    }
+}
+
+"""
+Upvote/Downvote Question -> Creator
+Upvote/Downvote Answer -> Creator
+Upvote/Downvote QuestionComments -> Creator
+Upvote/Downvote AnswerComments -> Creator
+Accepted Answer -> Creator
+Downvoting Question -> Voter
+Downvoting Answer -> Voter
+Downvoting QuestionComment -> Voter
+Downvoting QuestionAnswer -> Voter
+Need to lock rows before updating to avoid race conditions
+Use points field in qa-profile to store total reputation
+Create user profile model methods
+Assume all values not in settings as 0
+"""

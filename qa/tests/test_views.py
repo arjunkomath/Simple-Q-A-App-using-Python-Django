@@ -51,7 +51,10 @@ class TestViews(TestCase):
         self.assertEqual(Question.objects.count(),
                          current_question_count + 1)
 
-    @override_settings(QA_DESCRIPTION_OPTIONAL=True)
+    @override_settings(QA_SETTINGS={
+        'qa_messages': True,
+        'qa_description_optional': True,
+        })
     def test_create_question_optional_description(self):
         """
         When QA_DESCRIPTION_OPTIONAL is True, the validation for description
@@ -68,7 +71,7 @@ class TestViews(TestCase):
         self.assertEqual(new_question.title, title)
         self.assertEqual(Question.objects.count(), current_question_count + 1)
 
-    @override_settings(QA_DESCRIPTION_OPTIONAL=False)
+    @override_settings(QA_SETTINGS={'qa_description_optional': False})
     def test_create_question_optional_description_false(self):
         """
         When QA_DESCRIPTION_OPTIONAL is False (default), the validation for

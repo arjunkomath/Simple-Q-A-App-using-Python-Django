@@ -144,19 +144,3 @@ QA_SETTINGS = {
         'DOWNVOTE_COMMENT': 0,
     }
 }
-
-"""
-Upvote/Downvote Question -> Creator
-Upvote/Downvote Answer -> Creator
-Upvote/Downvote QuestionComments -> Creator
-Upvote/Downvote AnswerComments -> Creator
-Accepted Answer -> Creator
-Downvoting Question -> Voter
-Downvoting Answer -> Voter
-Downvoting QuestionComment -> Voter
-Downvoting QuestionAnswer -> Voter
-Need to lock rows before updating to avoid race conditions
-Use points field in qa-profile to store total reputation
-Create user profile model methods
-Assume all values not in settings as 0
-"""
