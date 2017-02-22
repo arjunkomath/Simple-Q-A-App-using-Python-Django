@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from qa.models import (Question, Answer, QuestionComment, QuestionVote,
-                       AnswerVote)
+                       AnswerVote, UserQAProfile)
 from qa.mixins import LoginRequired
 from qa.views import CreateQuestionView, CreateAnswerView
 
@@ -21,6 +21,7 @@ class TestViews(TestCase):
             password='top_secret'
         )
         self.client.login(username='test_user', password='top_secret')
+        self.qa_user = UserQAProfile.objects.create(user=self.user)
 
     def test_create_question_login(self):
         """
@@ -51,10 +52,7 @@ class TestViews(TestCase):
         self.assertEqual(Question.objects.count(),
                          current_question_count + 1)
 
-    @override_settings(QA_SETTINGS={
-        'qa_messages': True,
-        'qa_description_optional': True,
-        })
+    @override_settings(QA_SETTINGS={'qa_description_optional': True})
     def test_create_question_optional_description(self):
         """
         When QA_DESCRIPTION_OPTIONAL is True, the validation for description
