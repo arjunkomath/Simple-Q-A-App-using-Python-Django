@@ -234,6 +234,8 @@ class TestViews(TestCase):
 
         user = get_user_model().objects.create_user(username='user2',
                                                     password='top_secret')
+        qa_user = UserQAProfile.objects.create(user=user)
+        self.assertIsInstance(qa_user, UserQAProfile)
         question = Question.objects.create(
             title='a title', description='bla', user=self.user)
         answer = Answer.objects.create(
@@ -254,6 +256,8 @@ class TestViews(TestCase):
 
         user = get_user_model().objects.create_user(username='user2',
                                                     password='top_secret')
+        qa_user = UserQAProfile.objects.create(user=user)
+        self.assertIsInstance(qa_user, UserQAProfile)
         question = Question.objects.create(
             title='a title', description='bla', user=self.user)
         answer = Answer.objects.create(
