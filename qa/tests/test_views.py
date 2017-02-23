@@ -22,6 +22,9 @@ class TestViews(TestCase):
         )
         self.client.login(username='test_user', password='top_secret')
         self.qa_user = UserQAProfile.objects.create(user=self.user)
+        self.user_two = get_user_model().objects.create_user(
+            username='user2', password='top_secret')
+        self.qa_user_two = UserQAProfile.objects.create(user=self.user_two)
 
     def test_create_question_login(self):
         """
@@ -141,10 +144,8 @@ class TestViews(TestCase):
         and a new instance of QuestionVote is created.
         Shares same base class as answer votes.
         """
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         previous_votes = question.total_points
         previous_vote_instances = QuestionVote.objects.count()
         response = self.client.post(reverse(
@@ -161,12 +162,10 @@ class TestViews(TestCase):
         When i downvote an answer, the answer field gets updated
         and a new instance of AnswerVote is created.
         """
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         answer = Answer.objects.create(
-            answer_text='a title', user=user, question=question)
+            answer_text='a title', user=self.user_two, question=question)
         previous_votes = question.total_points
         previous_vote_instances = AnswerVote.objects.count()
         response = self.client.post(reverse('qa_answer_vote',
@@ -184,10 +183,8 @@ class TestViews(TestCase):
         is reverted. This means that the vote count goes down and the
         vote instance is removed.
         """
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         QuestionVote.objects.create(user=self.user, question=question,
                                     value=True)
         previous_vote_instances = QuestionVote.objects.count()
@@ -206,10 +203,8 @@ class TestViews(TestCase):
         shift downwards by 2 because i am not only retiring my upvote, I am
         adding a negative vote too. The vote instance should be updated too.
         """
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         question_vote = QuestionVote.objects.create(user=self.user,
                                                     question=question,
                                                     value=True)
@@ -232,12 +227,10 @@ class TestViews(TestCase):
         as the satisfying one. The question should be kept open
         """
 
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
             title='a title', description='bla', user=self.user)
         answer = Answer.objects.create(
-            answer_text='a title', user=user, question=question)
+            answer_text='a title', user=self.user_two, question=question)
         response = self.client.post(reverse('qa_answer_question',
                                     kwargs={'answer_id': answer.id}))
         answer.refresh_from_db()
@@ -252,12 +245,10 @@ class TestViews(TestCase):
         redirect there.
         """
 
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
             title='a title', description='bla', user=self.user)
         answer = Answer.objects.create(
-            answer_text='a title', user=user, question=question)
+            answer_text='a title', user=self.user_two, question=question)
         response = self.client.post(
             reverse('qa_answer_question',
                     kwargs={'answer_id': answer.id}),
@@ -273,10 +264,8 @@ class TestViews(TestCase):
         to mark an user as the satisfying one.
         """
 
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         answer = Answer.objects.create(
             answer_text='a title', user=self.user, question=question)
         with self.assertRaises(ValidationError):
@@ -320,10 +309,8 @@ class TestViews(TestCase):
         Any user that is not the owner of the question should not be able
         to close question.
         """
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         with self.assertRaises(ValidationError):
             self.client.post(reverse('qa_close_question',
                              kwargs={'question_id': question.id}))
@@ -447,10 +434,8 @@ class TestViews(TestCase):
         UpdateQuestionView updates the required answer
         """
 
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         answer = Answer.objects.create(
             answer_text='a title', user=self.user, question=question)
         answer_text = answer.answer_text
@@ -469,10 +454,8 @@ class TestViews(TestCase):
         CreateAnswerCommentView creates comment to given answer
         """
 
-        user = get_user_model().objects.create_user(username='user2',
-                                                    password='top_secret')
         question = Question.objects.create(
-            title='a title', description='bla', user=user)
+            title='a title', description='bla', user=self.user_two)
         answer = Answer.objects.create(
             answer_text='a title', user=self.user, question=question)
         answer_comments = len(answer.answercomment_set.all())

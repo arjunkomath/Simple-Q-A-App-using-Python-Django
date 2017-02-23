@@ -40,6 +40,7 @@ class Question(models.Model, HitCountMixin):
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = slugify(self.title)
+
         self.total_points = self.positive_votes - self.negative_votes
         super(Question, self).save(*args, **kwargs)
 
