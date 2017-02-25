@@ -471,8 +471,9 @@ class TestViews(TestCase):
     @override_settings(QA_SETTINGS={'reputation': {'ACCEPT_ANSWER': 4}})
     def test_affect_reputation_when_providing_the_answer_of_choice(self):
         """
-        This test validates than the view alters properly the QA user profile
-        when it updates the reputation points.
+        This test validates than the view alters properly the right QA user
+        profile when it updates the reputation points at the momment of
+        an answer acceptance
         """
         question = Question.objects.create(
             title='a title', description='bla', user=self.user)
@@ -482,7 +483,6 @@ class TestViews(TestCase):
         self.assertEqual(self.qa_user_two.points, 0)
         response = self.client.post(reverse('qa_answer_question',
                                     kwargs={'answer_id': answer.id}))
-
         self.qa_user_two.refresh_from_db()
         self.qa_user_two.refresh_from_db()
         self.assertEqual(self.qa_user.points, 0)
