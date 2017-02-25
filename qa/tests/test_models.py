@@ -117,6 +117,8 @@ class TestModels(TestCase, BasicTaggingTest):
         qa_user = UserQAProfile.objects.create(user=self.user)
         self.assertEqual(qa_user.points, 0)
         qa_user.modify_reputation(3)
+        qa_user.refresh_from_db()
         self.assertEqual(qa_user.points, 3)
         qa_user.modify_reputation(1)
+        qa_user.refresh_from_db()
         self.assertEqual(qa_user.points, 4)

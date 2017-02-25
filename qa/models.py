@@ -18,7 +18,6 @@ class UserQAProfile(models.Model):
     def modify_reputation(self, added_points):
         self.points = F('points') + added_points
         self.save()
-        self.refresh_from_db()
 
     def __str__(self):  # pragma: no cover
         return self.user.username
