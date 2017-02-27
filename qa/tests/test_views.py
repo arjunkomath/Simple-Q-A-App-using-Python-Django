@@ -468,7 +468,7 @@ class TestViews(TestCase):
         self.assertNotEqual(
             answer_comments, answer.answercomment_set.all())
 
-    @override_settings(QA_SETTINGS={'reputation': {'ACCEPT_ANSWER': 4, 'CREATE_QUESTION': 3}})
+    @override_settings(QA_SETTINGS={'reputation': {'ACCEPT_ANSWER': 4}})
     def test_affect_reputation_when_providing_the_answer_of_choice(self):
         """
         This test validates than the view alters properly the right QA user
@@ -486,5 +486,25 @@ class TestViews(TestCase):
         self.qa_user.refresh_from_db()
         self.qa_user_two.refresh_from_db()
         self.assertEqual(self.qa_user.points, 3)
+        self.assertEqual(self.qa_user_two.points, 4)
+        self.assertEqual(response.status_code, 302)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION': 4}})
+    def test_affect_reputation_when_creating_question(self):
+        """
+        This test validates than the view alters properly the right QA user
+        profile when it updates the reputation points at the moment of
+        an answer acceptance.
+        """
+        self.client.login(username='user2', password='top_secret')
+        self.qa_user_two = UserQAProfile.objects.create(user=self.user_two)
+        self.assertEqual(self.qa_user.points, 0)
+        self.assertEqual(self.qa_user_two.points, 0)
+        response = self.client.post(
+            reverse('qa_create_question'),
+            {'title': 'title', 'description': 'babla', 'tags': 'test tag'})
+        self.qa_user.refresh_from_db()
+        self.qa_user_two.refresh_from_db()
+        self.assertEqual(self.qa_user.points, 0)
         self.assertEqual(self.qa_user_two.points, 4)
         self.assertEqual(response.status_code, 302)
