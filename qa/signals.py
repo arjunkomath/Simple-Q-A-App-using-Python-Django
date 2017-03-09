@@ -1,22 +1,29 @@
 from django.conf import settings
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 from .models import (Question, Answer, AnswerComment,
                      QuestionComment, UserQAProfile)
 
 
+@receiver(post_save, sender=User)
+def ensure_profile_exists(sender, **kwargs):
+    if kwargs.get('created', False):
+        UserQAProfile.objects.get_or_create(user=kwargs.get('instance'))
+
+
 @receiver(post_save, sender=Question)
 def affect_rep_at_question_creation(sender, instance, created, **kwargs):
-    if not created:
-        try:
-            points = settings.QA_SETTINGS['reputation']['CREATE_QUESTION']
+    # if created:
+    try:
+        points = settings.QA_SETTINGS['reputation']['CREATE_QUESTION']
 
-        except KeyError:
-            points = 0
+    except KeyError:
+        points = 2
 
-        qa_user = UserQAProfile.objects.get(user_id=instance.user)
-        qa_user.modify_reputation(points)
+    qa_user = UserQAProfile.objects.get(user_id=instance.user)
+    qa_user.modify_reputation(points)
 
 
 @receiver(post_save, sender=Answer)

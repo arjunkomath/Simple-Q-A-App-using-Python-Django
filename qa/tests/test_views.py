@@ -21,10 +21,10 @@ class TestViews(TestCase):
             password='top_secret'
         )
         self.client.login(username='test_user', password='top_secret')
-        self.qa_user = UserQAProfile.objects.create(user=self.user)
+        #self.qa_user = UserQAProfile.objects.create(user=self.user)
         self.user_two = get_user_model().objects.create_user(
             username='user2', password='top_secret')
-        self.qa_user_two = UserQAProfile.objects.create(user=self.user_two)
+        #self.qa_user_two = UserQAProfile.objects.create(user=self.user_two)
 
     def test_create_question_login(self):
         """
@@ -479,14 +479,16 @@ class TestViews(TestCase):
             title='a title', description='bla', user=self.user)
         answer = Answer.objects.create(
             answer_text='a title', user=self.user_two, question=question)
-        self.assertEqual(self.qa_user.points, 0)
-        self.assertEqual(self.qa_user_two.points, 0)
+        qa_user = UserQAProfile.objects.get(user_id=self.user)
+        qa_user_two = UserQAProfile.objects.get(user_id=self.user_two)
+        self.assertEqual(qa_user.points, 0)
+        self.assertEqual(qa_user_two.points, 0)
         response = self.client.post(reverse('qa_answer_question',
                                     kwargs={'answer_id': answer.id}))
-        self.qa_user.refresh_from_db()
-        self.qa_user_two.refresh_from_db()
-        self.assertEqual(self.qa_user.points, 3)
-        self.assertEqual(self.qa_user_two.points, 4)
+        qa_user.refresh_from_db()
+        qa_user_two.refresh_from_db()
+        self.assertEqual(qa_user.points, 0)
+        self.assertEqual(qa_user_two.points, 4)
         self.assertEqual(response.status_code, 302)
 
     @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION': 4}})
@@ -496,15 +498,16 @@ class TestViews(TestCase):
         profile when it updates the reputation points at the moment of
         an answer acceptance.
         """
-        self.client.login(username='user2', password='top_secret')
-        self.qa_user_two = UserQAProfile.objects.create(user=self.user_two)
-        self.assertEqual(self.qa_user.points, 0)
-        self.assertEqual(self.qa_user_two.points, 0)
+        self.client.logout()
+        qa_user = UserQAProfile.objects.get(user=self.user)
+        qa_user_two = UserQAProfile.objects.get(user=self.user_two)
+        self.assertEqual(qa_user.points, 0)
+        self.assertEqual(qa_user_two.points, 0)
         response = self.client.post(
             reverse('qa_create_question'),
-            {'title': 'title', 'description': 'babla', 'tags': 'test tag'})
-        self.qa_user.refresh_from_db()
-        self.qa_user_two.refresh_from_db()
-        self.assertEqual(self.qa_user.points, 0)
-        self.assertEqual(self.qa_user_two.points, 4)
+            {'title': 'Qtitle', 'description': 'babla', 'tags': 'test tag'})
+        qa_user.refresh_from_db()
+        qa_user_two.refresh_from_db()
+        self.assertEqual(qa_user.points, 4)
+        self.assertEqual(qa_user_two.points, 0)
         self.assertEqual(response.status_code, 302)

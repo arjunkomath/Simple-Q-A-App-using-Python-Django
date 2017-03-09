@@ -108,13 +108,13 @@ class TestModels(TestCase, BasicTaggingTest):
             self.first_question.slug, slugify(self.first_question.slug))
 
     def test_user_creation(self):
-        qa_user = UserQAProfile.objects.create(user=self.user)
+        qa_user = UserQAProfile.objects.get(user=self.user)
         self.assertEqual(qa_user.user, self.user)
         self.assertEqual(qa_user.user.username, 'test_user')
         self.assertTrue(isinstance(qa_user, UserQAProfile))
 
     def test_reputation_modification(self):
-        qa_user = UserQAProfile.objects.create(user=self.user)
+        qa_user = UserQAProfile.objects.get(user=self.user)
         self.assertEqual(qa_user.points, 0)
         qa_user.modify_reputation(3)
         qa_user.refresh_from_db()
