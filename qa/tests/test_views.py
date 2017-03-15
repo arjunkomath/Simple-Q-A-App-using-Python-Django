@@ -491,6 +491,30 @@ class TestViews(TestCase):
         self.assertEqual(qa_user_two.points, 4)
         self.assertEqual(response.status_code, 302)
 
+    @override_settings(QA_SETTINGS={})
+    def test_affect_reputation_when_providing_the_answer_of_choice_without(self):
+        """
+        This test validates than the view alters properly the right QA user
+        profile when it updates the reputation points at the moment of
+        an answer acceptance in case the QA_SETTINGS variable was not
+        declared on the settings file.
+        """
+        question = Question.objects.create(
+            title='a title', description='bla', user=self.user)
+        answer = Answer.objects.create(
+            answer_text='a title', user=self.user_two, question=question)
+        qa_user = UserQAProfile.objects.get(user_id=self.user)
+        qa_user_two = UserQAProfile.objects.get(user_id=self.user_two)
+        self.assertEqual(qa_user.points, 0)
+        self.assertEqual(qa_user_two.points, 0)
+        response = self.client.post(reverse('qa_answer_question',
+                                    kwargs={'answer_id': answer.id}))
+        qa_user.refresh_from_db()
+        qa_user_two.refresh_from_db()
+        self.assertEqual(qa_user.points, 0)
+        self.assertEqual(qa_user_two.points, 0)
+        self.assertEqual(response.status_code, 302)
+
     @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION': 4}})
     def test_affect_reputation_when_creating_question(self):
         """
