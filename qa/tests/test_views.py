@@ -511,6 +511,27 @@ class TestViews(TestCase):
         self.assertEqual(qa_user.points, 4)
         self.assertEqual(qa_user_two.points, 0)
 
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_ANSWER': 4}})
+    def test_affect_reputation_when_creating_anwer(self):
+        """
+        This test validates than the view alters properly the right QA user
+        profile at the creation point of the instance.
+        """
+        qa_user = UserQAProfile.objects.get(user=self.user)
+        qa_user_two = UserQAProfile.objects.get(user=self.user_two)
+        self.assertEqual(qa_user.points, 0)
+        self.assertEqual(qa_user_two.points, 0)
+        question = Question.objects.create(
+            title='a title', description='bla', user=self.user)
+        response = self.client.post(
+            reverse('qa_create_answer', kwargs={'question_id': question.pk}),
+            {'question': question, 'answer_text': 'some_text_here'})
+        self.assertEqual(response.status_code, 302)
+        qa_user.refresh_from_db()
+        qa_user_two.refresh_from_db()
+        self.assertEqual(qa_user.points, 4)
+        self.assertEqual(qa_user_two.points, 0)
+
     @override_settings(QA_SETTINGS={'reputation': {'CREATE_ANSWER_COMMENT': 4}})
     def test_affect_reputation_when_creating_answercomment(self):
         """
@@ -525,9 +546,10 @@ class TestViews(TestCase):
             answer_text='a title', user=self.user, question=question)
         self.assertEqual(qa_user.points, 0)
         self.assertEqual(qa_user_two.points, 0)
-        response = self.client.post(reverse('qa_create_answer_comment',
-                                            kwargs={'answer_id': answer.id}),
-                                    {'comment_text': 'a description'})
+        response = self.client.post(
+            reverse('qa_create_answer_comment',
+                    kwargs={'answer_id': answer.id}),
+            {'comment_text': 'a description'})
         self.assertEqual(response.status_code, 302)
         qa_user.refresh_from_db()
         qa_user_two.refresh_from_db()
@@ -546,9 +568,10 @@ class TestViews(TestCase):
             title='a title', description='bla', user=self.user_two)
         self.assertEqual(qa_user.points, 0)
         self.assertEqual(qa_user_two.points, 0)
-        response = self.client.post(reverse('qa_create_question_comment',
-                                            kwargs={'question_id': question.pk}),
-                                    {'comment_text': 'some_text_here'})
+        response = self.client.post(
+            reverse('qa_create_question_comment',
+                    kwargs={'question_id': question.pk}),
+            {'comment_text': 'some_text_here'})
         self.assertEqual(response.status_code, 302)
         qa_user.refresh_from_db()
         qa_user_two.refresh_from_db()
