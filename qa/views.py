@@ -92,7 +92,8 @@ class CloseQuestionView(LoginRequired, View):
                 question.closed = True
 
             else:
-                question.closed = False
+                raise ValidationError("Sorry, this question is already closed")
+
             question.save()
 
         next_url = request.POST.get('next', None)
