@@ -39,6 +39,13 @@ class Question(models.Model, HitCountMixin):
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = slugify(self.title)
+            try:
+                points = settings.QA_SETTINGS['reputation']['CREATE_QUESTION']
+
+            except KeyError:
+                points = 0
+
+            self.user.userqaprofile.modify_reputation(points)
 
         self.total_points = self.positive_votes - self.negative_votes
         super(Question, self).save(*args, **kwargs)
@@ -59,6 +66,13 @@ class Answer(models.Model):
     total_points = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
+        try:
+            points = settings.QA_SETTINGS['reputation']['CREATE_ANSWER']
+
+        except KeyError:
+            points = 0
+
+        self.user.userqaprofile.modify_reputation(points)
         self.total_points = self.positive_votes - self.negative_votes
         super(Answer, self).save(*args, **kwargs)
 
@@ -106,7 +120,27 @@ class AnswerComment(BaseComment):
     comment_text = MarkdownField()
     answer = models.ForeignKey(Answer)
 
+    def save(self, *args, **kwargs):
+        try:
+            points = settings.QA_SETTINGS['reputation']['CREATE_ANSWER_COMMENT']
+
+        except KeyError:
+            points = 0
+
+        self.user.userqaprofile.modify_reputation(points)
+        super(AnswerComment, self).save(*args, **kwargs)
+
 
 class QuestionComment(BaseComment):
     comment_text = models.CharField(max_length=250)
     question = models.ForeignKey(Question)
+
+    def save(self, *args, **kwargs):
+        try:
+            points = settings.QA_SETTINGS['reputation']['CREATE_QUESTION_COMMENT']
+
+        except KeyError:
+            points = 0
+
+        self.user.userqaprofile.modify_reputation(points)
+        super(QuestionComment, self).save(*args, **kwargs)
