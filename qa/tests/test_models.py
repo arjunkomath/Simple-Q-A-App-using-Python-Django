@@ -127,6 +127,10 @@ class TestModels(TestCase, BasicTaggingTest):
 
     @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION': 4}})
     def test_affect_reputation_by_question(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when a Question instance is created.
+        """
         other_qa_user = self.other_user.userqaprofile
         self.assertEqual(other_qa_user.points, 0)
         question = Question.objects.create(
@@ -139,3 +143,95 @@ class TestModels(TestCase, BasicTaggingTest):
         self.assertTrue(isinstance(question, Question))
         other_qa_user.refresh_from_db()
         self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_ANSWER': 4}})
+    def test_affect_reputation_by_answer(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an Answer instance is created
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        answer = Answer.objects.create(
+            question=self.first_question,
+            answer_text="A text body",
+            pub_date=timezone.datetime(2016, 2, 7, 0, 0, 0),
+            user=self.other_user,
+        )
+        self.assertTrue(isinstance(answer, Answer))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_ANSWER_COMMENT': 4}})
+    def test_affect_reputation_by_answercomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an AnswerComment instance is created
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = AnswerComment.objects.create(
+            answer=self.first_answer,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, AnswerComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION_COMMENT': 4}})
+    def test_affect_reputation_by_questioncomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an QuestionComment instance is created
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = QuestionComment.objects.create(
+            question=self.first_question,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, QuestionComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={})
+    def test_affect_reputation_by_answercomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an AnswerComment instance is created, but
+        there is no QA_SETTING defined inside the settings file, so the
+        try block inside the save() method of the model goes for the
+        excep line.
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = AnswerComment.objects.create(
+            answer=self.first_answer,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, AnswerComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 0)
+
+    @override_settings(QA_SETTINGS={})
+    def test_affect_reputation_by_questioncomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an QuestionComment instance is created, but
+        there is no QA_SETTING defined inside the settings file, so the
+        try block inside the save() method of the model goes for the
+        excep line.
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = QuestionComment.objects.create(
+            question=self.first_question,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, QuestionComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 0)
