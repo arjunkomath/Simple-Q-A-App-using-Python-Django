@@ -23,7 +23,7 @@ try:
     qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\
         settings.QA_SETTINGS['qa_messages']
 
-except AttributeError:
+except AttributeError:  # pragma: no cover
     qa_messages = False
 
 if qa_messages:
