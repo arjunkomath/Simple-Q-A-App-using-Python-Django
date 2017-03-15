@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.text import slugify
@@ -109,9 +109,11 @@ class TestModels(TestCase, BasicTaggingTest):
 
     def test_user_creation(self):
         qa_user = UserQAProfile.objects.get(user=self.user)
+        other_qa_user = self.other_user.userqaprofile
         self.assertEqual(qa_user.user, self.user)
         self.assertEqual(qa_user.user.username, 'test_user')
         self.assertTrue(isinstance(qa_user, UserQAProfile))
+        self.assertTrue(isinstance(other_qa_user, UserQAProfile))
 
     def test_reputation_modification(self):
         qa_user = UserQAProfile.objects.get(user=self.user)
@@ -122,3 +124,18 @@ class TestModels(TestCase, BasicTaggingTest):
         qa_user.modify_reputation(1)
         qa_user.refresh_from_db()
         self.assertEqual(qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION': 4}})
+    def test_affect_reputation_by_question(self):
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        question = Question.objects.create(
+            title="Additional Question",
+            description="A not so long random text",
+            pub_date=timezone.datetime(2016, 1, 6, 0, 0, 0),
+            reward=0,
+            user=self.other_user,
+            closed=False,)
+        self.assertTrue(isinstance(question, Question))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
