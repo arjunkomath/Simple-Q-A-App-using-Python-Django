@@ -296,7 +296,8 @@ class TestViews(TestCase):
                                            closed=True, user=self.user)
         with self.assertRaises(ValidationError):
             response = self.client.post(
-                reverse('qa_close_question', kwargs={'question_id': question.id}))
+                reverse('qa_close_question',
+                        kwargs={'question_id': question.id}))
             self.assertEqual(response.status_code, 302)
 
         self.assertTrue(question.closed)
