@@ -287,6 +287,20 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(question.closed)
 
+    def test_can_not_mark_closed_question(self):
+        """
+        The question is already closed, so the view should rises a
+        ValidationError
+        """
+        question = Question.objects.create(title='a title', description='bla',
+                                           closed=True, user=self.user)
+        with self.assertRaises(ValidationError):
+            response = self.client.post(
+                reverse('qa_close_question', kwargs={'question_id': question.id}))
+            self.assertEqual(response.status_code, 302)
+
+        self.assertTrue(question.closed)
+
     def test_can_provide_next_url_when_closing_question(self):
         """
         If an url is provided at the post request, the view should
@@ -313,7 +327,6 @@ class TestViews(TestCase):
             self.client.post(reverse('qa_close_question',
                              kwargs={'question_id': question.id}))
             self.assertFalse(question.closed)
-
 
 # QuestionIndexView
 
