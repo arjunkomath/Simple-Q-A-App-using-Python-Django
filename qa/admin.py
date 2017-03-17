@@ -1,7 +1,7 @@
 from django.contrib import admin
-from qa.models import (Question, Answer, AnswerComment, AnswerVote,
-                       QuestionComment)
 from django_markdown.admin import MarkdownModelAdmin
+from qa.models import (Answer, AnswerComment, AnswerVote, Question,
+                       QuestionComment)
 
 admin.site.register(Question)
 admin.site.register(Answer, MarkdownModelAdmin)

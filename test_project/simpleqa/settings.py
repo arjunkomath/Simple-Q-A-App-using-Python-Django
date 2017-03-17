@@ -127,4 +127,18 @@ MARKDOWN_EDITOR_SKIN = 'simple'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 LOGIN_URL = 'login'
-QA_MESSAGES = True
+
+QA_SETTINGS = {
+    'qa_messages': True,
+    'qa_description_optional': False,
+    'reputation': {
+        'CREATE_QUESTION': 0,
+        'CREATE_ANSWER': 0,
+        'CREATE_COMMENT': 0,
+        'ACCEPT_ANSWER': 0,
+        'UPVOTE_QUESTION': 0,
+        'UPVOTE_ANSWER': 0,
+        'DOWNVOTE_QUESTION': 0,
+        'DOWNVOTE_ANSWER': 0,
+    }
+}

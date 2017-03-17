@@ -1,10 +1,9 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase, override_settings
 from django.utils import timezone
 from django.utils.text import slugify
-
-from qa.models import (Question, Answer, AnswerComment, QuestionComment,
-                       QuestionVote, AnswerVote)  # , VoteParent)
+from qa.models import (Answer, AnswerComment, AnswerVote, Question,
+                       QuestionComment, QuestionVote, UserQAProfile)
 
 
 class BasicTaggingTest(object):
@@ -107,38 +106,131 @@ class TestModels(TestCase, BasicTaggingTest):
         self.assertEqual(
             self.first_question.slug, slugify(self.first_question.slug))
 
-# this should be tested at the views, it is not a property of the model anymore
+    def test_user_creation(self):
+        qa_user = UserQAProfile.objects.get(user=self.user)
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(qa_user.user, self.user)
+        self.assertEqual(qa_user.user.username, 'test_user')
+        self.assertTrue(isinstance(qa_user, UserQAProfile))
+        self.assertTrue(isinstance(other_qa_user, UserQAProfile))
 
-#    def test_question_positive_votes(self):
-#        QuestionVote.objects.create(user=self.user,
-#                                    value=True,  question=self.first_question)
-#        self.assertEqual(self.first_question.positive_votes, 1)
-#
-#    def test_question_negative_votes(self):
-#        QuestionVote.objects.create(user=self.user,
-#                                    value=False,  question=self.first_question)
-#        self.assertEqual(self.first_question.negative_votes, 1)
-#
-#    def test_question_total_points(self):
-#        QuestionVote.objects.create(user=self.user,
-#                                    value=True,  question=self.first_question)
-#        QuestionVote.objects.create(user=self.other_user,
-#                                    value=False, question=self.first_question)
-#        self.assertEqual(self.first_question.total_points, 0)
+    def test_reputation_modification(self):
+        qa_user = UserQAProfile.objects.get(user=self.user)
+        self.assertEqual(qa_user.points, 0)
+        qa_user.modify_reputation(3)
+        qa_user.refresh_from_db()
+        self.assertEqual(qa_user.points, 3)
+        qa_user.modify_reputation(1)
+        qa_user.refresh_from_db()
+        self.assertEqual(qa_user.points, 4)
 
-#     def test_answer_positive_votes(self):
-#         AnswerVote.objects.create(user=self.user,
-#                                   value=True, answer=self.first_answer)
-#         self.assertEqual(self.first_answer.positive_votes, 1)
-#
-#     def test_answer_negative_votes(self):
-#         AnswerVote.objects.create(user=self.user,
-#                                   value=False, answer=self.first_answer)
-#         self.assertEqual(self.first_answer.negative_votes, 1)
-#
-#     def test_answer_total_points(self):
-#         AnswerVote.objects.create(user=self.user,
-#                                   value=True, answer=self.first_answer)
-#         AnswerVote.objects.create(user=self.other_user,
-#                                   value=False, answer=self.first_answer)
-#         self.assertEqual(self.first_answer.total_points, 0)
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION': 4}})
+    def test_affect_reputation_by_question(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when a Question instance is created.
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        question = Question.objects.create(
+            title="Additional Question",
+            description="A not so long random text",
+            pub_date=timezone.datetime(2016, 1, 6, 0, 0, 0),
+            reward=0,
+            user=self.other_user,
+            closed=False,)
+        self.assertTrue(isinstance(question, Question))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_ANSWER': 4}})
+    def test_affect_reputation_by_answer(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an Answer instance is created
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        answer = Answer.objects.create(
+            question=self.first_question,
+            answer_text="A text body",
+            pub_date=timezone.datetime(2016, 2, 7, 0, 0, 0),
+            user=self.other_user,
+        )
+        self.assertTrue(isinstance(answer, Answer))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_ANSWER_COMMENT': 4}})
+    def test_affect_reputation_by_answercomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an AnswerComment instance is created
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = AnswerComment.objects.create(
+            answer=self.first_answer,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, AnswerComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={'reputation': {'CREATE_QUESTION_COMMENT': 4}})
+    def test_affect_reputation_by_questioncomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an QuestionComment instance is created
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = QuestionComment.objects.create(
+            question=self.first_question,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, QuestionComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 4)
+
+    @override_settings(QA_SETTINGS={})
+    def test_affect_reputation_by_answercomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an AnswerComment instance is created, but
+        there is no QA_SETTING defined inside the settings file, so the
+        try block inside the save() method of the model goes for the
+        excep line.
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = AnswerComment.objects.create(
+            answer=self.first_answer,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, AnswerComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 0)
+
+    @override_settings(QA_SETTINGS={})
+    def test_affect_reputation_by_questioncomment(self):
+        """
+        This test validates than the UserQAProfile method modify_reputation
+        works properly when an QuestionComment instance is created, but
+        there is no QA_SETTING defined inside the settings file, so the
+        try block inside the save() method of the model goes for the
+        excep line.
+        """
+        other_qa_user = self.other_user.userqaprofile
+        self.assertEqual(other_qa_user.points, 0)
+        comment = QuestionComment.objects.create(
+            question=self.first_question,
+            comment_text="This is not so bright a comment",
+            pub_date=timezone.datetime(2016, 2, 8, 0, 0, 0),
+            user=self.other_user)
+        self.assertTrue(isinstance(comment, QuestionComment))
+        other_qa_user.refresh_from_db()
+        self.assertEqual(other_qa_user.points, 0)

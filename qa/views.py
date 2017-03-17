@@ -1,29 +1,30 @@
 import operator
 from functools import reduce
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse
-from django.contrib.contenttypes.models import ContentType
-from taggit.models import TaggedItem, Tag
-from hitcount.views import HitCountDetailView
-from django.db.models import Count
+
 from django.conf import settings
-from django.utils.translation import ugettext as _
-from django.views.generic import (CreateView, View, ListView, UpdateView)
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.db.models import Q
-from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
-                       QuestionVote, AnswerComment, QuestionComment)
-from .mixins import LoginRequired, AuthorRequiredMixin
-from .utils import question_score
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.urlresolvers import reverse
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import ugettext as _
+from django.views.generic import CreateView, ListView, UpdateView, View
+from hitcount.views import HitCountDetailView
+from qa.models import (Answer, AnswerComment, AnswerVote, Question,
+                       QuestionComment, QuestionVote, UserQAProfile)
+from taggit.models import Tag, TaggedItem
+
 from .forms import QuestionForm
+from .mixins import AuthorRequiredMixin, LoginRequired
+from .utils import question_score
 
 try:
     qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\
-        settings.QA_MESSAGES
+        settings.QA_SETTINGS['qa_messages']
 
-except AttributeError:
+except AttributeError:  # pragma: no cover
     qa_messages = False
 
 if qa_messages:
@@ -58,6 +59,14 @@ class AnswerQuestionView(LoginRequired, View):
             answer.question.answer_set.update(answer=False)
             answer.answer = True
             answer.save()
+            try:
+                points = settings.QA_SETTINGS['reputation']['ACCEPT_ANSWER']
+
+            except KeyError:
+                points = 0
+
+            qa_user = UserQAProfile.objects.get(user=answer.user)
+            qa_user.modify_reputation(points)
 
         next_url = request.POST.get('next', None)
         if next_url is not None:
@@ -84,7 +93,8 @@ class CloseQuestionView(LoginRequired, View):
                 question.closed = True
 
             else:
-                question.closed = False
+                raise ValidationError("Sorry, this question is already closed")
+
             question.save()
 
         next_url = request.POST.get('next', None)
@@ -126,7 +136,7 @@ class QuestionIndexView(ListView):
         except PageNotAnInteger:
             noans = paginator.page(1)
 
-        except EmptyPage:
+        except EmptyPage:  # pragma: no cover
             noans = paginator.page(paginator.num_pages)
 
         context['totalnoans'] = paginator.count
