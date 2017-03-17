@@ -138,9 +138,7 @@ QA_SETTINGS = {
         'ACCEPT_ANSWER': 0,
         'UPVOTE_QUESTION': 0,
         'UPVOTE_ANSWER': 0,
-        'UPVOTE_COMMENT': 0,
         'DOWNVOTE_QUESTION': 0,
         'DOWNVOTE_ANSWER': 0,
-        'DOWNVOTE_COMMENT': 0,
     }
 }
