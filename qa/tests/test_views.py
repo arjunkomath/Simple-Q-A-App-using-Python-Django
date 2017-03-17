@@ -38,6 +38,14 @@ class TestViews(TestCase):
         """
         self.assertTrue(issubclass(CreateAnswerView, LoginRequired))
 
+    def test_profile_view(self):
+        """Test than the profile view is working properly
+        """
+        response = self.client.get(
+            reverse('qa_profile',
+                    kwargs={'user_id': self.user.userqaprofile.user_id}))
+        self.assertEqual(response.status_code, 200)
+
     def test_create_question_view_one(self):
         """
         CreateQuestionView should create a new question object.
