@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.test import Client, TestCase, override_settings
 from qa.mixins import LoginRequired
 from qa.models import (Answer, AnswerVote, Question, QuestionComment,
-                       QuestionVote, UserQAProfile)
+                       QuestionVote, UserQAProfile, AnswerComment)
 from qa.views import CreateAnswerView, CreateQuestionView
 
 
@@ -123,6 +123,52 @@ class TestViews(TestCase):
         self.assertEqual(new_comment.question, question)
         self.assertEqual(QuestionComment.objects.count(),
                          current_comment_question_count + 1)
+
+    def test_updates_question_comments(self):
+        """
+        If an url is provided at the post request, the view should
+        redirect there.
+        """
+        question = Question.objects.create(
+            title='a title', description='bla', user=self.user)
+        response_q = self.client.post(
+            reverse('qa_create_question_comment',
+                    kwargs={'question_id': question.pk}),
+            {'comment_text': 'some_text_here'})
+        comment = QuestionComment.objects.latest('pub_date')
+        comment_text = comment.comment_text
+        response_two = self.client.post(
+            reverse('qa_update_question_comment',
+                    kwargs={'comment_id': comment.id}),
+            {'comment_text': 'some_different_text_here'})
+        comment.refresh_from_db()
+        self.assertEqual(response_q.status_code, 302)
+        self.assertEqual(response_two.status_code, 302)
+        self.assertNotEqual(comment_text, comment.comment_text)
+
+    def test_updates_answer_comments(self):
+        """
+        If an url is provided at the post request, the view should
+        redirect there.
+        """
+        question = Question.objects.create(
+            title='a title', description='bla', user=self.user)
+        answer = Answer.objects.create(
+            answer_text='a title', user=self.user, question=question)
+        response_a = self.client.post(
+            reverse('qa_create_answer_comment',
+                    kwargs={'answer_id': answer.id}),
+            {'comment_text': 'a description'})
+        comment = AnswerComment.objects.latest('pub_date')
+        comment_text = comment.comment_text
+        response_two = self.client.post(
+            reverse('qa_update_answer_comment',
+                    kwargs={'comment_id': comment.id}),
+            {'comment_text': 'some_different_text_here'})
+        comment.refresh_from_db()
+        self.assertEqual(response_a.status_code, 302)
+        self.assertEqual(response_two.status_code, 302)
+        self.assertNotEqual(comment_text, comment.comment_text)
 
     def test_user_cannot_upvote_own_questions(self):
         """
