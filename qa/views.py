@@ -136,7 +136,7 @@ class QuestionIndexView(ListView):
         except PageNotAnInteger:
             noans = paginator.page(1)
 
-        except EmptyPage:
+        except EmptyPage:  # pragma: no cover
             noans = paginator.page(paginator.num_pages)
 
         context['totalnoans'] = paginator.count
