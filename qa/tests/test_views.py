@@ -1,11 +1,11 @@
-from django.test import TestCase, Client, override_settings
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
-from qa.models import (Question, Answer, QuestionComment, QuestionVote,
-                       AnswerVote, UserQAProfile)
+from django.core.urlresolvers import reverse
+from django.test import Client, TestCase, override_settings
 from qa.mixins import LoginRequired
-from qa.views import CreateQuestionView, CreateAnswerView
+from qa.models import (Answer, AnswerVote, Question, QuestionComment,
+                       QuestionVote, UserQAProfile)
+from qa.views import CreateAnswerView, CreateQuestionView
 
 
 class TestViews(TestCase):

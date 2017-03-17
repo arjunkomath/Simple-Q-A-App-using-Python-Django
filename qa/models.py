@@ -1,12 +1,11 @@
+from annoying.fields import AutoOneToOneField
+from django.conf import settings
 from django.db import models
 from django.db.models import F
-from django.conf import settings
 from django.utils.text import slugify
-
 from django_markdown.models import MarkdownField
 from hitcount.models import HitCountMixin
 from taggit.managers import TaggableManager
-from annoying.fields import AutoOneToOneField
 
 
 class UserQAProfile(models.Model):

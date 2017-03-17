@@ -1,23 +1,24 @@
 import operator
 from functools import reduce
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse
-from django.contrib.contenttypes.models import ContentType
-from taggit.models import TaggedItem, Tag
-from hitcount.views import HitCountDetailView
-from django.db.models import Count
+
 from django.conf import settings
-from django.utils.translation import ugettext as _
-from django.views.generic import (CreateView, View, ListView, UpdateView)
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.db.models import Q
-from qa.models import (UserQAProfile, Question, Answer, AnswerVote,
-                       QuestionVote, AnswerComment, QuestionComment)
-from .mixins import LoginRequired, AuthorRequiredMixin
-from .utils import question_score
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.urlresolvers import reverse
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import ugettext as _
+from django.views.generic import CreateView, ListView, UpdateView, View
+from hitcount.views import HitCountDetailView
+from qa.models import (Answer, AnswerComment, AnswerVote, Question,
+                       QuestionComment, QuestionVote, UserQAProfile)
+from taggit.models import Tag, TaggedItem
+
 from .forms import QuestionForm
+from .mixins import AuthorRequiredMixin, LoginRequired
+from .utils import question_score
 
 try:
     qa_messages = 'django.contrib.messages' in settings.INSTALLED_APPS and\

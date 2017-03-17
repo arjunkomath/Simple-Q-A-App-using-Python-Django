@@ -1,10 +1,9 @@
-from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
+from django.test import TestCase, override_settings
 from django.utils import timezone
 from django.utils.text import slugify
-
-from qa.models import (Question, Answer, AnswerComment, QuestionComment,
-                       QuestionVote, AnswerVote, UserQAProfile)
+from qa.models import (Answer, AnswerComment, AnswerVote, Question,
+                       QuestionComment, QuestionVote, UserQAProfile)
 
 
 class BasicTaggingTest(object):

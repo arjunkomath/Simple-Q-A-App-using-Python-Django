@@ -1,6 +1,6 @@
-from qa.models import Question
-from django.conf import settings
 from django import forms
+from django.conf import settings
+from qa.models import Question
 
 
 class QuestionForm(forms.ModelForm):
