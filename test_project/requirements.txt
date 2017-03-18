@@ -5,5 +5,5 @@
 -e ../
 
 # This project requirements
-django-bootstrap3==8.1.0
+django-bootstrap3==8.2.1
 django-hitcount==1.2.2
