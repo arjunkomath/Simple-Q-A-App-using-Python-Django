@@ -379,10 +379,14 @@ class QuestionDetailView(HitCountDetailView):
     View to call a question and to render all the details about that question.
     """
     model = Question
-    count_hit = True
     template_name = 'qa/detail_question.html'
     context_object_name = 'question'
     slug_field = 'slug'
+    try:
+        count_hit = settings.QA_SETTINGS['count_hits']
+
+    except KeyError:
+        count_hit = True
 
     def get_context_data(self, **kwargs):
         answers = self.object.answer_set.all().order_by('pub_date')

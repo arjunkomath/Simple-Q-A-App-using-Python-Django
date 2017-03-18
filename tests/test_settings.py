@@ -79,6 +79,7 @@ LOGIN_REDIRECT_URL = '/foo/list/'
 QA_SETTINGS = {
     'qa_messages': True,
     'qa_description_optional': False,
+    'count_hits': True,
     'reputation': {
         'CREATE_QUESTION': 0,
         'CREATE_ANSWER': 0,
