@@ -37,13 +37,13 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source pro runtests.py tests
+	coverage run --source django-qa runtests.py tests
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/pro.rst
+	rm -f docs/django-qa.rst
 	rm -f docs/modules.rst
 	sphinx-apidoc -o docs/ pro
 	$(MAKE) -C docs clean
