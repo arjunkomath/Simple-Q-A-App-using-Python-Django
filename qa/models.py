@@ -9,12 +9,15 @@ from taggit.managers import TaggableManager
 
 
 class UserQAProfile(models.Model):
+    """Model class to define a User profile for the app, directly linked
+    to the core Django user model."""
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     points = models.IntegerField(default=0)
     # The additional attributes we wish to include.
     website = models.URLField(blank=True)
 
     def modify_reputation(self, added_points):
+        """Core function to modify the reputation of the user profile."""
         self.points = F('points') + added_points
         self.save()
 
@@ -23,6 +26,7 @@ class UserQAProfile(models.Model):
 
 
 class Question(models.Model, HitCountMixin):
+    """Model class to contain every question in the forum"""
     slug = models.SlugField(max_length=200)
     title = models.CharField(max_length=200, blank=False)
     description = MarkdownField()
@@ -54,6 +58,8 @@ class Question(models.Model, HitCountMixin):
 
 
 class Answer(models.Model):
+    """Model class to contain every answer in the forum and to link it
+    to the proper question."""
     question = models.ForeignKey(Question)
     answer_text = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
@@ -83,6 +89,7 @@ class Answer(models.Model):
 
 
 class VoteParent(models.Model):
+    """Abstract model to define the basic elements to every single vote."""
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     value = models.BooleanField(default=True)
 
@@ -91,6 +98,7 @@ class VoteParent(models.Model):
 
 
 class AnswerVote(VoteParent):
+    """Model class to contain the votes for the answers."""
     answer = models.ForeignKey(Answer)
 
     class Meta:
@@ -98,6 +106,7 @@ class AnswerVote(VoteParent):
 
 
 class QuestionVote(VoteParent):
+    """Model class to contain the votes for the questions."""
     question = models.ForeignKey(Question)
 
     class Meta:
@@ -105,6 +114,7 @@ class QuestionVote(VoteParent):
 
 
 class BaseComment(models.Model):
+    """Abstract model to define the basic elements to every single comment."""
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
@@ -116,6 +126,7 @@ class BaseComment(models.Model):
 
 
 class AnswerComment(BaseComment):
+    """Model class to contain the comments for the answers."""
     comment_text = MarkdownField()
     answer = models.ForeignKey(Answer)
 
@@ -131,6 +142,7 @@ class AnswerComment(BaseComment):
 
 
 class QuestionComment(BaseComment):
+    """Model class to contain the comments for the questions."""
     comment_text = models.CharField(max_length=250)
     question = models.ForeignKey(Question)
 
