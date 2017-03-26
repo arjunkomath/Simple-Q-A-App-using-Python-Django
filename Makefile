@@ -54,4 +54,4 @@ sdist: clean ## package
 
 history: ## Generate the history report from the git log comments records
 	printf '%s\n' '.. :changelog:' '' 'History' '-------' >> HISTORY.rst
-	git log --no-merges --pretty=format:'`Commit #%h <https://github.com/swappsco/django-qa/commit/%H>`_ on %cd%n* %s' >> HISTORY.rst
+	git log --no-merges --pretty=format:'`Commit #%h <https://github.com/swappsco/django-qa/commit/%H>`_ on %cd %n* %s%n' >> HISTORY.rst
