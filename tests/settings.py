@@ -1,16 +1,13 @@
-# Django settings for example project.
-import os
-from decimal import Decimal
+# -*- coding: utf-8
+from __future__ import unicode_literals, absolute_import
+
+import django
+
 DEBUG = True
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': ':memory:',  # Or path to database file if using sqlite3.
-            'USER': '',  # Not used with sqlite3.
-            'PASSWORD': '',  # Not used with sqlite3.
-            'HOST': '',  # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',  # Set to empty string for default. Not used with sqlite3.
+            'NAME': ':memory:',
             }
         }
 
@@ -75,8 +72,23 @@ TEMPLATES = [
             },
         ]
 
-
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_REDIRECT_URL = '/foo/list/'
+
+QA_SETTINGS = {
+    'qa_messages': True,
+    'qa_description_optional': False,
+    'count_hits': True,
+    'reputation': {
+        'CREATE_QUESTION': 0,
+        'CREATE_ANSWER': 0,
+        'CREATE_ANSWER_COMMENT': 0,
+        'CREATE_QUESTION_COMMENT': 0,
+        'ACCEPT_ANSWER': 0,
+        'UPVOTE_QUESTION': 0,
+        'UPVOTE_ANSWER': 0,
+        'DOWNVOTE_QUESTION': 0,
+        'DOWNVOTE_ANSWER': 0,
+    }
+}

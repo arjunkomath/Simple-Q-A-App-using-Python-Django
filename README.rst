@@ -41,66 +41,22 @@ Features
 * Support for hit counts with django-hitcounts.
 * Questions are categorized by latest, popular and most voted.
 
-Installation
-============
-Django-QA aims at keeping things simple. To install it you have to do what you would do with most django apps.
-
-Install with pip::
-
-    pip install django-qa
-
-Add to INSTALLED_APPS in your project settings:
-
-.. code-block:: python
-
-    INSTALLED_APPS = (
-    ...
-    'qa',
-    'taggit',
-    'hitcount',
-    ...
-    )
-
-Add the package urls to the project:
-
-.. code-block:: python
-
-    urlpatterns = [
-        ...,
-        url(r'^', include('qa.urls')),
-        ...
-    ]
-
-Run migrations::
-
-    python manage.py migrate
-
-And that's it!
-
-
-Settings
-========
-QA_DESCRIPTION_OPTIONAL (False). This flag disables validation for description field, allowing title only questions.
-
-Django qa uses `django-hitcount <https://github.com/thornomad/django-hitcount>`_ . If you want to have a custom behaviour for the hitcounts feature, feel free to use django-hitcount settings.
-
-
 About the functionality
 =======================
 * The package is integrated with the framework authentication process, right now the package defines an user profile linked to Django's user model, this models was created to contain information related to the user's activities inside the package functionalities.
 * It has comments on questions and answers.
 * It has no support for anonymous questions nor answers or comments.
-* It has tagging support through django-taggit.
 * It has a basic implementation for score and reputation records.
+* The package has no moderation options on none of the models, and has no REST support.
 
-Next steps
-==========
-With this setup you will have a functional questions and answers section inside of your project. Probably you will need to work on changing the default templates to fit the look and feel of your site.
+Some considerations
+===================
+For better understanding and information, please take a look at the documentation_ and report bugs and issues in the issue panel if you find one.
+
+With this setup you will have a functional questions and answers section inside your project. Probably you will need to work on the default templates to integrate the look and feel of your site.
 
 If your project has an user profile already, you may want to merge it with the data provided by this app (questions, answers, comments, reputation, etc). That requires some extra work, but can be done without using ugly hacks.
 
 The template structure serves as a foundation for your project, but you can (and should) override the defaults to better suit your needs. For example we load bootstrap3 from a CDN, but if your application already has bootstrap in a package you can just extend from your main base template.
 
-The package has no moderation options on none of the models yet and still lacks REST support.
-
-If you think that something essential for this kind of application is missing, you can request a feature by adding an issue to our repository.
+.. _documentation: https://django-qa.readthedocs.io/en/latest/?badge=latest

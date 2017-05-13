@@ -1,6 +1,6 @@
-from qa.models import UserQAProfile, Question
-from django.conf import settings
 from django import forms
+from django.conf import settings
+from qa.models import Question
 
 
 class QuestionForm(forms.ModelForm):
@@ -10,5 +10,11 @@ class QuestionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
-        if hasattr(settings, 'QA_DESCRIPTION_OPTIONAL'):
-            self.fields['description'].required = not settings.QA_DESCRIPTION_OPTIONAL
+
+        try:
+            settings.QA_SETTINGS['qa_description_optional']
+            self.fields['description'].required = not settings.QA_SETTINGS[
+                'qa_description_optional']
+
+        except KeyError:
+            pass

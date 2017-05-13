@@ -1,13 +1,14 @@
-from django.utils import timezone
-from django.core.exceptions import PermissionDenied
-from django.test import TestCase, RequestFactory
-from django.contrib.auth.models import AnonymousUser
-from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
-from django.views.generic import View, DetailView
-from ..mixins import LoginRequired, AuthorRequiredMixin
-from ..models import Question
+from django.test import RequestFactory, TestCase
+from django.utils import timezone
+from django.views.generic import DetailView, View
+
+from qa.mixins import AuthorRequiredMixin, LoginRequired
+from qa.models import Question
 
 
 class SomeView(LoginRequired, View):

@@ -64,6 +64,7 @@ target/
 *.pot
 *.py[co]
 __pycache__
+.vscode/
 MANIFEST
 dist/
 docs/_build/

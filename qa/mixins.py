@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.views.generic import View
 from django.utils.decorators import method_decorator
+from django.views.generic import View
 
 
 class LoginRequired(View):
