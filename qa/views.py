@@ -68,8 +68,8 @@ class AnswerQuestionView(LoginRequired, View):
             qa_user = UserQAProfile.objects.get(user=answer.user)
             qa_user.modify_reputation(points)
 
-        next_url = request.POST.get('next', None)
-        if next_url is not None:
+        next_url = request.POST.get('next', '')
+        if next_url is not '':
             return redirect(next_url)
 
         else:
@@ -97,8 +97,8 @@ class CloseQuestionView(LoginRequired, View):
 
             question.save()
 
-        next_url = request.POST.get('next', None)
-        if next_url is not None:
+        next_url = request.POST.get('next', '')
+        if next_url is not '':
             return redirect(next_url)
 
         else:
@@ -491,8 +491,8 @@ class ParentVoteView(View):
 
             vote_target.save()
 
-        next_url = request.POST.get('next', None)
-        if next_url is not None:
+        next_url = request.POST.get('next', '')
+        if next_url is not '':
             return redirect(next_url)
 
         else:
