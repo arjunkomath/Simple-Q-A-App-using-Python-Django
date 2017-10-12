@@ -16,6 +16,7 @@ Add qa and its requirements to INSTALLED_APPS in your project settings:
     'qa',
     'taggit',
     'hitcount',
+    'django_markdown',
     ...
     )
 
