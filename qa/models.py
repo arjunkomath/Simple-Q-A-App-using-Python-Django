@@ -2,12 +2,14 @@ from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.db import models
 from django.db.models import F
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from django_markdown.models import MarkdownField
 from hitcount.models import HitCountMixin
 from taggit.managers import TaggableManager
 
 
+@python_2_unicode_compatible
 class UserQAProfile(models.Model):
     """Model class to define a User profile for the app, directly linked
     to the core Django user model."""
@@ -25,6 +27,7 @@ class UserQAProfile(models.Model):
         return self.user.username
 
 
+@python_2_unicode_compatible
 class Question(models.Model, HitCountMixin):
     """Model class to contain every question in the forum"""
     slug = models.SlugField(max_length=200)
@@ -57,6 +60,7 @@ class Question(models.Model, HitCountMixin):
         return self.title
 
 
+@python_2_unicode_compatible
 class Answer(models.Model):
     """Model class to contain every answer in the forum and to link it
     to the proper question."""
@@ -113,6 +117,7 @@ class QuestionVote(VoteParent):
         unique_together = (('user', 'question'),)
 
 
+@python_2_unicode_compatible
 class BaseComment(models.Model):
     """Abstract model to define the basic elements to every single comment."""
     pub_date = models.DateTimeField('date published', auto_now_add=True)
