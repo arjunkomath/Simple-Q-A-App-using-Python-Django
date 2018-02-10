@@ -34,4 +34,6 @@ Run migrations::
 
     python manage.py migrate
 
+Once all the previous steps have been solved, check the settings topic to include those into your project settings file.
+
 And that's it!
