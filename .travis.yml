@@ -14,8 +14,7 @@ env:
 #     - develop
 # command to install dependencies
 install:
-  - "pip install -q -e ."
-  - "pip install -q -r requirements.txt"
+  - pip install -r requirements.txt
   - pip install "$DJANGO"
   - pip install python-coveralls
   - pip install coverage
