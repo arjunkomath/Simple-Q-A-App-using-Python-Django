@@ -7,7 +7,7 @@ with open('README.rst') as file:
 
 setup(
     name='django-qa',
-    version='0.9.1',
+    version='0.9.4.2',
     description='Pluggable django app for Q&A',
     long_description=long_description,
     author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
@@ -25,16 +25,17 @@ setup(
         'Environment :: Web Environment',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Framework :: Django',
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
     ],
     install_requires=[
         'django-annoying==0.10.3',
-        'django-markdown-app==0.9.2',
+        'django-markdown-app==0.9.3.1',
         'django-taggit==0.22.1',
         'pytz==2017.2',
         'django-hitcount==1.2.2'
