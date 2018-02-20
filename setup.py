@@ -2,18 +2,22 @@
 # -*- coding: utf-8 -*-
 from setuptools import find_packages, setup
 
-with open('README.rst') as file:
-    long_description = file.read()
 
-with open('requirements.txt') as file:
-    requirements = file.read()
+def get_long_description():
+    with open('README.rst') as file:
+        return file.read()
+
+
+def get_requirements():
+    with open('requirements.txt') as file:
+        return file.read()
 
 
 setup(
     name='django-qa',
     version='0.9.1',
     description='Pluggable django app for Q&A',
-    long_description=long_description,
+    long_description=get_long_description(),
     author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
     author_email='dev@swapps.co',
     url='https://github.com/swappsco/django-qa',
@@ -36,7 +40,7 @@ setup(
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
     ],
-    install_requires=requirements,
+    install_requires=get_requirements(),
     extras_require={
         'i18n': [
             'django-modeltranslation>=0.5b1',
