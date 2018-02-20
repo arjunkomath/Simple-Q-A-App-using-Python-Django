@@ -5,6 +5,10 @@ from setuptools import find_packages, setup
 with open('README.rst') as file:
     long_description = file.read()
 
+with open('requirements.txt') as file:
+    requirements = file.read()
+
+
 setup(
     name='django-qa',
     version='0.9.1',
@@ -32,13 +36,7 @@ setup(
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
     ],
-    install_requires=[
-        'django-annoying==0.10.3',
-        'django-markdown-app==0.9.2',
-        'django-taggit==0.22.1',
-        'pytz==2017.2',
-        'django-hitcount==1.2.2'
-    ],
+    install_requires=requirements,
     extras_require={
         'i18n': [
             'django-modeltranslation>=0.5b1',
