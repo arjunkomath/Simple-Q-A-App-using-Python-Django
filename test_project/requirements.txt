@@ -5,4 +5,4 @@
 -e ../
 
 # This project requirements
-django-bootstrap3==8.2.3
+django-bootstrap3==9.1.0
