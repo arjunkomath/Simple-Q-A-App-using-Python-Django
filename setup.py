@@ -16,7 +16,7 @@ def get_requirements():
 
 setup(
     name='django-qa',
-    version='0.9.4.2',
+    version='0.10.0',
     description='Pluggable django app for Q&A',
     long_description=get_long_description(),
     author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
@@ -38,8 +38,6 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Framework :: Django',
-        'Framework :: Django :: 1.9',
-        'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
     ],
     install_requires=get_requirements(),

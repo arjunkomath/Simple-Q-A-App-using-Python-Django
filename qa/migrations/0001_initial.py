@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('pub_date', models.DateTimeField(auto_now_add=True, verbose_name=b'date published')),
                 ('comment_text', django_markdown.models.MarkdownField()),
-                ('answer', models.ForeignKey(to='qa.Answer')),
+                ('answer', models.ForeignKey(to='qa.Answer', on_delete=models.CASCADE)),
             ],
             options={
                 'abstract': False,
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('value', models.BooleanField(default=True)),
-                ('answer', models.ForeignKey(to='qa.Answer')),
+                ('answer', models.ForeignKey(to='qa.Answer', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('pub_date', models.DateTimeField(auto_now_add=True, verbose_name=b'date published')),
                 ('comment_text', models.CharField(max_length=250)),
-                ('question', models.ForeignKey(to='qa.Question')),
+                ('question', models.ForeignKey(to='qa.Question', on_delete=models.CASCADE)),
             ],
             options={
                 'abstract': False,
@@ -77,13 +77,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('value', models.BooleanField(default=True)),
-                ('question', models.ForeignKey(to='qa.Question')),
+                ('question', models.ForeignKey(to='qa.Question', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
             name='UserQAProfile',
             fields=[
-                ('user', annoying.fields.AutoOneToOneField(primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('user', annoying.fields.AutoOneToOneField(primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
                 ('points', models.IntegerField(default=0)),
                 ('website', models.URLField(blank=True)),
                 ('picture', models.ImageField(upload_to=b'qa/static/profile_images', blank=True)),
@@ -92,37 +92,37 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='questionvote',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='questioncomment',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='question',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='answervote',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='answercomment',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='answer',
             name='question',
-            field=models.ForeignKey(to='qa.Question'),
+            field=models.ForeignKey(to='qa.Question', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='answer',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='questionvote',
