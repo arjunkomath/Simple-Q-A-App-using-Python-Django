@@ -37,3 +37,8 @@ Run migrations::
 Once all the previous steps have been solved, check the settings topic to include those into your project settings file.
 
 And that's it!
+
+CAVEATS
+-------
+There is an issue with django-markdown-app versioning. It does not support django1.11(LTS) and 2 simultaneously.
+If you have a project using django>=2.0, you will need to specify the django-markdown-app manually to the latest.
