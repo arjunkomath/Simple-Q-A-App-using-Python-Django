@@ -59,6 +59,9 @@ class AnswerQuestionView(LoginRequired, View):
             answer.question.answer_set.update(answer=False)
             answer.answer = True
             answer.save()
+            answer.question.closed = True
+            answer.question.save()
+            
             try:
                 points = settings.QA_SETTINGS['reputation']['ACCEPT_ANSWER']
 
