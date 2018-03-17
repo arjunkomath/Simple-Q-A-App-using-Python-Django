@@ -13,7 +13,8 @@ from taggit.managers import TaggableManager
 class UserQAProfile(models.Model):
     """Model class to define a User profile for the app, directly linked
     to the core Django user model."""
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True,
+                             on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
     # The additional attributes we wish to include.
     website = models.URLField(blank=True)
@@ -36,7 +37,7 @@ class Question(models.Model, HitCountMixin):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     tags = TaggableManager()
     reward = models.IntegerField(default=0)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     closed = models.BooleanField(default=False)
     positive_votes = models.IntegerField(default=0)
     negative_votes = models.IntegerField(default=0)
@@ -64,11 +65,11 @@ class Question(models.Model, HitCountMixin):
 class Answer(models.Model):
     """Model class to contain every answer in the forum and to link it
     to the proper question."""
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer_text = MarkdownField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     updated = models.DateTimeField('date updated', auto_now=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     answer = models.BooleanField(default=False)
     positive_votes = models.IntegerField(default=0)
     negative_votes = models.IntegerField(default=0)
@@ -94,7 +95,7 @@ class Answer(models.Model):
 
 class VoteParent(models.Model):
     """Abstract model to define the basic elements to every single vote."""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     value = models.BooleanField(default=True)
 
     class Meta:
@@ -103,7 +104,7 @@ class VoteParent(models.Model):
 
 class AnswerVote(VoteParent):
     """Model class to contain the votes for the answers."""
-    answer = models.ForeignKey(Answer)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('user', 'answer'),)
@@ -111,7 +112,7 @@ class AnswerVote(VoteParent):
 
 class QuestionVote(VoteParent):
     """Model class to contain the votes for the questions."""
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('user', 'question'),)
@@ -121,7 +122,7 @@ class QuestionVote(VoteParent):
 class BaseComment(models.Model):
     """Abstract model to define the basic elements to every single comment."""
     pub_date = models.DateTimeField('date published', auto_now_add=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
@@ -133,7 +134,7 @@ class BaseComment(models.Model):
 class AnswerComment(BaseComment):
     """Model class to contain the comments for the answers."""
     comment_text = MarkdownField()
-    answer = models.ForeignKey(Answer)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         try:
@@ -149,7 +150,7 @@ class AnswerComment(BaseComment):
 class QuestionComment(BaseComment):
     """Model class to contain the comments for the questions."""
     comment_text = models.CharField(max_length=250)
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         try:
