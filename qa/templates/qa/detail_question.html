@@ -63,7 +63,12 @@
           <p class="pull-right">This Question has been closed.</p>
       {% else %}
           <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_answer' question.id %}" role="button">Answer this Question!</a>
-          <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_question_comment' question.id %}" role="button">comment this Question!</a>
+          <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_question_comment' question.id %}" role="button">Comment this Question!</a>
+          <form action="{% url 'qa_close_question' question.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}"/>
+            <button type="submit" class="btn btn-warning btn-sm pull-right" data-toggle="tooltip" data-placement="bottom">Close question</button></div>
+          </form>
       {% endif %}
       </p>
     </div>
@@ -126,7 +131,7 @@
                     <form action="{% url 'qa_answer_question' answer.id %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="next" value="{{ request.path }}"/>
-                        <button type="submit" class="btn btn-success btn-sm pull-right" data-toggle="tooltip" data-placement="bottom" title="Close this question"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div>
+                        <button type="submit" class="btn btn-success btn-sm pull-right" data-toggle="tooltip" data-placement="bottom" title="Mark as answer"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div>
                     </form>
                 {% else %}
                     {% if  answer.answer == True %}
