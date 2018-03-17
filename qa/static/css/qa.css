@@ -99,24 +99,18 @@ a:hover {color: #FF8800; }
 .closed {
   width:100%;
   height:7px;
-  position: absolute;
-
   background: #FF4444;
 }
 
 .open {
   width:100%;
   height:7px;
-  position: absolute;
-
   background: #99CC00;
 }
 
 .rewarding {
   width:100%;
   height:7px;
-  position: absolute;
-
   background: #AA66CC;
 }
 .custom-big {
