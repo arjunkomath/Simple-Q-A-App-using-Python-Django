@@ -16,7 +16,7 @@ def get_requirements():
 
 setup(
     name='django-qa',
-    version='0.10.0',
+    version='0.10.1',
     description='Pluggable django app for Q&A',
     long_description=get_long_description(),
     author='arjunkomath, cdvv7788, sebastian-code, jlariza, swappsco',
