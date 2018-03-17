@@ -2,6 +2,166 @@
 
 History
 -------
+Sat Mar 17 17:39:36 2018 -0500 - `#58d046a <https://github.com/swappsco/django-qa/commit/58d046af5e55dceab7749f65ab6513661287bb6c>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Discarding unsupported Python and Django versions, adding a TravisCI validation to test the package in better conditions.
+
+Sat Mar 17 14:46:52 2018 -0500 - `#2ab3b7c <https://github.com/swappsco/django-qa/commit/2ab3b7c9f5f033bca82885bcefecc902a13f7af8>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Update version filters. Add django2 and remove python2
+
+Sat Mar 17 14:43:56 2018 -0500 - `#cf95c23 <https://github.com/swappsco/django-qa/commit/cf95c231e213e4eea48621819edd3646746e3ecd>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Bump version
+
+Sat Mar 17 14:41:42 2018 -0500 - `#1b3b3f3 <https://github.com/swappsco/django-qa/commit/1b3b3f3c60bf3cf58bd5e05a04641dcc8f4e479b>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Document issue with django-markdown-app
+
+Sat Mar 17 14:36:04 2018 -0500 - `#6a2a1e7 <https://github.com/swappsco/django-qa/commit/6a2a1e70cd0d06c79caf901bec239aba90a727e4>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Update test_project to work with django2.0
+
+Sat Mar 17 14:31:15 2018 -0500 - `#89f8046 <https://github.com/swappsco/django-qa/commit/89f8046f16ff06d514e3315add27dc00cd5a2eaf>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Make compatible with django 2.0
+
+Sat Mar 17 14:01:20 2018 -0500 - `#7c509e7 <https://github.com/swappsco/django-qa/commit/7c509e7684e843ef634aee2b0f828b2b8bcf7fc4>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Update dependencies
+
+Sat Mar 17 13:58:46 2018 -0500 - `#3371bb9 <https://github.com/swappsco/django-qa/commit/3371bb940de853e0d5db5893164b5721096e8258>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Update dependencies
+
+Sat Mar 17 13:41:29 2018 -0500 - `#555edb4 <https://github.com/swappsco/django-qa/commit/555edb45d022a00c5dbba2f47e4c3d9283d7e8b3>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Protocol agnostic urls
+
+Sat Mar 17 13:37:39 2018 -0500 - `#d4eb2ef <https://github.com/swappsco/django-qa/commit/d4eb2ef5635150d97e77252787ab21621bb49072>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Fix styles of colored topbar
+
+Sat Mar 17 13:35:53 2018 -0500 - `#f12c30c <https://github.com/swappsco/django-qa/commit/f12c30cf8b4c5edba3697a0a202a444cd658db1b>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Fix issue with extra div under certain conditions
+
+Sat Mar 17 13:20:09 2018 -0500 - `#23882ae <https://github.com/swappsco/django-qa/commit/23882ae3ce6aafee124b25e450dc0f02352a3314>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Update flow to match expectations
+
+Sat Mar 17 12:58:30 2018 -0500 - `#d5fd1d3 <https://github.com/swappsco/django-qa/commit/d5fd1d38c3dce3a5054402d8b80887a8effa4972>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Allow answered questions to stay open
+
+Fri Mar 16 18:44:02 2018 +0100 - `#5d79f3a <https://github.com/swappsco/django-qa/commit/5d79f3ac4f0696f4effdd8b5800cae507e216f4f>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Ability to mark which answer resolve a question
+
+Thu Mar 8 15:33:34 2018 +0100 - `#d4d16e7 <https://github.com/swappsco/django-qa/commit/d4d16e789a1c2551697833d5c407166bbc3ec762>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* templates/qa/base.html: Fix missing <head> and <body> html tags
+
+Thu Feb 22 10:18:49 2018 -0500 - `#9968677 <https://github.com/swappsco/django-qa/commit/9968677d70f1a88a992355e91222b0c6ab69c59a>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Including #48 from @Postroutine and some personal additions.
+
+Tue Feb 20 10:12:31 2018 -0500 - `#c366eef <https://github.com/swappsco/django-qa/commit/c366eef83d32df6bce7409c43cbe59019eba8c3d>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Revert " Setup.py: Get requirements from `requirements.txt` file "
+
+Tue Feb 20 15:57:28 2018 +0100 - `#e6ac7e0 <https://github.com/swappsco/django-qa/commit/e6ac7e0a531b8d76c35b3ec345df96605c10733d>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Setup.py: Def function to get external informations
+
+Tue Feb 20 15:56:17 2018 +0100 - `#7397d5c <https://github.com/swappsco/django-qa/commit/7397d5c2b5fdd0e4a7d1ba0848de0b92279b9504>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Setup.py: Get requirements from `requirements.txt` file
+
+Tue Feb 20 09:50:59 2018 -0500 - `#a05b59d <https://github.com/swappsco/django-qa/commit/a05b59ddb7ad44ecfd32274196f144898261269d>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Bump version. Missing lines. Solves #47
+
+Mon Feb 19 10:29:42 2018 -0500 - `#4657515 <https://github.com/swappsco/django-qa/commit/465751517a6fd53ed242314c97184bc9274860f9>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Fixing issue with TravisCI
+
+Mon Feb 19 10:13:12 2018 -0500 - `#d645dff <https://github.com/swappsco/django-qa/commit/d645dffa9279af40cce88178b5e95b353bfd730e>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Solves #46
+
+Sat Feb 10 07:01:05 2018 -0500 - `#0dbf002 <https://github.com/swappsco/django-qa/commit/0dbf0022bdf16525842836f9e95e92b6533f107e>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* This line points in the right direction to setup the package properly. Closing #45 by @jetcanfly
+
+Mon Dec 4 11:35:47 2017 +0700 - `#417209b <https://github.com/swappsco/django-qa/commit/417209bac662b678fb043fc7c1042ad916b013e5>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Non-ascii in Question or Answer causes UnicodeEncodeError #43
+
+Thu Oct 12 16:28:32 2017 -0500 - `#49b1982 <https://github.com/swappsco/django-qa/commit/49b1982861db8201e65eeac441387e53e832ed59>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Bump version.
+
+Thu Oct 12 16:26:40 2017 -0500 - `#2f957ef <https://github.com/swappsco/django-qa/commit/2f957efa535cbba651b020722ffa20aa704859ea>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Fixing the redirect call inside all the CBV which overloaded the POST method, fixing the issue reported by @achillis2 in #42, and also future not reported issues on the additional views.
+
+Thu Oct 12 16:19:07 2017 -0500 - `#bfb48bb <https://github.com/swappsco/django-qa/commit/bfb48bbbd8d1f790d1cfdb255f96616f6efa87e5>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Small fix to the template to change the variable provided by the REGEX, previously pointed to the anwer when it should have been pointed to the matching question.
+
+Thu Oct 12 16:01:59 2017 -0500 - `#a5bb96f <https://github.com/swappsco/django-qa/commit/a5bb96fe75faa3177c2ea78dc4ed53e567e9afae>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Adding missing line to the documentation on the installation process to solve #41 by @qari
+
+Sat May 13 11:06:00 2017 -0500 - `#97748fa <https://github.com/swappsco/django-qa/commit/97748fa1449f97d3bf1857fedb15efdd13c5fca9>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Fixing the docs to give it a better styling
+
+Sat May 13 10:36:10 2017 -0500 - `#df89358 <https://github.com/swappsco/django-qa/commit/df893588f5c77ebdd26666e7c207b2941f0efe49>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Bump version
+
+Sat May 13 10:29:06 2017 -0500 - `#47f3551 <https://github.com/swappsco/django-qa/commit/47f3551e27cd3cb54e3feb2f2f95786ffd7dda77>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Updating the requirements list accross the project to keep up to date all the package and include the latest security patches from them
+
+Sun Mar 26 11:34:13 2017 -0500 - `#3d8fcf5 <https://github.com/swappsco/django-qa/commit/3d8fcf57f24b8f7f5edbc344e993c9395fffb1be>`_ 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Editing the HISTORY record of the project with a different style for presentation.
+
 Sat Mar 25 23:47:25 2017 -0500 - `#9a39c06 <https://github.com/swappsco/django-qa/commit/9a39c06afcb6ecfe96dcd44ddbf6923af940997b>`_ 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

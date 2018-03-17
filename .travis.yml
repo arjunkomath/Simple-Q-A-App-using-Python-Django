@@ -1,25 +1,27 @@
 language: python
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
+  - "3.6"
+
 env:
   matrix:
-   - DJANGO="Django<1.9"
-   - DJANGO="Django<1.10"
-   - DJANGO="Django<1.11"
-# branches:
-#   only:
-#     - master
-#     - develop
-# command to install dependencies
+   - DJANGO="Django>=1.11,<1.12
+   - DJANGO="Django>=2"
+
+branches:
+  only:
+    - master
+
 install:
   - pip install -r requirements.txt
   - pip install "$DJANGO"
   - pip install python-coveralls
   - pip install coverage
 
-# command to run tests
+before_script:
+  - if [[ "$DJANGO" >= "2" ]]; then pip install django-markdown-app==0.9.4.1; fi
+
 script: "coverage run manage.py test"
 
 after_success:
