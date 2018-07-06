@@ -40,6 +40,9 @@ class Question(models.Model, HitCountMixin):
     negative_votes = models.IntegerField(default=0)
     total_points = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = slugify(self.title)
