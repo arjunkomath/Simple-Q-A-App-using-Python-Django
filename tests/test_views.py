@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import Client, TestCase, override_settings
 from qa.mixins import LoginRequired
 from qa.models import (Answer, AnswerVote, Question, QuestionComment,
