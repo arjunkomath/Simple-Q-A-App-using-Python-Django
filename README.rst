@@ -30,6 +30,19 @@ The development of this package is kindly supported by SWAPPS_ and constantly de
 
 Please take in considerations than this application is still under active development and we cannot guarantee that nothing will break between versions. Most of the core features are already there, so we expect to release a beta version soon.
 
+Version compatibility
+=====================
+
+Starting with version 0.10.12, django-qa requires Django 2.0 or later and is only compatible with Python 3.5 or later.
+
+==============  ===================
+Django version  django-qa
+==============  ===================
+2.0 or later    0.10.12
+1.11.x          0.10.11
+==============  ===================
+
+
 Features
 ========
 * Assumes nothing about the rest of your application.
