@@ -1,0 +1,160 @@
+{% extends 'qa/base.html' %}
+{% load django_markdown %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% if question.closed %}
+  <div class="closed"></div>
+{% else %}
+    {% if question.reward %}
+    <div class="rewarding"></div>
+    {% else %}
+    <div class="open"></div>
+    {% endif %}
+{% endif %}
+
+
+{% if message %}
+    <div class="alert alert-danger" role="alert">{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+{% comment %}
+
+{% if question.reward %}
+    <div class="alert alert-info" role="alert">This question has been marked to be worth a reward of <b>{{ question.reward }}<b> points!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+{% endcomment %}
+
+<div class="jumbotron">
+  <div class="row">
+    {% if user.is_authenticated and question.user != user %}
+      <div class ="col-sm-1">
+        <big class="pull-left custom-big"><b>{{ question.total_points }}</b></big>
+      </div>
+      <div class ="col-sm-1">
+        <form action="{% url 'qa_question_vote' question.id %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <input type="hidden" name="upvote" value="on">
+          <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+        </form>
+          <form action="{% url 'qa_question_vote' question.id %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+        </form>
+      </div>
+    {% endif %}
+    <div class="col-sm-10">
+      <small class="pull-right">Posted by {{ question.user.username }}, {{ question.pub_date }}</small>
+      {% if user.is_authenticated and question.user == user %}<a href="{% url 'qa_update_question' question.id %}"><small class="pull-right">Edit &nbsp;</small></a>{% endif %}
+      <h3><cool>Q: </cool>{{ question.title }}</h3>
+      <h4>{{ question.description|markdown }}</h4>
+      <p>
+      {% if question.closed %}
+          <p class="pull-right">This Question has been closed.</p>
+      {% else %}
+          <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_answer' question.id %}" role="button">Answer this Question!</a>
+          <a class="btn btn-primary btn-sm pull-right" href="{% url 'qa_create_question_comment' question.id %}" role="button">Comment this Question!</a>
+          <form action="{% url 'qa_close_question' question.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}"/>
+            <button type="submit" class="btn btn-warning btn-sm pull-right" data-toggle="tooltip" data-placement="bottom">Close question</button>
+          </form>
+      {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% if last_comments %}
+  <h4>comments</h4>
+  {% for comment in last_comments %}
+  <div class="row">
+    <div class="col-md-9 col-md-offset-1">
+    <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_question_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
+    </div>
+  </div>
+  {% endfor %}
+{% endif %}
+{% if answers %}
+  <h3>Answers</h3>
+  <hr/>
+
+    {% for answer in answers %}
+    <div class="row">
+      {% if user.is_authenticated and answer.user != user %}
+      <div class ="col-md-1">
+        <div class="row">
+          <div class ="col-sm-1"><big class="pull-left custom-big"><b>{{ answer.total_points }}</b></big></div>
+          <div class ="col-sm-1">
+          <form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <input type="hidden" name="upvote" value="on">
+              <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Vote Up this answer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+          </form>
+          <form action="{% url 'qa_answer_vote' answer.id %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vote Down this answer"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></div>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+      <div class ="col-md-9">
+        <a href="{% url 'qa_create_answer_comment' answer.id %}" class="pull-right"><small><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment &nbsp;</small></a>
+        {% if answer.user == user %}<a href="{% url 'qa_update_answer' answer.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
+            <div id="ans" class="alert alert-primary" role="alert">{{ answer.answer_text|markdown }}</div>
+        {% if answer.answercomment_set %}
+          {% for comment in answer.answercomment_set.all %}
+            <p><b>{{ comment.comment_text|markdown }}</b><small>, <a href="{% url 'qa_profile' comment.user.id %}">{{ comment.user.username }}</a> <div class="pull-right">{{ comment.pub_date }}</div></small></p>{% if comment.user == user %}<a href="{% url 'qa_update_answer_comment' comment.id %}" class="pull-right"><small>Edit &nbsp;</small></a>{% endif %}
+          <hr>
+          {% endfor %}
+        {% endif %}
+      </div>
+          <div class ="col-md-2">
+            {% if answer.user.userqaprofile.picture %}
+                <img class="pull-right" src="{{ answer.user.userqaprofile.picture }}">
+            {% else %}
+                <img class="pull-right" width="50px" height="50px" src="{% static "qa/user.png" %}">
+            {% endif %}
+            <p class="pull-right">- <b><a href="{% url 'qa_profile' answer.user.id %}">{{ answer.user.username }}</a> ({{ answer.user.userqaprofile.points }})</b></p>
+                {% if user.is_authenticated and answer.question.user == user and answer.question.closed == False %}
+                    <form action="{% url 'qa_answer_question' answer.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}"/>
+                        <button type="submit" class="btn btn-success btn-sm pull-right" data-toggle="tooltip" data-placement="bottom" title="Mark as answer"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div>
+                    </form>
+                {% else %}
+                    {% if  answer.answer == True %}
+                        <button class="btn btn-success btn-sm pull-right" title="Picked Answer"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button></div>
+                    {% endif %}
+                {% endif %}
+          </div>
+    </div>
+  <hr>
+    {% endfor %}
+
+{% else %}
+<img class="pull-right" src="{% static "qa/question.jpg" %}" alt="question"/>
+<center><h2>This question is still open, <a href="{% url 'qa_create_answer' question.id %}" role="button">Write answer!</a></h2></center>
+{% endif %}
+
+
+{% endblock content %}
+{% block extra_js %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+{% endblock extra_js %}

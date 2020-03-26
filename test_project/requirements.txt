@@ -1,0 +1,8 @@
+# Your app requirements.
+-r ../requirements.txt
+
+# Your app in editable mode.
+-e ../
+
+# This project requirements
+django-bootstrap3==10.0.1

@@ -1,0 +1,101 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>Simple QA{% block title %}{% endblock title %}</title>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/png" href="static/qa/icon.ico">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <link href='//fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/qa.css' %}" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="topbar"></div>
+    <div class="container">
+      <div class="page-header">
+	<a class="btn btn-lg btn-warning pull-right" href="#search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Find</a><a class="btn btn-lg btn-danger pull-right" href="{% url 'qa_create_question' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ask Question</a><h1><a href="{% url 'qa_index' %}"><img width="50px" src="http://icons.iconarchive.com/icons/seanau/flat-app/256/Questionmark-icon.png" /><orange>Simple QA</orange> </a><small>Open Questions</small></h1>
+      </div>
+    </div>
+
+    <div class="container">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+      {% endfor %}
+      {% endif %}
+      {% block content %}
+
+      {% endblock content %}
+      <div id="search">
+	<button type="button" class="close">×</button>
+	<form method="GET" action="{% url 'qa_search' %}">
+	  <input type="search" value="" name="word" placeholder="type keyword(s) here" />
+	  <input class="btn btn-lg btn-warning" type="submit" value="Find" />
+	</form>
+	
+      </div>
+    </div>
+    <hr>
+    <center>
+      <a href="http://www.djangoproject.com/"><img src="https://www.djangoproject.com/m/img/badges/djangoproject120x25.gif" border="0" alt="A Django project." title="A Django project." /></a> ·
+      <a href="https://github.com/swappsco/django-qa/">Github</a> ·
+      <a data-toggle="modal" data-target="#apiModal">API</a> ·
+      <small><a href="/admin">Admin Panel</a></small></center>
+    <br/><br/>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="apiModal" tabindex="-1" role="dialog" aria-labelledby="APIModal" aria-hidden="true">
+      <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> API Access</h4>
+	  </div>
+	  <div class="modal-body">
+            <ul>
+              <li>
+		<b>List of Questions</b>
+		<br/>Retrieve the list of questions.
+		<br/>json URL : <code class="custom-code">http://djangoqa.azurewebsites.net/api/questions/?format=json</code>
+              </li>
+              <br/>
+              <li>
+		<b>List of Users</b>
+		<br/>Retrieve the list of users.
+		<br/>json URL : <code class="custom-code">http://djangoqa.azurewebsites.net/api/users/?format=json</code>
+              </li>
+            </ul>
+	  </div>
+	  <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+	  </div>
+	</div>
+      </div>
+    </div>
+
+    {% block js %}
+    <script>
+      $(function () {
+      $('a[href="#search"]').on('click', function(event) {
+      event.preventDefault();
+      $('#search').addClass('open');
+      $('#search > form > input[type="search"]').focus();
+      });
+
+      $('#search, #search button.close').on('click keyup', function(event) {
+      if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
+      $(this).removeClass('open');
+      }
+      });
+
+      });
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    {% endblock js %}
+    {%block extra_js %}{% endblock extra_js %}
+
+  </body>
+</html>

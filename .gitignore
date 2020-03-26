@@ -49,6 +49,8 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+docs/_static/
+docs/_templates/
 
 # PyBuilder
 target/
@@ -62,6 +64,7 @@ target/
 *.pot
 *.py[co]
 __pycache__
+.vscode/
 MANIFEST
 dist/
 docs/_build/
@@ -71,3 +74,4 @@ tests/coverage_html/
 tests/.coverage
 build/
 tests/report/
+*.sqlite3

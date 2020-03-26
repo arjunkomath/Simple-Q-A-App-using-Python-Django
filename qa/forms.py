@@ -1,20 +1,20 @@
-from qa.models import *
-from django.contrib.auth.models import User
 from django import forms
+from django.conf import settings
+from qa.models import Question
+
 
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('question_text', 'tags')
-        
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
+        fields = ['title', 'description', 'tags']
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
+    def __init__(self, *args, **kwargs):
+        super(QuestionForm, self).__init__(*args, **kwargs)
 
-class UserProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = ('website', 'picture')
+        try:
+            settings.QA_SETTINGS['qa_description_optional']
+            self.fields['description'].required = not settings.QA_SETTINGS[
+                'qa_description_optional']
+
+        except KeyError:
+            pass

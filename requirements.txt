@@ -1,0 +1,5 @@
+django-annoying>=0.10.4
+django-markdown-app>=0.9.4.1
+django-taggit>=0.22.2
+pytz>=2018.5
+django-hitcount>=1.3.0

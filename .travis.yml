@@ -1,0 +1,23 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+
+env:
+  matrix:
+   - DJANGO="Django>=2.0,<2.1"
+
+branches:
+  only:
+    - master
+
+install:
+  - pip install -r requirements.txt
+  - pip install "$DJANGO"
+  - pip install python-coveralls
+  - pip install coverage
+
+script: "coverage run manage.py test"
+
+after_success:
+- coveralls

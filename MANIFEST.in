@@ -1,0 +1,8 @@
+include AUTHORS.rst
+include CONTRIBUTING.rst
+include LICENSE
+include README.rst
+recursive-include qa *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
+recursive-include qa/templates *
+recursive-include qa/static *
+recursive-include qa/migrations *
