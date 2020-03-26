@@ -202,7 +202,7 @@ class TestModels(TestCase, BasicTaggingTest):
         works properly when an AnswerComment instance is created, but
         there is no QA_SETTING defined inside the settings file, so the
         try block inside the save() method of the model goes for the
-        excep line.
+        except line.
         """
         other_qa_user = self.other_user.userqaprofile
         self.assertEqual(other_qa_user.points, 0)
@@ -222,7 +222,7 @@ class TestModels(TestCase, BasicTaggingTest):
         works properly when an QuestionComment instance is created, but
         there is no QA_SETTING defined inside the settings file, so the
         try block inside the save() method of the model goes for the
-        excep line.
+        except line.
         """
         other_qa_user = self.other_user.userqaprofile
         self.assertEqual(other_qa_user.points, 0)
