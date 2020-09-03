@@ -1,3 +1,10 @@
+This project is no longer maintained, please check the following fork:
+http://swappsco.github.io/django-qa/
+
+
+
+
+
 =====================
 WELCOME TO DJANGO-QA
 =====================
